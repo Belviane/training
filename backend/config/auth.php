@@ -2,6 +2,20 @@
 
 return [
 
+   'guards' => [
+    'api' => [
+        'driver' => 'sanctum',
+        'provider' => 'utilisateurs',
+    ],
+],
+
+// 'providers' => [
+//     'users' => [
+//         'driver' => 'eloquent',
+//         'model' => App\Models\User::class, // ← notre modèle utilisateur
+//     ],
+// ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -65,10 +79,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+         'users' => [
+             'driver' => 'database',
+             'table' => 'utilisateurs',
+         ],
     ],
 
     /*
