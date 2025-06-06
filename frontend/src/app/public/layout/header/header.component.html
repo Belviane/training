@@ -1,0 +1,40 @@
+<header class="site-header">
+  <nav id="navbar">
+    <div class="container">
+      <!-- Logo + Nom -->
+      <a href="/" class="logo-link">
+        <img src="assets/logo.jpg" alt="Logo" class="logo-img"/>
+        <div class="site-title">
+          BE I.T AFRICA
+        </div>
+      </a>
+
+      <!-- Menu principal -->
+      <ul class="main-menu">
+        <li>
+          <a href="#" 
+             (click)="onNavClick('accueil')" 
+             [class.active]="activeLink === 'accueil'"><i class="fi fi-sr-home"></i>Accueil</a>
+        </li>
+         <li>
+          <a href="#" 
+             (click)="onNavClick('blog')" 
+             [class.active]="activeLink === 'blog'">Nos formations</a>
+        </li>
+        <li>
+          <a href="#" 
+             (click)="onNavClick('apropos')" 
+             [class.active]="activeLink === 'apropos'">À propos</a>
+        </li>
+        <li>
+          <a href="#" 
+             (click)="onNavClick('contact')" 
+             [class.active]="activeLink === 'contact'">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Bouton Connexion -->
+      <a href="/login" class="btn-login">Connexion</a>
+    </div>
+  </nav>
+</header>

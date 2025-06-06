@@ -1,0 +1,37 @@
+.auth-footer {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #FFFFFF; /* Fond blanc */
+  color: #222222; /* Texte noir */
+  padding: 1rem 0;
+  border-top: 1px solid #EFEFEF; /* Bordure subtile */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 900; /* Sous le sidebar (z-index: 1000) */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555555; /* Gris foncé */
+}
+
+.auth-footer .container {
+  padding-right: 2rem; /* Alignement avec le header */
+  padding-left: 2rem;
+}
+
+/* Adaptation pour le mode mobile */
+@media (max-width: 768px) {
+  .auth-footer {
+    padding: 0.8rem 0;
+    text-align: center;
+  }
+  
+  /* Si le sidebar est ouvert en mobile */
+  .sidebar.open ~ .auth-footer {
+    padding-left: 280px; /* Largeur du sidebar */
+    transition: padding 0.3s ease;
+  }
+}

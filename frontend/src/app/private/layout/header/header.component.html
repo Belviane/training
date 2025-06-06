@@ -1,0 +1,31 @@
+<header class="main-header">
+    <div class="header-left">
+        <img src="assets/logo.png" class="header-logo" alt="BE I.T Logo" style="height: 12%; width: 40px;"/>
+        
+        <span class="current-date">{{ currentDate | date:'EEEE d MMMM y' }}</span>
+    </div>
+
+    <div class="header-center">
+        <h1 class="site-title">BE I.T CLASSROOM</h1>
+    </div>
+
+    <div class="header-right">
+        <!-- Notifications -->
+        <div class="notification-wrapper" (click)="toggleNotifications()">
+            <mat-icon>notifications</mat-icon>
+            <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+            <div *ngIf="showNotifications" class="notifications-dropdown">
+                <div *ngFor="let notif of notifications" class="notification-item" [class.unread]="!notif.read">
+                    {{ notif.message }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Profil utilisateur -->
+        <div class="profile-wrapper" (click)="openProfile()">
+            <img  src="assets/logo.jpg" class="avatar" />
+            <mat-icon *ngIf="!user.avatar">account_circle</mat-icon>
+            <span class="user-name">{{ user.name }}</span>
+        </div>
+    </div>
+</header>
