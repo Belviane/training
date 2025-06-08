@@ -3,6 +3,7 @@ import { User, UserRole } from "../../shared/models/user.model";
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -24,29 +25,32 @@ export class AuthService {
     }
 
     getUserRole(): UserRole | null {
-        return this.currentUserValue?.roles || null; // Note: 'roles' au lieu de 'role'
+        return this.currentUserValue?.role || null;
     }
 
     isLoggedIn(): boolean {
         return !!this.currentUserValue;
     }
 
-    hasAnyRole(requiredRoles: UserRole[]): boolean { // Renommé requiredRole en requiredRoles
-        if (!this.currentUserValue?.roles) return false;
-        return requiredRoles.includes(this.currentUserValue.roles);
+    hasAnyRole(requiredRoles: UserRole[]): boolean {
+        if (!this.currentUserValue?.role) return false;
+        return requiredRoles.includes(this.currentUserValue.role);
     }
 
-    login(email: string, password: string): Observable<{user: User, token: string}> {
-        return this.http.post<{user: User, token: string}>(
-            'http://localhost:8000/api/login', 
-            { email, password }
-        ).pipe(
+    login(login: string, mdp: string): Observable<any> {
+        return this.http.post('http://localhost:8000/api/login', { login, mdp }).pipe(
             tap(response => {
-                if (response.user && response.token) {
-                    localStorage.setItem('currentUser', JSON.stringify(response.user));
-                    localStorage.setItem('token', response.token);
-                    this.currentUserSubject.next(response.user);
+                console.log('Réponse de l\'API :', response);
+                // Stockez les informations de l'utilisateur connecté
+                localStorage.setItem('currentUser', JSON.stringify(response));
+                this.currentUserSubject.next(response as User);
+            }),
+            catchError(error => {
+                console.error('Erreur de connexion :', error);
+                if (error.status === 401) {
+                    // Gérer l'erreur de connexion
                 }
+                return throwError(error);
             })
         );
     }
@@ -75,6 +79,18 @@ export class AuthService {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 }
+            })
+        );
+    }
+
+    register(user: any): Observable<any> {
+        return this.http.post('http://localhost:8000/api/register', user).pipe(
+            tap(response => {
+                console.log('Réponse de l\'API :', response);
+            }),
+            catchError(error => {
+                console.error('Erreur d\'inscription :', error);
+                return throwError(error);
             })
         );
     }

@@ -6,16 +6,16 @@
       <p class="subtitle">Connectez-vous à votre espace</p>
     </div>
 
-    <form class="login-form" (submit)="login()">
+    <form class="login-form" (submit)="Login()">
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="login">Login</label>
         <div class="input-wrapper">
           <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Entrez votre email"
-            autocomplete="email"
+            type="login"
+            id="login"
+            name="login"
+            placeholder="Entrez votre login"
+            autocomplete="login"
             required
             aria-required="true"
           />
@@ -34,12 +34,10 @@
             required
             aria-required="true"
           />
-          <button type="button" class="toggle-password" aria-label="Afficher ou masquer le mot de passe">👁️</button>
         </div>
       </div>
 
       <button type="submit" class="login-btn">Se connecter</button>
-
       <div class="login-footer">
         <a href="##" class="forgot-password">Mot de passe oublié ?</a>
       </div>

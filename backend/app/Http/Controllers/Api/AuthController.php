@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-   public function register(Request $request)
+    public function register(Request $request)
     {
         $request->validate([
             'nom' => 'required|string',
@@ -44,34 +44,35 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $request->validate([
-        'login' => 'required|string',
-        'mdp' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'login' => 'required|email',
+            'mdp' => 'required|string',
+        ]);
 
-    $user = User::where('login', $request->login)->first();
+        $user = User::where('login', $request->login)->first();
 
-    if (!$user || !Hash::check($request->mdp, $user->mdp)) {
-        return response()->json(['message' => 'Identifiants incorrects'], 401);
+        if (!$user || !Hash::check($request->mdp, $user->mdp)) {
+            return response()->json(['message' => 'Identifiants incorrects'], 401);
+        }
+
+        if (!$user->is_active) {
+            return response()->json(['message' => 'Compte désactivé. Contactez un administrateur.'], 403);
+        }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Connexion réussie',
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 
-    if (!$user->is_active) {
-        return response()->json(['message' => 'Compte désactivé. Contactez un administrateur.'], 403);
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Déconnecté avec succès']);
     }
-
-    $token = $user->createToken('API Token')->plainTextToken;
-
-    return response()->json([
-        'message' => 'Connexion réussie',
-        'token' => $token,
-        'user' => $user,
-    ]);
-}
-
-
-  public function logout(Request $request) {
-    $request->user()->currentAccessToken()->delete();
-    return response()->json(['message' => 'Déconnecté avec succès']);
-}
 }

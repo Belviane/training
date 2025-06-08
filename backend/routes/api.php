@@ -8,7 +8,8 @@ use App\Http\Controllers\FormateureController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
-
+use App\Http\Controllers\Api\ProfilController;
+use App\Http\Controllers\Api\InscriptionController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
