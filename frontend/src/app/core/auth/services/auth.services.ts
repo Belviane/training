@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { catchError, throwError } from 'rxjs';
+import { LaravelApi } from '@app/core/api/laravel.api';
+
 
 @Injectable({
     providedIn: 'root'
@@ -38,21 +40,8 @@ export class AuthService {
     }
 
     login(login: string, mdp: string): Observable<any> {
-        return this.http.post('http://localhost:8000/api/login', { login, mdp }).pipe(
-            tap(response => {
-                console.log('Réponse de l\'API :', response);
-                // Stockez les informations de l'utilisateur connecté
-                localStorage.setItem('currentUser', JSON.stringify(response));
-                this.currentUserSubject.next(response as User);
-            }),
-            catchError(error => {
-                console.error('Erreur de connexion :', error);
-                if (error.status === 401) {
-                    // Gérer l'erreur de connexion
-                }
-                return throwError(error);
-            })
-        );
+        return this.http.post(LaravelApi.login, { login, mdp })
+
     }
 
     logout(): void {
@@ -70,17 +59,6 @@ export class AuthService {
                 this.currentUserSubject.next(null);
             }
         });
-    }
-
-    getMe(): Observable<User> {
-        return this.http.get<User>('http://localhost:8000/api/me').pipe(
-            tap(user => {
-                if (user) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
-                }
-            })
-        );
     }
 
     register(user: any): Observable<any> {
