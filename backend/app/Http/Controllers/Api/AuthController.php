@@ -17,7 +17,7 @@ class AuthController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'login' => 'required|string|unique:utilisateurs',
-            'mdp' => 'required|string|min:6',
+            //'mdp' => 'required|string|min:6',
             'email' => 'required|email|unique:utilisateurs,email',
             'password' => 'required|string|min:6|confirmed',
             'genre' => 'required|string',
@@ -46,12 +46,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'login' => 'required|string',
-            'mdp' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         $user = User::where('login', $request->login)->first();
 
-        if (!$user || !Hash::check($request->mdp, $user->mdp)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
 
