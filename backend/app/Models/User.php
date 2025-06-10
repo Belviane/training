@@ -26,11 +26,11 @@ class User extends Authenticatable
         'prenom',
         'genre',
         'date_naissance',
-        // 'email',
-        // 'password',
+         'email',
+         'password',
         'role_id',
         'login',
-        'mdp',
+        //'mdp',
         'is_active'
     ];
 
@@ -41,7 +41,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        'mdp',
+        //'mdp',
         'remember_token',
     ];
 
@@ -51,11 +51,19 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function formateur() {
+   public function formateur()
+    {
         return $this->hasOne(Formateur::class);
     }
 
     public function apprenant() {
         return $this->hasOne(Apprenant::class);
     }
+
+    public function inscriptionsFormateur()
+{
+    return $this->hasMany(Inscriptions::class, 'formateur_id');
+}
+
+
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\apprenante;
+use App\Models\administrateur;
 use Illuminate\Http\Request;
 
-class ApprenanteController extends Controller
+class AdministrateurController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class ApprenanteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(apprenante $apprenante)
+    public function show(administrateur $administrateur)
     {
         //
     }
@@ -42,7 +42,7 @@ class ApprenanteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(apprenante $apprenante)
+    public function edit(administrateur $administrateur)
     {
         //
     }
@@ -50,7 +50,7 @@ class ApprenanteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, apprenante $apprenante)
+    public function update(Request $request, administrateur $administrateur)
     {
         //
     }
@@ -58,7 +58,7 @@ class ApprenanteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(apprenante $apprenante)
+    public function destroy(administrateur $administrateur)
     {
         //
     }
