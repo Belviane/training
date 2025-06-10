@@ -23,5 +23,11 @@ class Formation extends Model
     {
         return $this->hasMany(Inscription::class);
     }
-    
+
+    public function apprenants() {
+        return $this->belongsToMany(Apprenant::class, 'formation_apprenant')
+               ->withPivot(['formateur_id', 'date_inscription', 'statut'])
+               ->withTimestamps();
+    }
+
 }

@@ -14,14 +14,14 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         DB::table('roles')->insert([
-            ['libelle' => 'admin',      'created_at' => now(), 'updated_at' => now()],
-            ['libelle' => 'supervisor', 'created_at' => now(), 'updated_at' => now()],
-            ['libelle' => 'trainer',    'created_at' => now(), 'updated_at' => now()],
-            ['libelle' => 'learner',    'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'administrateur',      'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'superviseur', 'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'formateur',    'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'apprenant',    'created_at' => now(), 'updated_at' => now()],
             ['libelle' => 'parent',     'created_at' => now(), 'updated_at' => now()],
-            ['libelle' => 'cashier',    'created_at' => now(), 'updated_at' => now()],
-            ['libelle' => 'auditor',    'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'caissier',    'created_at' => now(), 'updated_at' => now()],
+            ['libelle' => 'auditeur',    'created_at' => now(), 'updated_at' => now()],
         ]);
-        
+
     }
 }

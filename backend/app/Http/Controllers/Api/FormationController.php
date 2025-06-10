@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Formation;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
@@ -97,4 +98,8 @@ class FormationController extends Controller
         $formation->delete();
         return response()->json(null, 204);
     }
+
+
+
+
 }

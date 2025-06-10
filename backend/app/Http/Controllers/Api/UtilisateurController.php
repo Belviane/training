@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Routing\Controller;
 
@@ -36,7 +36,7 @@ class UtilisateurController extends Controller
             'genre' => 'required',
             'date_naissance' => 'required|date',
             'login' => 'required|string|unique:utilisateurs',
-            'mdp' => 'required|string',
+            //'mdp' => 'required|string',
             'password' => 'required|string',
             'role_id' => 'required|exists:roles,id'
         ]);
@@ -47,7 +47,7 @@ class UtilisateurController extends Controller
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance,
             'login' => $request->login,
-            'mdp' => bcrypt($request->mdp),
+            //'mdp' => bcrypt($request->mdp),
             'password' => bcrypt($request->password),
             'role_id' => $request->role_id
         ]);
@@ -61,7 +61,7 @@ class UtilisateurController extends Controller
     public function update(Request $request, $id)
     {
          $utilisateur = User::findOrFail($id);
-        if ($utilisateur->role === 'admin') {
+        if ($utilisateur->role === 'administrateur') {
             return response()->json(['message' => 'Modification refusée.'], 403);
         }
         $utilisateur->update($request->only('nom', 'prenom', 'email'));
@@ -69,8 +69,8 @@ class UtilisateurController extends Controller
 
 
 
-        if ($request->has('mdp')) {
-            $data['mdp'] = bcrypt($request->mdp);
+        if ($request->has('password')) {
+            $data['mdp'] = bcrypt($request->password);
         }
 
 
@@ -81,7 +81,7 @@ class UtilisateurController extends Controller
        public function bloquer($id)
     {
         $utilisateur = User::findOrFail($id);
-        if ($utilisateur->role === 'admin') {
+        if ($utilisateur->role === 'admininistrateur') {
             return response()->json(['message' => 'Blocage refusé.'], 403);
         }
         $utilisateur->update(['bloque' => true]);
