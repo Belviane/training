@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.main-content {
+  padding-bottom: 60px;
+  /* hauteur approximative du footer */
+}
+
+.admin-dashboard {
+  padding: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-body h5 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #23527c;
+  border-color: #23527c;
+}

@@ -12,6 +12,18 @@
   z-index: 100;
 }
 
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.menu-toggle mat-icon {
+  color: #555;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -182,12 +194,60 @@
   color: #E0DB5A;
 }
 
-/* Animation subtile */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Adaptations pour tablettes */
+@media (max-width: 992px) {
+  .menu-toggle {
+    display: block;
+  }
+  
+  .header-logo {
+    height: 28px;
+  }
+  
+  .site-title {
+    font-size: 1.2rem;
+  }
+  
+  .current-date {
+    display: none;
+  }
+  
+  .user-name {
+    display: none;
+  }
+  
+  .profile-wrapper {
+    padding: 4px;
+  }
 }
 
-.notifications-dropdown {
-  animation: fadeIn 0.25s ease-out forwards;
+/* Adaptations pour téléphones */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 0.8rem 1rem;
+  }
+  
+  .site-title {
+    font-size: 1rem;
+  }
+  
+  .header-right {
+    gap: 1rem;
+  }
+  
+  .notifications-dropdown {
+    min-width: 280px;
+    right: -20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .site-title {
+    display: none;
+  }
+  
+  .header-center {
+    flex-grow: 1;
+    text-align: center;
+  }
 }

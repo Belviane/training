@@ -1,61 +1,84 @@
-/* Conteneur global */
+/* layout-wrapper.css */
 .layout-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
 }
 
-/* Header : fixe en haut */
 app-header {
-  height: 60px; /* ajustez selon votre header */
-  flex-shrink: 0;
-  width: 100%;
-  position: fixed;
+  grid-area: header;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1001;
-  background-color: #222222; /* ou votre couleur */
+  z-index: 100;
 }
 
-/* Sidebar : fixe à gauche, sous le header */
 app-sidebar {
-  position: fixed;
-  top: 60px; /* hauteur du header */
-  left: 0;
-  bottom: 0;
-  width: 260px; /* largeur sidebar */
-  background-color: #222222;
-  overflow-y: auto;
-  z-index: 1000;
+  grid-area: sidebar;
+  position: sticky;
+  top: var(--header-height, 60px);
+  height: calc(100vh - var(--header-height, 60px));
+  z-index: 90;
 }
 
-/* Overlay : caché par défaut */
-.vertical-overlay {
-  display: none; /* à afficher uniquement si menu mobile ouvert */
-  position: fixed;
-  top: 60px;
-  left: 260px;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 999;
-}
-
-/* Main content : à droite du sidebar, sous le header */
 .main-content {
-  margin-top: 60px; /* hauteur header */
-  margin-left: 260px; /* largeur sidebar */
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  background-color: #f5f5f5; /* ou votre couleur */
+  grid-area: content;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - var(--header-height, 60px));
 }
 
-/* Footer dans main-content */
-app-footer {
-  flex-shrink: 0;
-  height: 50px; /* ajustez selon besoin */
+app-content {
+  flex: 1;
 }
+
+.vertical-overlay {
+  display: none;
+}
+
+/* Responsive adaptations */
+@media (max-width: 992px) {
+  app-sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  app-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .vertical-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 80;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  app-sidebar.open + .vertical-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .layout-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  app-sidebar {
+    width: 100%;
+  }
+}
+
