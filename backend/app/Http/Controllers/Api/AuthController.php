@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-   public function register(Request $request)
+    public function register(Request $request)
     {
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'login' => 'required|string|unique:utilisateurs',
-            'mdp' => 'required|string|min:6',
+            //'mdp' => 'required|string|min:6',
             'email' => 'required|email|unique:utilisateurs,email',
             'password' => 'required|string|min:6|confirmed',
             'genre' => 'required|string',
@@ -33,7 +33,7 @@ class AuthController extends Controller
             'mdp' => bcrypt($request->mdp),
             'role_id' => $request->role_id,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            // 'password' => bcrypt($request->password), //ceci n'a pas sa place car il y'a deja mdp. password c'est pourquoi ?
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance
         ]);
@@ -44,34 +44,46 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $request->validate([
-        'login' => 'required|string',
-        'mdp' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'login' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-    $user = User::where('login', $request->login)->first();
+        $user = User::where('login', $request->login)->first();
 
-    if (!$user || !Hash::check($request->mdp, $user->mdp)) {
-        return response()->json(['message' => 'Identifiants incorrects'], 401);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Identifiants incorrects'], 401);
+        }
+
+        if (!$user->is_active) {
+            return response()->json(['message' => 'Compte désactivé. Contactez un administrateur.'], 403);
+        }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Connexion réussie',
+            'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'nom' => $user->nom,
+                'prenom' => $user->prenom,
+                'login' => $user->login,
+                'email' => $user->email,
+                'genre' => $user->genre,
+                'date_naissance' => $user->date_naissance,
+                'role' => $user->role->libelle, // <-- ici on renvoie le rôle en string
+                'role_id' => $user->role_id,
+                'is_active' => $user->is_active,
+            ],
+        ]);
     }
 
-    if (!$user->is_active) {
-        return response()->json(['message' => 'Compte désactivé. Contactez un administrateur.'], 403);
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Déconnecté avec succès']);
     }
-
-    $token = $user->createToken('API Token')->plainTextToken;
-
-    return response()->json([
-        'message' => 'Connexion réussie',
-        'token' => $token,
-        'user' => $user,
-    ]);
-}
-
-
-  public function logout(Request $request) {
-    $request->user()->currentAccessToken()->delete();
-    return response()->json(['message' => 'Déconnecté avec succès']);
-}
 }

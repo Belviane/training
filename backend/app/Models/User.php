@@ -5,14 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
-
-
-
 
 class User extends Authenticatable
 {
@@ -27,15 +22,15 @@ class User extends Authenticatable
     protected $table = 'utilisateurs'; // ← TABLE personnalisée
 
     protected $fillable = [
-         'nom',
+        'nom',
         'prenom',
-        'email',
-        'password',
         'genre',
         'date_naissance',
+         'email',
+         'password',
         'role_id',
         'login',
-        'mdp',
+        //'mdp',
         'is_active'
     ];
 
@@ -46,24 +41,29 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        'mdp',
+        //'mdp',
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function formateur() {
+   public function formateur()
+    {
         return $this->hasOne(Formateur::class);
     }
 
     public function apprenant() {
         return $this->hasOne(Apprenant::class);
     }
+
+    public function inscriptionsFormateur()
+{
+    return $this->hasMany(Inscriptions::class, 'formateur_id');
+}
+
+
 }

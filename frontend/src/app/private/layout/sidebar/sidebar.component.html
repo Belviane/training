@@ -1,0 +1,10 @@
+<nav class="sidebar">
+  <ul>
+    <li *ngFor="let item of filteredSidebarItems">
+      <a [routerLink]="item.route" routerLinkActive="active">
+        <mat-icon>{{item.icon}}</mat-icon>
+        <span>{{item.label}}</span>
+      </a>
+    </li>
+  </ul>
+</nav>

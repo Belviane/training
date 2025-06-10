@@ -1,0 +1,87 @@
+<section *ngIf="activeSection === 'accueil'" class="accueil-section" appScrollAnimate>
+  <h1 class="main-title">Bienvenue chez BE I.T AFRICA</h1>
+
+  <!-- Section Valeurs -->
+  <section class="values">
+    <h2>Nos valeurs</h2>
+    <div class="values-list">
+      <div class="value-card" tabindex="0" aria-label="Éducation numérique">
+        <img src="assets/hero.jpg" alt="Education numérique" />
+        <h3>Éducation numérique</h3>
+        <p>Des programmes adaptés pour tous les âges, dès 6 ans.</p>
+      </div>
+      <div class="value-card" tabindex="0" aria-label="Innovation">
+        <img src="assets/innovation.jpg" alt="Innovation" />
+        <h3>Innovation</h3>
+        <p>Des formations à la pointe pour préparer aux métiers de demain.</p>
+      </div>
+      <div class="value-card" tabindex="0" aria-label="Productivité entreprise">
+        <img src="assets/VM9.png" alt="Productivité entreprise" />
+        <h3>Productivité</h3>
+        <p>Accompagnement des entreprises dans leur transformation digitale.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Bootcamp -->
+  <section class="bootcamp">
+    <h2>Bootcamp Vacances Utiles 2025</h2>
+    <img src="assets/bootcamp.jpg" alt="Bootcamp enfants" style="height: 150px;"/>
+    <ul>
+      <li>Initiation aux fondamentaux de l’informatique</li>
+      <li>Outils bureautiques (Word, Excel)</li>
+      <li>Programmation et web</li>
+      <li>Analyse de données</li>
+      <li>Initiation au pilotage de drones</li>
+    </ul>
+    <p><strong>À partir de 6 ans</strong> | Packs de 20h à 120h | <a routerLink="/contact">Inscrivez-vous</a></p>
+  </section>
+
+  <!-- Section Témoignages -->
+  <section class="testimonials">
+    <h2>Ils témoignent</h2>
+    <div class="testimonial-list">
+      <div class="testimonial-card" tabindex="0">
+        <img src="assets/temoin1.jpg" alt="Parent satisfait" />
+        <blockquote>
+          “Grâce à BE I.T AFRICA, mon fils a découvert la programmation et a pris confiance en lui !”
+        </blockquote>
+        <cite>Fatou, parent</cite>
+      </div>
+      <div class="testimonial-card" tabindex="0">
+        <img src="assets/temoin2.jpg" alt="Entreprise partenaire" />
+        <blockquote>
+          “Nos équipes ont gagné en productivité grâce à leurs formations sur-mesure.”
+        </blockquote>
+        <cite>Directeur RH, PME locale</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section partenaires -->
+  <section class="partners">
+    <h2>Nos partenaires</h2>
+    <div class="partners-list">
+      <img src="assets/partner1.png" alt="Partenaire 1" />
+      <img src="assets/partner2.png" alt="Partenaire 2" />
+      <img src="assets/partner3.png" alt="Partenaire 3" />
+    </div>
+  </section>
+
+  <!-- Section FAQ -->
+  <section class="faq">
+    <h2>Foire aux questions</h2>
+    <details>
+      <summary>Quels sont les âges ciblés ?</summary>
+      <p>Nos formations s’adressent aux enfants dès 6 ans, adolescents, adultes et entreprises.</p>
+    </details>
+    <details>
+      <summary>Comment s’inscrire au bootcamp ?</summary>
+      <p>Contactez-nous via le formulaire ou par téléphone pour réserver votre place.</p>
+    </details>
+    <details>
+      <summary>Quels sont les moyens de paiement acceptés ?</summary>
+      <p>Nous acceptons les paiements par mobile money, virement bancaire et espèces.</p>
+    </details>
+  </section>
+</section>

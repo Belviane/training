@@ -1,0 +1,142 @@
+/* Conteneur principal - Version claire */
+.sidebar {
+  width: 260px;
+  height: calc(100vh);
+  background-color: #FFFFFF; /* Fond blanc pur */
+  color: #222222; /* Texte noir */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding-top: 60px;
+  border-right: 1px solid #EFEFEF; /* Ligne de séparation subtile */
+}
+
+/* Liste des éléments */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* Élément de menu */
+.sidebar li {
+  margin: 0;
+  position: relative;
+}
+
+/* Lien du menu */
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+  color: #222222;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid transparent;
+}
+
+/* Icônes */
+.sidebar mat-icon {
+  margin-right: 16px;
+  color: #CCBC6E; /* Jaune doré mat */
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+/* Effet au survol */
+.sidebar a:hover {
+  background-color: #FFFBE6; /* Fond jaune très pâle */
+  color: #222222;
+}
+
+.sidebar a:hover mat-icon {
+  color: #AAA009; /* Jaune plus soutenu */
+  transform: scale(1.05);
+}
+
+/* État actif */
+.sidebar a.active {
+  background-color: #FFF8D6; /* Jaune pâle */
+  border-left-color: #E0DB5A; /* Jaune doré */
+  font-weight: 600;
+}
+
+.sidebar a.active mat-icon {
+  color: #c0c01a;
+}
+
+/* Indicateur visuel pour l'état actif */
+.sidebar li::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background-color: #c0c01a;
+  transition: height 0.3s ease;
+}
+
+.sidebar li:hover::after,
+.sidebar li.active::after {
+  height: 60%;
+}
+
+/* Sous-menu */
+.submenu ul {
+  padding-left: 40px;
+  background-color: #F9F9F9; /* Gris très clair */
+}
+
+.submenu ul li a {
+  padding: 12px 24px 12px 20px;
+  font-size: 0.9rem;
+  color: #555555;
+  border-left: 3px solid #EEEEEE;
+}
+
+.submenu ul li a:hover,
+.submenu ul li a.active {
+  color: #222222;
+  background-color: #FFF0A0; /* Jaune plus prononcé */
+}
+
+/* Scrollbar élégante */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #F5F5F5;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #E0DB5A;
+  border-radius: 3px;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar a {
+    padding: 16px 24px;
+  }
+}

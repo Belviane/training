@@ -8,7 +8,7 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "app",    
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -21,15 +21,21 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/assets",
+              "src/favicon.ico",
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -79,6 +85,8 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
+              "src/favicon.ico",
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -87,7 +95,20 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "assets/libs/bootstrap/js/bootstrap.bundle.min.js",
+              "assets/libs/simplebar/simplebar.min.js",
+              "assets/libs/node-waves/waves.min.js",
+              "assets/libs/feather-icons/feather.min.js",
+              "assets/js/pages/plugins/lord-icon-2.1.0.js",
+              "assets/js/plugins.js",
+              "assets/libs/apexcharts/apexcharts.min.js",
+              "assets/libs/jsvectormap/jsvectormap.min.js",
+              "assets/libs/jsvectormap/maps/world-merc.js",
+              "assets/libs/swiper/swiper-bundle.min.js",
+              "assets/js/pages/dashboard-ecommerce.init.js",
+              "assets/js/app.js"
+            ]
           }
         }
       }

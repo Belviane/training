@@ -1,0 +1,37 @@
+<main>
+  <div class="login-container">
+    <div class="login-header">
+      <img src="assets/logo.png" alt="Logo BE I.T. CLASSROOM" class="logo" />
+      <h2>BE I.T. CLASSROOM</h2>
+      <p class="subtitle">Connectez-vous à votre espace</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="Login()">
+      <div class="form-group">
+        <label for="login">Login</label>
+        <div class="input-wrapper">
+          <input type="text" id="login" name="login" placeholder="Entrez votre login" autocomplete="login" required
+            aria-required="true" [(ngModel)]="login" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mdp">Mot de passe</label>
+        <div class="input-wrapper">
+          <input type="password" id="mdp" name="mdp" placeholder="Entrez votre mot de passe"
+            autocomplete="current-password" required aria-required="true" [(ngModel)]="mdp" />
+        </div>
+      </div>
+
+      <button type="submit" class="login-btn">Se connecter</button>
+      <div class="login-footer">
+        <a href="##" class="forgot-password">Mot de passe oublié ?</a>
+      </div>
+    </form>
+
+  </div>
+
+  <footer class="auth-footer">
+    <p>&copy; {{ currentYear }} BE IT AFRICA. Tous droits réservés.</p>
+  </footer>
+</main>

@@ -1,0 +1,113 @@
+.site-header {
+  width: 100%;
+}
+
+#navbar {
+  background-color: #010101;
+  padding: 15px 0;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(34, 34, 34, 0.08);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 100px;
+  width: 100px;           /* Ajoutez cette ligne pour forcer un format carré */
+  object-fit: cover;     /* Pour que le logo remplisse bien le cercle */
+  background: #222222;
+}
+
+.site-title {
+  color: #EFEF57;
+  font-weight: bold;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 #222222;
+}
+
+.main-menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.main-menu a {
+  color: #222222;
+  text-decoration: none;
+  font-weight: 500;
+  padding-bottom: 4px;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.main-menu a.active {
+  border-bottom-color: #EFEF57; /* Soulignement jaune */
+  font-weight: 700;
+  color: #010101;
+}
+
+.main-menu li a {
+  color: #E7ED7F;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.08rem;
+  transition: color 0.2s;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+.main-menu li a:hover,
+.main-menu li a:focus {
+  color: #AAA009;
+  background: #222222;
+  border-bottom-color: #EDEC38;
+}
+
+.btn-login {
+  background-color: #EFEF57; /* Uniformisez ici */
+  color: #010101;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(204, 188, 110, 0.08);
+  transition: background 0.2s, color 0.2s;
+  border: 1px solid #EFEF57; /* Uniformisez ici aussi */
+}
+
+.btn-login:hover,
+.btn-login:focus {
+  background-color: #EDEC38; /* Vous pouvez garder ce hover plus clair si vous voulez un effet, ou mettre aussi #EFEF57 */
+  color: #2D2D2B;
+  border-color: #AAA009;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .main-menu {
+    gap: 18px;
+  }
+  .logo-img {
+    height: 60px;
+  }
+}
