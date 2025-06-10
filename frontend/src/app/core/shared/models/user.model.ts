@@ -18,7 +18,7 @@ export interface User {
   email: string;
   genre: string;
   date_naissance: Date;
-  role: UserRole;
+  role: UserRole | String;
   createdAt?: Date;
   updatedAt?: Date; 
 }
@@ -49,5 +49,5 @@ export function hasRole(user: User, role: UserRole): boolean {
 }
 
 export function hasAnyRole(user: User, roles: UserRole[]): boolean {
-  return roles.includes(user.role);
+  return roles.includes(user.role as UserRole);
 }

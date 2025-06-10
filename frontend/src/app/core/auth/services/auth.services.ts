@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     getUserRole(): UserRole | null {
-        return this.currentUserValue?.role || null;
+        return this.currentUserValue?.role ? this.currentUserValue.role as UserRole : null;
     }
 
     isLoggedIn(): boolean {
@@ -36,17 +36,38 @@ export class AuthService {
 
     hasAnyRole(requiredRoles: UserRole[]): boolean {
         if (!this.currentUserValue?.role) return false;
-        return requiredRoles.includes(this.currentUserValue.role);
+        return requiredRoles.includes(this.currentUserValue.role as UserRole);
     }
 
     login(login: string, mdp: string): Observable<any> {
-        return this.http.post(LaravelApi.login, { login, mdp })
+        return this.http.post<any>(LaravelApi.login, { login, mdp }).pipe(
+            tap(response => {
+                if (response && response.token && response.user) {
+                    // Si 'role' est un objet, on extrait la propriété libelle
+                    let roleString = response.user.role;
+                    if (typeof roleString === 'object' && roleString !== null && 'libelle' in roleString) {
+                        roleString = roleString.libelle;
+                    }
 
+                    // Construire un nouvel objet user avec role en string
+                    const user = {
+                        ...response.user,
+                        role: roleString
+                    };
+
+                    localStorage.setItem('token', response.token);
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.currentUserSubject.next(user);
+                }
+            })
+        );
     }
+
+
 
     logout(): void {
         // Appel API avant de nettoyer le local storage
-        this.http.post('http://localhost:8000/api/logout', {}).subscribe({
+        this.http.post(LaravelApi.logout, {}).subscribe({
             complete: () => {
                 localStorage.removeItem('currentUser');
                 localStorage.removeItem('token');
@@ -62,7 +83,7 @@ export class AuthService {
     }
 
     register(user: any): Observable<any> {
-        return this.http.post('http://localhost:8000/api/register', user).pipe(
+        return this.http.post(LaravelApi.register, user).pipe(
             tap(response => {
                 console.log('Réponse de l\'API :', response);
             }),

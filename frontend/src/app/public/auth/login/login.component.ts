@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/auth/services/auth.services';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
   currentYear: any;
   login: string = '';
-  password: string = '';
+  mdp: string = '';
   errorMessage: string = '';
 
   ngOnInit(): void {
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
    }
 
   Login() {
-    this.authService.login(this.login, this.password).subscribe(
+    this.authService.login(this.login, this.mdp).subscribe(
       {
       next: () => 
         // Redirection vers la page d'accueil après une connexion réussie
