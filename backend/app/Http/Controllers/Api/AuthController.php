@@ -46,7 +46,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'login' => 'required|email',
+            'login' => 'required|string',
             'mdp' => 'required|string',
         ]);
 
@@ -65,7 +65,18 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Connexion réussie',
             'token' => $token,
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'nom' => $user->nom,
+                'prenom' => $user->prenom,
+                'login' => $user->login,
+                'email' => $user->email,
+                'genre' => $user->genre,
+                'date_naissance' => $user->date_naissance,
+                'role' => $user->role->libelle, // <-- ici on renvoie le rôle en string
+                'role_id' => $user->role_id,
+                'is_active' => $user->is_active,
+            ],
         ]);
     }
 
