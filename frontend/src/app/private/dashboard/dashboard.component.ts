@@ -4,6 +4,7 @@ import { FooterComponent } from '../../private/layout/footer/footer.component';
 import { SidebarComponent } from "../layout/sidebar/sidebar.component";
 import { ContentComponent } from '../content/content.component';
 import { ResponsiveService } from 'src/app/services/responsive.service';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,7 @@ export class DashboardComponent implements OnInit {
   responsiveService = inject(ResponsiveService);
 
   themeSelectorMode = computed(() => {
-    if (this.responsiveService.largeWidth()){
+    if (this.responsiveService.largeWidth()) {
       return 'side';
     }
     return 'over';
@@ -28,9 +29,22 @@ export class DashboardComponent implements OnInit {
     return 'side';
   });
 
-  constructor() {}
+  constructor(private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (event.url !== '/app') {
+          this.router.navigate(['/app'], { replaceUrl: true });
+          // Rediriger à nouveau pour éviter les tentatives de revenir en arrière
+          setTimeout(() => {
+            if (this.router.url !== '/app') {
+              this.router.navigate(['/app'], { replaceUrl: true });
+            }
+          }, 100);
+        }
+      }
+    });
   }
 
 }

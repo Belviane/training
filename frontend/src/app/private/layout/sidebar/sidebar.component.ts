@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router'; // Importation du Router pour la navigation
 import { AuthService } from '../../../core/auth/services/auth.services' // Service d'authentification
 import { MatIconModule } from '@angular/material/icon'; // Importation de MatIconModule pour les icônes
+import { Observable } from 'rxjs/internal/Observable';
+import { LaravelApi } from '@app/core/api/laravel.api';
 
 
 interface MenuItem {
@@ -19,6 +21,7 @@ interface MenuItem {
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit {
+  [x: string]: any;
 
   isLoggedIn: boolean = false;
   userRole: string | null = null;
@@ -33,30 +36,30 @@ export class SidebarComponent implements OnInit {
 
   sidebarItems: MenuItem[] = [
     // Commun à tous
-    { label: 'Dashboard', icon: 'dashboard', route: '', roles: ['learner', 'parent', 'trainer', 'supervisor', 'admin'] },
-    // learner
-    { label: 'Mon évolution', icon: 'trending_up', route: '/evolution', roles: ['learner'] },
-    { label: 'Mes formations', icon: 'school', route: '/formations', roles: ['learner'] },
-    { label: 'Fiche d\'évaluation', icon: 'assignment', route: '/fiche-evaluation', roles: ['learner'] },
+    { label: 'Dashboard', icon: 'dashboard', route: '', roles: ['apprenant', 'parent', 'formateur', 'superviseur', 'administrateur'] },
+    // apprenant
+    { label: 'Mon évolution', icon: 'trending_up', route: '/evolution', roles: ['apprenant'] },
+    { label: 'Mes formations', icon: 'school', route: '/formations', roles: ['apprenant'] },
+    { label: 'Fiche d\'évaluation', icon: 'assignment', route: '/fiche-evaluation', roles: ['apprenant'] },
     // Parent
     { label: 'Évolution enfant', icon: 'child_care', route: '/enfant/evolution', roles: ['parent'] },
-    // trainer
-    { label: 'Suivi des learners', icon: 'people', route: '/suivi-learners', roles: ['trainer'] },
-    { label: 'Évaluer learners', icon: 'rate_review', route: '/evaluation', roles: ['trainer'] },
-    { label: 'Suivi des classes', icon: 'class', route: '/suivi-classes', roles: ['trainer'] },
-    { label: 'Tests de connaissances', icon: 'quiz', route: '/tests', roles: ['trainer'] },
-    // supervisor
-    { label: 'Suivi global', icon: 'analytics', route: '/suivi-global', roles: ['supervisor'] },
-    { label: 'Évaluer trainers', icon: 'star_rate', route: '/evaluation-trainers', roles: ['supervisor'] },
-    // admin
-    { label: 'Comptes', icon: 'account_circle', route: '/admin/comptes', roles: ['admin'] },
-    { label: 'Contenus', icon: 'folder', route: '/admin/contenus', roles: ['admin'] },
-    { label: 'Statistiques', icon: 'bar_chart', route: '/admin/statistiques', roles: ['admin'] }
+    // formateur
+    { label: 'Suivi des apprenants', icon: 'people', route: '/suivi-apprenants', roles: ['formateur'] },
+    { label: 'Évaluer apprenants', icon: 'rate_review', route: '/evaluation', roles: ['formateur'] },
+    { label: 'Suivi des classes', icon: 'class', route: '/suivi-classes', roles: ['formateur'] },
+    { label: 'Tests de connaissances', icon: 'quiz', route: '/tests', roles: ['formateur'] },
+    // superviseur
+    { label: 'Suivi global', icon: 'analytics', route: '/suivi-global', roles: ['superviseur'] },
+    { label: 'Évaluer formateurs', icon: 'star_rate', route: '/evaluation-formateurs', roles: ['superviseur'] },
+    // administrateur
+    { label: 'Comptes', icon: 'account_circle', route: '/administrateur/comptes', roles: ['administrateur'] },
+    { label: 'Contenus', icon: 'folder', route: '/administrateur/contenus', roles: ['administrateur'] },
+    { label: 'Statistiques', icon: 'bar_chart', route: '/administrateur/statistiques', roles: ['administrateur'] }
   ];
 
   filteredSidebarItems: MenuItem[] = [];
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -71,5 +74,9 @@ export class SidebarComponent implements OnInit {
     } else {
       this.filteredSidebarItems = [];
     }
+  }
+
+  logout(): Observable<any> {
+    return this['http'].post(LaravelApi.logout, {});
   }
 }

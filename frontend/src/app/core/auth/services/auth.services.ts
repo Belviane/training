@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User, UserRole } from "../../shared/models/user.model";
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { catchError, throwError } from 'rxjs';
 import { LaravelApi } from '@app/core/api/laravel.api';
@@ -11,6 +11,8 @@ import { LaravelApi } from '@app/core/api/laravel.api';
     providedIn: 'root'
 })
 export class AuthService {
+    // Supposons que les infos utilisateur sont stockées dans un objet user
+    private user: { name: string;  /* autres champs */ } | null = null;
     private currentUserSubject: BehaviorSubject<User | null>;
     public currentUser$: Observable<User | null>;
 
@@ -26,9 +28,20 @@ export class AuthService {
         return this.currentUserSubject.value;
     }
 
+    // Cette méthode peut être appelée après la connexion pour stocker l'utilisateur
+    setUser(userData: any) {
+        this.user = userData;
+    }
+
     getUserRole(): UserRole | null {
         return this.currentUserValue?.role ? this.currentUserValue.role as UserRole : null;
     }
+
+    getUserName(): Observable<string> {
+    return this.http.get<{ nom: string; prenom: string }>(LaravelApi.userinfo).pipe(
+      map(user => `${user.prenom} ${user.nom}`)
+    );
+  }
 
     isLoggedIn(): boolean {
         return !!this.currentUserValue;
@@ -39,8 +52,8 @@ export class AuthService {
         return requiredRoles.includes(this.currentUserValue.role as UserRole);
     }
 
-    login(login: string, mdp: string): Observable<any> {
-        return this.http.post<any>(LaravelApi.login, { login, mdp }).pipe(
+    login(login: string, password: string): Observable<any> {
+        return this.http.post<any>(LaravelApi.login, { login, password }).pipe(
             tap(response => {
                 if (response && response.token && response.user) {
                     // Si 'role' est un objet, on extrait la propriété libelle

@@ -32,3 +32,110 @@
     </div>
   </div>
 </div>
+
+
+<!-- Formateur-->
+<div *ngIf="isTrainer()" class="trainer-dashboard">
+  <!-- Section Bienvenue -->
+  <div class="welcome-card">
+    <div class="welcome-content">
+      <h2>Bonjour, {{ trainerName }}</h2>
+      <p>Voici votre activité aujourd'hui</p>
+    </div>
+
+    <div class="add-learner-button">
+      <button mat-raised-button color="primary" (click)="openAjouterModal()">
+        Ajouter Apprenant
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistiques Rapides -->
+  <div class="quick-stats">
+    <div class="stat-card">
+      <mat-icon>group</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">24</span>
+        <span class="stat-label">Apprenants actifs</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <mat-icon>assignment</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">5</span>
+        <span class="stat-label">Évaluations en attente</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <mat-icon>event_available</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Sessions aujourd'hui</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deux colonnes principales -->
+  <div class="main-content">
+    <!-- Colonne de gauche -->
+    <div class="left-column">
+      <!-- Prochaines sessions -->
+      <div class="sessions-card">
+        <h3 class="section-title">
+          <mat-icon>event</mat-icon>
+          <span>Prochaines sessions</span>
+        </h3>
+        <div class="session-item" *ngFor="let session of upcomingSessions">
+          <div class="session-time">
+            {{ session.time }}
+          </div>
+          <div class="session-details">
+            <strong>{{ session.title }}</strong>
+            <span>{{ session.group }} - {{ session.location }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dernières évaluations -->
+      <div class="evaluations-card">
+        <h3 class="section-title">
+          <mat-icon>assignment_turned_in</mat-icon>
+          <span>Dernières évaluations</span>
+        </h3>
+        <div class="evaluation-item" *ngFor="let eval of recentEvaluations">
+          <div class="eval-icon"
+            [ngClass]="{'success': eval.status === 'completed', 'warning': eval.status === 'pending'}">
+            <mat-icon>{{ eval.status === 'completed' ? 'check_circle' : 'pending' }}</mat-icon>
+          </div>
+          <div class="eval-details">
+            <strong>{{ eval.learner }}</strong>
+            <span>{{ eval.test }} - {{ eval.date }}</span>
+          </div>
+          <div class="eval-grade" *ngIf="eval.grade">
+            {{ eval.grade }}/20
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne de droite -->
+    <div class="right-column">
+      <!-- Activité récente -->
+      <div class="activity-card">
+        <h3 class="section-title">
+          <mat-icon>timeline</mat-icon>
+          <span>Activité récente</span>
+        </h3>
+        <div class="activity-timeline">
+          <div class="timeline-item" *ngFor="let activity of recentActivities">
+            <div class="timeline-badge" [ngClass]="activity.type"></div>
+            <div class="timeline-content">
+              <p>{{ activity.description }}</p>
+              <small>{{ activity.time }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -125,6 +125,45 @@
   border-radius: 3px;
 }
 
+.logout-container {
+  margin-top: auto;
+  padding: 0px;
+  border-top: 1px solid #EFEFEF;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+  color: #222222;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.logout-button:hover {
+  background-color: #FFFBE6;
+  color: #222222;
+}
+
+.logout-button mat-icon {
+  margin-right: 16px;
+  color: #CCBC6E;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover mat-icon {
+  color: #AAA009;
+  transform: scale(1.05);
+}
+
 /* Version mobile par défaut */
 @media (max-width: 992px) {
   .sidebar {

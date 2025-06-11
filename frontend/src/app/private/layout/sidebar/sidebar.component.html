@@ -1,5 +1,5 @@
 <nav class="sidebar" [class.open]="isSidebarOpen">
-  
+
   <ul>
     <li *ngFor="let item of filteredSidebarItems">
       <a [routerLink]="item.route" routerLinkActive="active">
@@ -8,4 +8,11 @@
       </a>
     </li>
   </ul>
+
+  <div class="logout-container">
+    <button class="logout-button" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span class="menu-label">Déconnexion</span>
+    </button>
+  </div>
 </nav>
