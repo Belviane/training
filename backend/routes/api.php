@@ -120,3 +120,6 @@ Route::middleware(['auth:sanctum', 'role:formateur,superviseur'])->group(functio
         return response()->json(['message' => 'Accès formateur/superviseur']);
     });
 });
+
+
+Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);

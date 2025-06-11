@@ -30,7 +30,7 @@ class AuthController extends Controller
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'login' => $request->login,
-            'mdp' => bcrypt($request->mdp),
+            'password' => bcrypt($request->mdp),
             'role_id' => $request->role_id,
             'email' => $request->email,
             'genre' => $request->genre,

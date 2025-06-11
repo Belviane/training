@@ -22,10 +22,10 @@ class UtilisateurController extends Controller
         $adminRoleId = DB::table('roles')->where('libelle', 'admin')->value('id');
 
         $users = DB::table('utilisateurs')
-                ->where('role_id', '!=', $adminRoleId)
-                ->get();
+            ->where('role_id', '!=', $adminRoleId)
+            ->get();
 
-    return response()->json($users);
+        return response()->json($users);
     }
 
     public function store(Request $request)
@@ -60,7 +60,7 @@ class UtilisateurController extends Controller
 
     public function update(Request $request, $id)
     {
-         $utilisateur = User::findOrFail($id);
+        $utilisateur = User::findOrFail($id);
         if ($utilisateur->role === 'administrateur') {
             return response()->json(['message' => 'Modification refusée.'], 403);
         }
@@ -78,7 +78,7 @@ class UtilisateurController extends Controller
         return $utilisateur;
     }
 
-       public function bloquer($id)
+    public function bloquer($id)
     {
         $utilisateur = User::findOrFail($id);
         if ($utilisateur->role === 'admininistrateur') {
@@ -108,26 +108,40 @@ class UtilisateurController extends Controller
         return $this->hasOne(Administrateur::class);
     }
 
-     public function listerApprenants()
+    public function listerApprenants()
     {
         return User::where('role', 'apprenant')->get();
     }
 
     public function activer($id)
-{
-    $utilisateur = User::findOrFail($id);
-    $utilisateur->is_active = true;
-    $utilisateur->save();
+    {
+        $utilisateur = User::findOrFail($id);
+        $utilisateur->is_active = true;
+        $utilisateur->save();
 
-    return response()->json(['message' => 'Utilisateur activé avec succès.']);
-}
+        return response()->json(['message' => 'Utilisateur activé avec succès.']);
+    }
 
-public function desactiver($id)
-{
-    $utilisateur = User::findOrFail($id);
-    $utilisateur->is_active = false;
-    $utilisateur->save();
+    public function desactiver($id)
+    {
+        $utilisateur = User::findOrFail($id);
+        $utilisateur->is_active = false;
+        $utilisateur->save();
 
-    return response()->json(['message' => 'Utilisateur désactivé avec succès.']);
-}
+        return response()->json(['message' => 'Utilisateur désactivé avec succès.']);
+    }
+
+    public function userInfo(Request $request)
+    {
+        $user = $request->user(); // récupère l'utilisateur authentifié via Sanctum ou autre
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non authentifié'], 401);
+        }
+
+        return response()->json([
+            'nom' => $user->nom,
+            'prenom' => $user->prenom
+        ]);
+    }
 }
