@@ -1,0 +1,40 @@
+<h2>Ajouter un Apprenant à une formation</h2>
+
+<form [formGroup]="inscriptionForm" (ngSubmit)="submit()">
+    <!-- Sélection de la formation -->
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 1rem;">
+        <mat-label>Formation</mat-label>
+        <mat-select formControlName="formation_id" required>
+            <mat-option *ngIf="isLoadingFormations" disabled>Chargement des formations...</mat-option>
+            <mat-option *ngFor="let formation of formations" [value]="formation.id">
+                {{ formation.nom_formation }} - {{ formation.libelle_formation }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="inscriptionForm.get('formation_id')?.hasError('required')">
+            La formation est obligatoire
+        </mat-error>
+    </mat-form-field>
+
+    <!-- ID de l'apprenant -->
+    <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Identifiant Apprenant</mat-label>
+        <input matInput formControlName="apprenant_id" placeholder="Entrez l'ID de l'apprenant" type="number" />
+        <mat-error *ngIf="inscriptionForm.get('apprenant_id')?.hasError('required')">
+            Ce champ est obligatoire
+        </mat-error>
+        <mat-error *ngIf="inscriptionForm.get('apprenant_id')?.hasError('min')">
+            L'ID doit être supérieur à 0
+        </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    <div class="actions">
+        <button mat-button type="button" (click)="close()">Annuler</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting || inscriptionForm.invalid">
+            {{ isSubmitting ? 'En cours...' : 'Inscrire' }}
+        </button>
+    </div>
+</form>

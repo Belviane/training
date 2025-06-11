@@ -1,11 +1,11 @@
 export enum UserRole {
-  ADMIN = 'admin',
-  SUPERVISOR = 'supervisor',
-  TRAINER = 'trainer',
-  LEARNER = 'learner',
+  ADMIN = 'admininstrateur',
+  SUPERVISOR = 'superviseur',
+  TRAINER = 'formateur',
+  LEARNER = 'apprenant',
   PARENT = 'parent',
-  CASHIER = 'cashier',
-  AUDITOR = 'auditor'
+  CASHIER = 'caissier',
+  AUDITOR = 'auditeur'
 }
 
 export interface User {
@@ -13,7 +13,7 @@ export interface User {
   nom: string;
   prenom: string;
   login: string;
-  mdp: string;
+  password: string;
   role_id: number;
   email: string;
   genre: string;

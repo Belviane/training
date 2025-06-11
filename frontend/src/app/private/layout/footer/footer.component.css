@@ -1,5 +1,4 @@
 .auth-footer {
-  position:fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -23,16 +22,31 @@
   padding-left: 2rem;
 }
 
-/* Adaptation pour le mode mobile */
-@media (max-width: 768px) {
+/* Modifications existantes et ajouts */
+
+/* Adaptations pour sidebar réduite */
+@media (max-width: 992px) {
   .auth-footer {
-    padding: 0.8rem 0;
+    padding-left: 80px;
+  }
+  
+  .sidebar.open ~ .auth-footer {
+    padding-left: 260px;
+  }
+}
+
+/* Adaptations pour téléphones */
+@media (max-width: 576px) {
+  .auth-footer {
+    padding-left: 0;
     text-align: center;
   }
   
-  /* Si le sidebar est ouvert en mobile */
   .sidebar.open ~ .auth-footer {
-    padding-left: 280px; /* Largeur du sidebar */
-    transition: padding 0.3s ease;
+    padding-left: 0;
+  }
+  
+  .auth-footer p {
+    font-size: 0.8rem;
   }
 }

@@ -15,7 +15,7 @@ use App\Models\Apprenant;
 class InscriptionController extends Controller
 {
 
-   public function inscrire(Request $request, $formationId)
+    public function inscrire(Request $request, $formationId)
     {
 
         if (!auth()->check()) {
@@ -29,31 +29,31 @@ class InscriptionController extends Controller
         ], 401);
     }
         // Auth::user() est forcément un formateur ici car la policy l'a vérifié
-    $request->validate([
-        'apprenant_id' => 'required|exists:apprenants,id'
-    ]);
+        $request->validate([
+            'apprenant_id' => 'required|exists:apprenants,id'
+        ]);
 
-    $apprenant = Apprenant::findOrFail($request->apprenant_id);
+        $apprenant = Apprenant::findOrFail($request->apprenant_id);
 
-    if ($formation->apprenants()->where('apprenant_id', $apprenant->id)->exists()) {
-        return response()->json(['message' => 'Cet apprenant est déjà inscrit'], 400);
-    }
+        if ($formation->apprenants()->where('apprenant_id', $apprenant->id)->exists()) {
+            return response()->json(['message' => 'Cet apprenant est déjà inscrit'], 400);
+        }
 
-    $formation->apprenants()->attach($apprenant->id, [
-        'formateur_id' => Auth::id(),
-        'date_inscription' => now(),
-        'statut' => 'actif'
-    ]);
+        $formation->apprenants()->attach($apprenant->id, [
+            'formateur_id' => Auth::id(),
+            'date_inscription' => now(),
+            'statut' => 'actif'
+        ]);
 
-    return response()->json([
-        'message' => 'Inscription réussie',
-        'inscription' => [
-            'formation' => $formation->nom,
-            'apprenant' => $apprenant->utilisateur->nom_complet,
-            'formateur' => Auth::user()->nom_complet,
-            'date' => now()->toDateString()
-        ]
-    ], 201);
+        return response()->json([
+            'message' => 'Inscription réussie',
+            'inscription' => [
+                'formation' => $formation->nom,
+                'apprenant' => $apprenant->utilisateur->nom_complet,
+                'formateur' => Auth::user()->nom_complet,
+                'date' => now()->toDateString()
+            ]
+        ], 201);
     }
 
     public function mesInscriptions()
@@ -62,10 +62,10 @@ class InscriptionController extends Controller
         $inscriptions = Formation::where('formateur_id', Auth::id())
             ->with(['apprenants.utilisateur'])
             ->get()
-            ->map(function($formation) {
+            ->map(function ($formation) {
                 return [
                     'formation' => $formation->nom,
-                    'apprenants' => $formation->apprenants->map(function($apprenant) {
+                    'apprenants' => $formation->apprenants->map(function ($apprenant) {
                         return [
                             'id' => $apprenant->id,
                             'nom' => $apprenant->utilisateur->nom,

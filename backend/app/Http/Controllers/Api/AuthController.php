@@ -30,10 +30,9 @@ class AuthController extends Controller
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'login' => $request->login,
-            'mdp' => bcrypt($request->mdp),
+            'password' => bcrypt($request->mdp),
             'role_id' => $request->role_id,
             'email' => $request->email,
-            // 'password' => bcrypt($request->password), //ceci n'a pas sa place car il y'a deja mdp. password c'est pourquoi ?
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance
         ]);
