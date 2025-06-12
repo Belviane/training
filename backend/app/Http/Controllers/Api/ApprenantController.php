@@ -21,8 +21,7 @@ class ApprenantController extends Controller
         $apprenants = Apprenant::with('utilisateur')->get();
         return response()->json($apprenants);
     }
-
-        // Créer un apprenant
+    // Créer un apprenant
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -72,7 +71,6 @@ class ApprenantController extends Controller
     {
         $apprenant = Apprenant::findOrFail($id);
         $utilisateur = $apprenant->utilisateur;
-
 
         $validated = $request->validate([
             'nom' => 'sometimes|string',

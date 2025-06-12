@@ -8,16 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Apprenant extends Model
 {
-     use HasFactory;
-
+    use HasFactory;
     protected $fillable = [
         'matricule',
         'utilisateur_id'
     ];
 
-
-
-     public function utilisateur() {
+    public function utilisateur() {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }
     public static function genererMatricule($prenom, $nom)
@@ -29,9 +26,8 @@ class Apprenant extends Model
         return $debutPrenom . $debutNom . $date;
     }
 
-
    public function formations() {
-        return $this->belongsToMany(Formation::class, 'formation_apprenant')
+        return $this->belongsToMany(Formation::class, 'inscriptions', 'apprenant_id', 'formation_id')
                ->withPivot(['formateur_id', 'date_inscription', 'statut'])
                ->withTimestamps();
     }
