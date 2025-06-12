@@ -298,3 +298,138 @@ details p {
     max-width: 100%;
   }
 }
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --gold: #AA9900;
+  --gold-light: #E6D66B;
+}
+
+/* Mise à jour des couleurs globales */
+body {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.accueil-section {
+  background: var(--black);
+  color: var(--white);
+}
+
+.main-title {
+  color: var(--white);
+  text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.3);
+}
+
+/* Valeurs */
+.values h2,
+.bootcamp h2,
+.testimonials h2,
+.partners h2,
+.faq h2,
+.formations h2,
+.team h2 {
+  color: var(--gold);
+}
+
+.value-card {
+  background: var(--gold-light);
+  color: var(--black);
+  box-shadow: 0 6px 12px rgba(170,153,0,0.25);
+}
+.value-card img {
+  border-color: var(--gold);
+}
+
+/* Bootcamp */
+.bootcamp p strong {
+  color: var(--gold);
+}
+
+/* Témoignages */
+.testimonials {
+  background: var(--gold-light);
+  color: var(--black);
+}
+.testimonial-card {
+  background: var(--white);
+  color: var(--black);
+}
+.testimonial-card img {
+  border-color: var(--gold);
+}
+
+/* Partenaires */
+.partners-list img {
+  filter: drop-shadow(0 0 4px var(--gold));
+}
+
+/* FAQ */
+details {
+  background: var(--gold-light);
+}
+details[open] {
+  background: #d6c84d;
+}
+
+/* === Formations === */
+.formations {
+  margin-top: 60px;
+  text-align: center;
+  animation: fadeSlideIn 1.6s ease forwards;
+}
+.formations-list {
+  display: flex;
+  justify-content: space-around;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.formation-card {
+  background: var(--white);
+  color: var(--black);
+  padding: 20px;
+  border-radius: 12px;
+  width: 280px;
+  box-shadow: 0 6px 12px rgba(170,153,0,0.3);
+  transition: transform 0.3s ease;
+}
+.formation-card:hover {
+  transform: translateY(-10px);
+}
+
+/* === Équipe === */
+.team {
+  margin-top: 60px;
+  text-align: center;
+  animation: fadeSlideIn 1.8s ease forwards;
+}
+.team-list {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.team-card {
+  background: var(--white);
+  color: var(--black);
+  padding: 20px;
+  border-radius: 12px;
+  width: 240px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+.team-card img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 3px solid var(--gold);
+}
+.team-card:hover {
+  transform: translateY(-10px);
+}

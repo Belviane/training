@@ -5,12 +5,13 @@ import { AuthService } from '../../../core/auth/services/auth.services' // Servi
 import { MatIconModule } from '@angular/material/icon'; // Importation de MatIconModule pour les icônes
 import { Observable } from 'rxjs/internal/Observable';
 import { LaravelApi } from '@app/core/api/laravel.api';
-
+import { HttpClient } from '@angular/common/http';
+import { CompteComponent } from '../../compte/compte.component';
 
 interface MenuItem {
   label: string;
   icon: string; // nom d'icône (ex: Material Icons ou FontAwesome)
-  route: string;
+  route: string; // chemin de navigation
   roles: string[]; // rôles autorisés à voir ce menu
 }
 
@@ -25,6 +26,9 @@ export class SidebarComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   userRole: string | null = null;
+  route: string | undefined;
+
+
 
   // Ajoutez cette propriété à votre classe
   isSidebarOpen: boolean = false;
@@ -51,15 +55,16 @@ export class SidebarComponent implements OnInit {
     // superviseur
     { label: 'Suivi global', icon: 'analytics', route: '/suivi-global', roles: ['superviseur'] },
     { label: 'Évaluer formateurs', icon: 'star_rate', route: '/evaluation-formateurs', roles: ['superviseur'] },
+    
     // administrateur
-    { label: 'Comptes', icon: 'account_circle', route: '/administrateur/comptes', roles: ['administrateur'] },
+    { label: 'Comptes', icon: 'account_circle', route: '/compte', roles: ['administrateur'] }, // Cette route doit être liée à CompteComponent dans votre routing module
     { label: 'Contenus', icon: 'folder', route: '/administrateur/contenus', roles: ['administrateur'] },
     { label: 'Statistiques', icon: 'bar_chart', route: '/administrateur/statistiques', roles: ['administrateur'] }
   ];
 
   filteredSidebarItems: MenuItem[] = [];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private http: HttpClient) { }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -76,7 +81,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  logout(): Observable<any> {
-    return this['http'].post(LaravelApi.logout, {});
-  }
+  logout() {
+    this.router.navigate(['/login']); // Redirigez vers la page de connexion
+}
 }

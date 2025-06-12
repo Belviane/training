@@ -5,19 +5,53 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AjouterComponent } from '@app/core/shared/modals/ajouter/ajouter.component';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ListeComponent } from '@app/core/shared/modals/liste/liste.component';
+import { LaravelApi } from '@app/core/api/laravel.api';
+import { CompteComponent } from '../compte/compte.component';
 
 @Component({
   selector: 'app-content',
-  imports: [CommonModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
 export class ContentComponent implements OnInit {
 
-  trainerName: string = '';
+  userStats = [
+    {
+      label: 'Superviseurs',
+      value: 0, // Remplacez par la valeur réelle
+      icon: 'supervisor_account',
+    },
+  ];
+
+  recentAccounts: any[] = [];
+  participationRate: number = 0;
+  participantsCount: number = 0;
+  totalSeats: number = 0;
+  averageTimeSpent: number = 0;
+  timeTrend: 'up' | 'down' = 'up';
+  timeTrendValue: number = 0;
+  contentInteractions: number = 0;
+  clickCount: number = 0;
+  quizCount: number = 0;
+  commentCount: number = 0;
+  roi: number = 0;
+  trainingCost: number = 0;
+  trainingBenefit: number = 0;
+  monthlyActiveUsers: number = 0;
+  skillImprovement: number = 0;
+  skillImprovementValue: number = 0;
+
   userRole: string | null = null;
   isLoggedIn: boolean = false;
   currentDate: string | number | Date | undefined;
+
+  formationForm: FormGroup;
+  successMessage = '';
+  errorMessage = '';
 
   upcomingSessions = [
     {
@@ -87,25 +121,60 @@ export class ContentComponent implements OnInit {
   ];
 
 
-  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
+  constructor(private authService: AuthService,
+    private router: Router,
+    private dialog: MatDialog,
+    private fb: FormBuilder,
+    private http: HttpClient) {
+    this.formationForm = this.fb.group({
+      nom_formation: ['', [Validators.required]],
+      libelle_formation: ['', [Validators.required]],
+      date_debutf: ['', [Validators.required]],
+      date_finf: ['', [Validators.required]],
+      nombre_seancef: ['', [Validators.required, Validators.min(1)]],
+    });
+  }
 
   ngOnInit() {
+
     this.isLoggedIn = this.authService.isLoggedIn();
     this.userRole = this.authService.getUserRole();
-    this.authService.getUserName().subscribe({
-      next: (fullName) => this.trainerName = fullName,
-      error: () => this.trainerName = 'Formateur '
-    });
-
   }
+
 
   openAjouterModal() {
     this.dialog.open(AjouterComponent, {
-      width: '500px',
+      width: '5000px',
+      height: '500px',
       panelClass: 'custom-modal', // Classe supplémentaire pour des styles globaux
       autoFocus: false,
       disableClose: true // Empêche la fermeture en cliquant à l'extérieur
     });
+  }
+  openCompteModal() {
+    this.dialog.open(CompteComponent, {
+      width: '5000px',
+      panelClass: 'custom-modal', // Classe supplémentaire pour des styles globaux
+      autoFocus: false,
+      disableClose: true // Empêche la fermeture en cliquant à l'extérieur
+    });
+  }
+
+  onSubmit() {
+    if (this.formationForm.invalid) return;
+
+    this.http.post(LaravelApi.formations(), this.formationForm.value)
+      .subscribe({
+        next: (response: any) => {
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          this.formationForm.reset();
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.error || 'Erreur lors de la création.';
+          this.successMessage = '';
+        }
+      });
   }
 
   isAdmin(): boolean {
@@ -116,8 +185,18 @@ export class ContentComponent implements OnInit {
     return this.userRole === 'formateur';
   }
 
+  isSupervisor(): boolean {
+    return this.userRole === 'superviseur';
+  }
+
   navigateTo(route: string) {
     this.router.navigate(['/admin', route]);
   }
 
+  openListeModal(): void {
+    this.dialog.open(ListeComponent, {
+      width: '800px',
+      disableClose: false
+    });
+  }
 }

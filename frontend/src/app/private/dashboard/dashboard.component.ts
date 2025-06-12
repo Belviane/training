@@ -5,10 +5,11 @@ import { SidebarComponent } from "../layout/sidebar/sidebar.component";
 import { ContentComponent } from '../content/content.component';
 import { ResponsiveService } from 'src/app/services/responsive.service';
 import { NavigationStart, Router } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderComponent, SidebarComponent, ContentComponent, FooterComponent],
+  imports: [HeaderComponent, SidebarComponent, ContentComponent, FooterComponent, RouterOutlet],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

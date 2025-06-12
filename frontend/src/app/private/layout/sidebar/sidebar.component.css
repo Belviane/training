@@ -1,8 +1,8 @@
-/* Conteneur principal - Version claire */
+/* Conteneur principal - Version claire élégante */
 .sidebar {
   width: 260px;
   height: calc(100vh);
-  background-color: #FFFFFF; /* Fond blanc pur */
+  background-color: #FFFFFF; /* Fond blanc */
   color: #222222; /* Texte noir */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
@@ -14,7 +14,7 @@
   left: 0;
   z-index: 1000;
   padding-top: 60px;
-  border-right: 1px solid #EFEFEF; /* Ligne de séparation subtile */
+  border-right: 1px solid #EEEEEE; /* Ligne de séparation subtile */
 }
 
 /* Liste des éléments */
@@ -44,34 +44,34 @@
   border-left: 4px solid transparent;
 }
 
-/* Icônes */
+/* Icônes en gris neutre */
 .sidebar mat-icon {
   margin-right: 16px;
-  color: #CCBC6E; /* Jaune doré mat */
+  color: #666666; /* Gris moyen */
   font-size: 24px;
   transition: all 0.3s ease;
 }
 
 /* Effet au survol */
 .sidebar a:hover {
-  background-color: #FFFBE6; /* Fond jaune très pâle */
+  background-color: #FFFBE6; /* Jaune très pâle */
   color: #222222;
 }
 
 .sidebar a:hover mat-icon {
-  color: #AAA009; /* Jaune plus soutenu */
+  color: #FFD700; /* Jaune or au survol */
   transform: scale(1.05);
 }
 
 /* État actif */
 .sidebar a.active {
   background-color: #FFF8D6; /* Jaune pâle */
-  border-left-color: #E0DB5A; /* Jaune doré */
+  border-left-color: #FFD700; /* Jaune or */
   font-weight: 600;
 }
 
 .sidebar a.active mat-icon {
-  color: #c0c01a;
+  color: #FFD700; /* Jaune or pour l'état actif */
 }
 
 /* Indicateur visuel pour l'état actif */
@@ -83,7 +83,7 @@
   transform: translateY(-50%);
   width: 3px;
   height: 0;
-  background-color: #c0c01a;
+  background-color: #FFD700; /* Jaune or */
   transition: height 0.3s ease;
 }
 
@@ -101,7 +101,7 @@
 .submenu ul li a {
   padding: 12px 24px 12px 20px;
   font-size: 0.9rem;
-  color: #555555;
+  color: #555555; /* Gris moyen */
   border-left: 3px solid #EEEEEE;
 }
 
@@ -109,6 +109,11 @@
 .submenu ul li a.active {
   color: #222222;
   background-color: #FFF0A0; /* Jaune plus prononcé */
+  border-left-color: #FFD700; /* Jaune or */
+}
+
+.submenu ul li a mat-icon {
+  font-size: 20px; /* Taille légèrement réduite pour les sous-menus */
 }
 
 /* Scrollbar élégante */
@@ -121,14 +126,15 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #E0DB5A;
+  background-color: #FFD700; /* Jaune or */
   border-radius: 3px;
 }
 
+/* Section de déconnexion */
 .logout-container {
   margin-top: auto;
   padding: 0px;
-  border-top: 1px solid #EFEFEF;
+  border-top: 1px solid #EEEEEE;
 }
 
 .logout-button {
@@ -148,23 +154,23 @@
 }
 
 .logout-button:hover {
-  background-color: #FFFBE6;
+  background-color: #FFFBE6; /* Jaune très pâle */
   color: #222222;
 }
 
 .logout-button mat-icon {
   margin-right: 16px;
-  color: #CCBC6E;
+  color: #666666; /* Gris moyen */
   font-size: 24px;
   transition: all 0.3s ease;
 }
 
 .logout-button:hover mat-icon {
-  color: #AAA009;
+  color: #FFD700; /* Jaune or au survol */
   transform: scale(1.05);
 }
 
-/* Version mobile par défaut */
+/* Version mobile */
 @media (max-width: 992px) {
   .sidebar {
     width: 80px;
@@ -193,8 +199,12 @@
   .toggle-btn {
     background: none;
     border: none;
-    color: #555;
+    color: #666666; /* Gris moyen */
     cursor: pointer;
+  }
+  
+  .toggle-btn:hover {
+    color: #FFD700; /* Jaune or au survol */
   }
   
   .sidebar a {

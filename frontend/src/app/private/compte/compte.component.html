@@ -1,0 +1,42 @@
+<div class="admin-accounts">
+    <button class="close-btn" (click)="fermerModal()">
+        <mat-icon>close</mat-icon> Fermer
+    </button>
+    <h2><mat-icon>group</mat-icon> Liste des Comptes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of utilisateurs">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3><mat-icon>person_add</mat-icon> Ajouter un compte</h3>
+    <form (submit)="ajouterUtilisateur()">
+        <input type="text" placeholder="Nom" [(ngModel)]="nouveauUtilisateur.name" name="name" required>
+        <input type="email" placeholder="Email" [(ngModel)]="nouveauUtilisateur.email" name="email" required>
+        <input type="password" placeholder="Mot de passe" [(ngModel)]="nouveauUtilisateur.password" name="password"
+            required>
+        <select [(ngModel)]="nouveauUtilisateur.role" name="role" required>
+            <option value="">-- Sélectionner un rôle --</option>
+            <option value="apprenant">Apprenant</option>
+            <option value="formateur">Formateur</option>
+            <option value="parent">Parent</option>
+            <option value="superviseur">Superviseur</option>
+            <option value="administrateur">Administrateur</option>
+        </select>
+        <button type="submit">Ajouter</button>
+    </form>
+
+</div>
