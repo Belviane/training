@@ -27,12 +27,13 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Formations
-    Route::controller(FormationController::class)->group(function () {
-        Route::get('/formations/{id}', 'show');
-        Route::delete('/formations/{id}', 'destroy');
-        Route::put('/formations/{id}', 'update');
-        Route::post('/formations', 'store');
-    });
+    // Route::controller(FormationController::class)->group(function () {
+    //     Route::get('/formations/{id}', 'show');
+   // Route::get('/formations', 'index');
+    //     Route::delete('/formations/{id}', 'destroy');
+    //     Route::put('/formations/{id}', 'update');
+    //     Route::post('/formations', 'store');
+    // });
 
     // Utilisateurs
     Route::controller(UtilisateurController::class)->group(function () {
@@ -40,30 +41,30 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/utilisateurs/{id}', 'show');
         Route::get('/utilisateurs/apprenants', 'listerApprenants');
         Route::delete('/utilisateurs/{id}', 'destroy');
-        Route::delete('/utilisateurs/{id}/bloquer', 'bloquer');
+        Route::patch('/utilisateurs/{id}/bloquer', 'bloquer');
         Route::put('/utilisateurs/{id}', 'update');
         Route::post('/utilisateurs', 'store');
     });
 
-    // // Formateurs
-    // Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::post('/', 'store')->middleware('role:admin');
-    //     Route::get('/{id}', 'show');
-    //     Route::put('/{id}', 'update');
-    //     Route::patch('/{id}/activate', 'activate');
-    //     Route::patch('/{id}/deactivate', 'deactivate');
-    // });
+    // Formateurs
+    Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store')->middleware('role:admin');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::patch('/{id}/activate', 'activate');
+        Route::patch('/{id}/deactivate', 'deactivate');
+    });
 
       // Apprenants
-    // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::post('/', 'store')->middleware('role:admin');
-    //     Route::get('/{id}', 'show');
-    //     Route::put('/{id}', 'update');
-    //     Route::patch('/{id}/activate', 'activate');
-    //     Route::patch('/{id}/deactivate', 'deactivate');
-    // });
+    Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store')->middleware('role:admin');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::patch('/{id}/activate', 'activate');
+        Route::patch('/{id}/deactivate', 'deactivate');
+    });
 
 
     // Formateur peut inscrire un apprenant
@@ -85,31 +86,43 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // Formateurs
-    Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
-        Route::patch('/{id}/activate', 'activate');
-        Route::patch('/{id}/deactivate', 'deactivate');
-    });
+    // Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
+    //     Route::get('/', 'index');
+    //     Route::post('/', 'store');
+    //     Route::get('/{id}', 'show');
+    //     Route::put('/{id}', 'update');
+    //     Route::patch('/{id}/activate', 'activate');
+    //     Route::patch('/{id}/deactivate', 'deactivate');
+    // });
 
      //Apprenants
-    Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
-        Route::patch('/{id}/activate', 'activate');
-        Route::patch('/{id}/deactivate', 'deactivate');
+    // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
+    //     Route::get('/', 'index');
+    //     Route::post('/', 'store');
+    //     Route::get('/{id}', 'show');
+    //     Route::put('/{id}', 'update');
+    //     Route::patch('/{id}/activate', 'activate');
+    //     Route::patch('/{id}/deactivate', 'deactivate');
+    // });
+
+    Route::controller(FormationController::class)->group(function () {
+        Route::get('/formations/{id}', 'show');
+        Route::get('/formations', 'index');
+        Route::delete('/formations/{id}', 'destroy');
+        Route::put('/formations/{id}', 'update');
+        Route::post('/formations', 'store');
     });
+
+    Route::get('formations/{id}/apprenants', [FormationController::class, 'getApprenants']);
+    Route::post('formations/{id}/apprenants', [FormationController::class, 'ajouterApprenant']);
+
 
 
 // Roles (accessible selon vos besoins)
 Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
 
 // Routes avec contrôle de rôle
-Route::middleware(['auth:sanctum', 'role:admininistrateur'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
     Route::get('/admin-only', function () {
         return response()->json(['message' => 'Bienvenue admin']);
     });
