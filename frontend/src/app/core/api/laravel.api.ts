@@ -12,6 +12,6 @@ export const LaravelApi = {
   },
 
   inscrireApprenant(formationId: number): string {
-    return `${BASE_URL}/formations/${formationId}/apprenants`;
+    return `${BASE_URL}/formations/${formationId}/inscrire`;
   }
 };
