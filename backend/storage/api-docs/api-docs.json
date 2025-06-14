@@ -1,0 +1,32 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mon API",
+        "contact": {
+            "email": "Aline@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/rjkchdkhdhdjvhdjoles": {
+            "get": {
+                "tags": [
+                    "Rnjcjdôles"
+                ],
+                "summary": "Liste des rôles",
+                "operationId": "b0e2049a5df79a2dd3620405c3f2195d",
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Rnjcjdôles",
+            "description": "Rnjcjdôles"
+        }
+    ]
+}
