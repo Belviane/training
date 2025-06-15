@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use OpenApi\Annotations as OA;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
@@ -27,7 +28,17 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
  *     description="Serveur principal de l'API"
  * )
  */
-
+/**
+     * @OA\Get(
+     *     path="/api/roles",
+     *     summary="Liste des rôles",
+     *     tags={"Rôles"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès"
+     *     )
+     * )
+     */
 
 abstract class Controller
 {

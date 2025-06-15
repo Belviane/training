@@ -10,10 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Apprenant;
+use OpenApi\Annotations as OA;
 
 class InscriptionController extends Controller
 {
-    public function inscrire(Request $request, $formationId)
+    /*public function inscrire(Request $request, $formationId)
     {
         $formation = Formation::findOrFail($formationId);
         if (!auth()->check()) {
@@ -53,6 +54,58 @@ class InscriptionController extends Controller
             ]
         ], 201);
     }
+*/
+
+public function inscrire(Request $request, $formationId)
+{
+    $formation = Formation::findOrFail($formationId);
+
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Token manquant ou invalide',
+            'solution' => [
+                '1. Vérifiez votre token dans Postman',
+                '2. Regénérez un token via /login',
+                '3. Vérifiez les headers de la requête'
+            ]
+        ], 401);
+    }
+
+    $user = auth()->user();
+
+    // verifcation du role de formateur
+    if ($user->role->libelle !== 'formateur' ||$user->role->libelle !== 'superviseur'||$user->role->libelle !== 'administrateur' ) {
+        return response()->json([
+            'message' => 'Accès interdit : seuls les formateurs peuvent inscrire un apprenant.'
+        ], 403);
+    }
+
+    $request->validate([
+        'apprenant_id' => 'required|exists:apprenants,id'
+    ]);
+
+    $apprenant = Apprenant::findOrFail($request->apprenant_id);
+
+    if ($formation->apprenants()->where('apprenant_id', $apprenant->id)->exists()) {
+        return response()->json(['message' => 'Cet apprenant est déjà inscrit'], 400);
+    }
+
+    $formation->apprenants()->attach($apprenant->id, [
+        'formateur_id' => $user->id,
+        'date_inscription' => now(),
+        'statut' => 'accepte'
+    ]);
+
+    return response()->json([
+        'message' => 'Inscription réussie',
+        'inscription' => [
+            'formation' => $formation->nom,
+            'apprenant' => $apprenant->utilisateur->nom_complet,
+            'formateur' => $user->nom_complet,
+            'date' => now()->toDateString()
+        ]
+    ], 201);
+}
 
     public function mesInscriptions()
     {
