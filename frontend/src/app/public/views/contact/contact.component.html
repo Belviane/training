@@ -1,0 +1,97 @@
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="section-header">
+            <h2>Contactez-nous</h2>
+            <p>Prêt à commencer votre formation ? Contactez-nous dès maintenant !</p>
+        </div>
+
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Informations de contact</h3>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h4>Adresse</h4>
+                        <p>123 Rue de la Formation<br>34000 Montpellier</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h4>Téléphone</h4>
+                        <p>04 67 XX XX XX</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>contactformations.fr</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <div>
+                        <h4>Horaires</h4>
+                        <p>Lun - Ven: 9h00 - 18h00<br>Sam: 9h00 - 12h00</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+                <div class="form-group">
+                    <label for="name">Nom complet *</label>
+                    <input type="text" id="name" name="name" [(ngModel)]="formData.name" required #nameField="ngModel">
+                    <div *ngIf="nameField.invalid && nameField.touched" class="error">
+                        Le nom est requis
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" [(ngModel)]="formData.email" required email
+                        #emailField="ngModel">
+                    <div *ngIf="emailField.invalid && emailField.touched" class="error">
+                        Un email valide est requis
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone" [(ngModel)]="formData.phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="formation">Formation souhaitée</label>
+                    <select id="formation" name="formation" [(ngModel)]="formData.formation">
+                        <option value="">Sélectionnez une formation</option>
+                        <option value="wordpress">WordPress</option>
+                        <option value="photoshop">Photoshop</option>
+                        <option value="excel">Excel</option>
+                        <option value="illustrator">Illustrator</option>
+                        <option value="windows">Windows</option>
+                        <option value="powerpoint">PowerPoint</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="5" [(ngModel)]="formData.message" required
+                        #messageField="ngModel"></textarea>
+                    <div *ngIf="messageField.invalid && messageField.touched" class="error">
+                        Le message est requis
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="contactForm.invalid || isSubmitting">
+                    {{ isSubmitting ? 'Envoi en cours...' : 'Envoyer le message' }}
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
