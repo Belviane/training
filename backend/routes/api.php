@@ -27,20 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/utilisateurs/{id}/desactiver', [UtilisateurController::class, 'desactiver']);
     });
 
-    // Formations
-    // Route::controller(FormationController::class)->group(function () {
-    //     Route::get('/formations/{id}', 'show');
-    //     Route::delete('/formations/{id}', 'destroy');
-    //     Route::put('/formations/{id}', 'update');
-    //     Route::post('/formations', 'store');
-    // });
-    // Route::controller(FormationController::class)->group(function () {
-    //     Route::get('/formations/{id}', 'show');
-   // Route::get('/formations', 'index');
-    //     Route::delete('/formations/{id}', 'destroy');
-    //     Route::put('/formations/{id}', 'update');
-    //     Route::post('/formations', 'store');
-    // });
+    //Formations
+    Route::controller(FormationController::class)->group(function () {
+        Route::get('/formations/{id}', 'show');
+        Route::get('/formations', 'index');
+        Route::delete('/formations/{id}', 'destroy');
+        Route::put('/formations/{id}', 'update');
+        Route::post('/formations', 'store');
+    });
 
     // Utilisateurs
     Route::controller(UtilisateurController::class)->group(function () {
@@ -75,7 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
       // Apprenants
     Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
         Route::get('/', 'index');
-        Route::post('/', 'store')->middleware('role:admin');
+        Route::post('/', 'store');
         Route::get('/{id}', 'show');
         Route::put('/{id}', 'update');
         Route::patch('/{id}/activate', 'activate');
@@ -85,7 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Formateur peut inscrire un apprenant
     Route::post('/formations/{formation}/inscrire', [InscriptionController::class, 'inscrire'])
-        ->middleware('can:inscrire,formation');
+       ;
 
     // Formateur peut voir ses inscriptions
     Route::get('/formateur/inscriptions', [InscriptionController::class, 'mesInscriptions'])
@@ -139,13 +133,13 @@ Route::prefix('apprenants')->controller(ApprenantController::class)->group(funct
     //     Route::patch('/{id}/deactivate', 'deactivate');
     // });
 
-    Route::controller(FormationController::class)->group(function () {
-        Route::get('/formations/{id}', 'show');
-        Route::get('/formations', 'index');
-        Route::delete('/formations/{id}', 'destroy');
-        Route::put('/formations/{id}', 'update');
-        Route::post('/formations', 'store');
-    });
+    // Route::controller(FormationController::class)->group(function () {
+    //     Route::get('/formations/{id}', 'show');
+    //     Route::get('/formations', 'index');
+    //     Route::delete('/formations/{id}', 'destroy');
+    //     Route::put('/formations/{id}', 'update');
+    //     Route::post('/formations', 'store');
+    // });
 
     Route::get('formations/{id}/apprenants', [FormationController::class, 'getApprenants']);
     Route::post('formations/{id}/apprenants', [FormationController::class, 'ajouterApprenant']);

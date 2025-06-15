@@ -9,8 +9,10 @@ use Illuminate\Auth\Access\Response;
 class FormationPolicy
 {
     public function inscrire(User $user, Formation $formation)
-    {
-     return $user->role->nom === 'formateur' && $formation->formateur_id === $user->id;
+    { \Log::info(auth()->user());
+     return $user->role->libelle === 'formateur' && $formation->formateur_id === $user->id;
+    
+
     }
     /**
      * Determine whether the user can view any models.
