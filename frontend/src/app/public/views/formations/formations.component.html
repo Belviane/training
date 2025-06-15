@@ -1,0 +1,44 @@
+<section id="formations" class="formations">
+    <div class="container">
+        <div class="section-header">
+            <h2>Nos Formations</h2>
+            <p>Choisissez la formation qui correspond à vos besoins</p>
+        </div>
+
+        <div class="formation-categories">
+            <button *ngFor="let category of categories" class="category-btn"
+                [class.active]="selectedCategory === category" (click)="filterByCategory(category)">
+                {{ category }}
+            </button>
+        </div>
+
+        <div class="formations-grid">
+            <div *ngFor="let formation of filteredFormations" class="formation-card">
+                <div class="card-image">
+                    <img [src]="formation.image" [alt]="formation.title">
+                    <div class="card-badge">{{ formation.level }}</div>
+                </div>
+                <div class="card-content">
+                    <h3>{{ formation.title }}</h3>
+                    <p class="card-description">{{ formation.description }}</p>
+                    <div class="card-highlights">
+                        <span *ngFor="let highlight of formation.highlights" class="highlight">
+                            {{ highlight }}
+                        </span>
+                    </div>
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span class="info-label">Durée:</span>
+                            <span>{{ formation.duration }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Prix:</span>
+                            <span class="price">{{ formation.price }}</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">En savoir plus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -2,19 +2,24 @@
 
 return [
 
-   'guards' => [
-    'api' => [
-        'driver' => 'sanctum',
-        'provider' => 'utilisateurs',
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'utilisateurs',
+        ],
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'utilisateurs',
+        ],
     ],
-],
 
-// 'providers' => [
-//     'users' => [
-//         'driver' => 'eloquent',
-//         'model' => App\Models\User::class, // ← notre modèle utilisateur
-//     ],
-// ],
+
+    'providers' => [
+        'utilisateurs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -79,10 +84,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-         'users' => [
-             'driver' => 'database',
-             'table' => 'utilisateurs',
-         ],
+        'users' => [
+            'driver' => 'database',
+            'table' => 'utilisateurs',
+        ],
     ],
 
     /*

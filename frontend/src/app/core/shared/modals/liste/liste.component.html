@@ -1,0 +1,31 @@
+<h2>Liste des Formations</h2>
+
+<table class="formation-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Libellé</th>
+      <th>Date Début</th>
+      <th>Date Fin</th>
+      <th>Nombre Séances</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let f of formations">
+      <td>{{ f.nom_formation }}</td>
+      <td>{{ f.libelle_formation }}</td>
+      <td>{{ f.date_debutf | date:'shortDate' }}</td>
+      <td>{{ f.date_finf | date:'shortDate' }}</td>
+      <td>{{ f.nombre_seancef }}</td>
+      <td>
+        <button class="btn-modifier" (click)="modifierFormation(f)">Modifier</button>
+        <button class="btn-suspendre" (click)="suspendFormation(f.id)">Suspendre</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="text-align: right; margin-top: 20px;">
+  <button (click)="fermer()">Fermer</button>
+</div>

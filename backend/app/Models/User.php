@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
 
-   use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +34,7 @@ class User extends Authenticatable
         'is_active'
     ];
 
-     public function getAuthPassword()
+    public function getAuthPassword()
     {
         return $this->mdp;
     }
@@ -51,19 +51,18 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-   public function formateur()
+    public function formateur()
     {
         return $this->hasOne(Formateur::class);
     }
 
-    public function apprenant() {
+    public function apprenant()
+    {
         return $this->hasOne(Apprenant::class);
     }
 
     public function inscriptionsFormateur()
-{
-    return $this->hasMany(Inscriptions::class, 'formateur_id');
-}
-
-
+    {
+        return $this->hasMany(Inscriptions::class, 'formateur_id');
+    }
 }

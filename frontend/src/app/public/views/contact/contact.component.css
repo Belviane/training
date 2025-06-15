@@ -1,0 +1,179 @@
+/* Contact Section */
+.contact {
+  padding: 80px 0;
+  background-color: white;
+  color: #010101;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  color: #010101;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #EFEF57;
+  border-radius: 3px;
+}
+
+.section-header p {
+  font-size: 1.2rem;
+  color: #353535;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact-content {
+  display: flex;
+  gap: 60px;
+  margin-top: 40px;
+}
+
+.contact-info, .contact-form {
+  flex: 1;
+}
+
+.contact-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #010101;
+}
+
+.contact-item {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  font-size: 1.5rem;
+  color: #EFEF57;
+  margin-top: 5px;
+}
+
+.contact-item h4 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #010101;
+}
+
+.contact-item p {
+  color: #353535;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Formulaire */
+.contact-form {
+  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 10px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #010101;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #EFEF57;
+  box-shadow: 0 0 0 3px rgba(239, 239, 87, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.btn-primary {
+  background-color: #EFEF57;
+  color: #010101;
+  border: none;
+  padding: 14px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: #e0db5a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(239, 239, 87, 0.2);
+}
+
+.btn-primary:disabled {
+  background-color: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .contact-content {
+    flex-direction: column;
+  }
+  
+  .contact-info {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 60px 0;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .contact-form {
+    padding: 30px;
+  }
+}

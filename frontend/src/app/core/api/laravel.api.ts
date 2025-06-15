@@ -5,7 +5,7 @@ export const LaravelApi = {
   login: `${BASE_URL}/login`,
   logout: `${BASE_URL}/logout`,
   register: `${BASE_URL}/register`,
-  userinfo: `${BASE_URL}/user-info`,
+  userinfo: `${BASE_URL}/userinfo`,
 
   formations(): string {
     return `${BASE_URL}/formations`;

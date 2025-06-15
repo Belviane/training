@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\FormationController;
 use App\Http\Controllers\Api\FormateurController;
@@ -56,6 +57,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{id}/deactivate', 'deactivate');
     });
 
+    // Apprenants
+    // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
+    //     Route::get('/', 'index');
+    //     Route::post('/', 'store')->middleware('role:admin');
+    //     Route::get('/{id}', 'show');
+    //     Route::put('/{id}', 'update');
+    //     Route::patch('/{id}/activate', 'activate');
+    //     Route::patch('/{id}/deactivate', 'deactivate');
+    // });
       // Apprenants
     Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
         Route::get('/', 'index');
@@ -85,6 +95,15 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+// Formateurs
+Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::patch('/{id}/activate', 'activate');
+    Route::patch('/{id}/deactivate', 'deactivate');
+});
     // Formateurs
     // Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
     //     Route::get('/', 'index');
@@ -95,6 +114,15 @@ Route::middleware('auth:sanctum')->group(function () {
     //     Route::patch('/{id}/deactivate', 'deactivate');
     // });
 
+//Apprenants
+Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::patch('/{id}/activate', 'activate');
+    Route::patch('/{id}/deactivate', 'deactivate');
+});
      //Apprenants
     // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
     //     Route::get('/', 'index');
@@ -135,4 +163,32 @@ Route::middleware(['auth:sanctum', 'role:formateur,superviseur'])->group(functio
 });
 
 
+Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
+    return $request->user();
+});
+
+
+
+Route::controller(FormationController::class)->group(function () {
+    Route::get('/formations/{id}', 'show');
+    Route::get('/formations', 'index');
+    Route::delete('/formations/{id}', 'destroy');
+    Route::put('/formations/{id}', 'update');
+    Route::post('/formations', 'store');
+});
+
 Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
+
+Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
+    return $request->user();
+});
+
+
+
+Route::controller(FormationController::class)->group(function () {
+    Route::get('/formations/{id}', 'show');
+    Route::get('/formations', 'index');
+    Route::delete('/formations/{id}', 'destroy');
+    Route::put('/formations/{id}', 'update');
+    Route::post('/formations', 'store');
+});

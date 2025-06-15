@@ -74,7 +74,7 @@ export class AjouterComponent {
     const formationId = this.inscriptionForm.value.formation_id;
     const url = LaravelApi.inscrireApprenant(formationId);
 
-    this.http.post(url, { utilisateur_id: this.inscriptionForm.value.apprenant_id }).subscribe({
+    this.http.post(url, { utilisateur_id: this.inscriptionForm.value.utilisateur_id }).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.dialogRef.close(true);
