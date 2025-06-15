@@ -1,120 +1,209 @@
-<section *ngIf="activeSection === 'accueil'" class="accueil-section" appScrollAnimate>
-  <h1 class="main-title">Bienvenue chez BE I.T AFRICA</h1>
-
-  <!-- Section Valeurs -->
-  <section class="values">
-    <h2>Nos valeurs</h2>
-    <div class="values-list">
-      <div class="value-card" tabindex="0" aria-label="Éducation numérique">
-        <img src="assets/hero.jpg" alt="Education numérique" />
-        <h3>Éducation numérique</h3>
-        <p>Des programmes adaptés pour tous les âges, dès 6 ans.</p>
-      </div>
-      <div class="value-card" tabindex="0" aria-label="Innovation">
-        <img src="assets/innovation.jpg" alt="Innovation" />
-        <h3>Innovation</h3>
-        <p>Des formations à la pointe pour préparer aux métiers de demain.</p>
-      </div>
-      <div class="value-card" tabindex="0" aria-label="Productivité entreprise">
-        <img src="assets/VM9.png" alt="Productivité entreprise" />
-        <h3>Productivité</h3>
-        <p>Accompagnement des entreprises dans leur transformation digitale.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section Bootcamp -->
-  <section class="bootcamp">
-    <h2>Bootcamp Vacances Utiles 2025</h2>
-    <img src="assets/bootcamp.jpg" alt="Bootcamp enfants" style="height: 150px;"/>
-    <ul>
-      <li>Initiation aux fondamentaux de l’informatique</li>
-      <li>Outils bureautiques (Word, Excel)</li>
-      <li>Programmation et web</li>
-      <li>Analyse de données</li>
-      <li>Initiation au pilotage de drones</li>
-    </ul>
-    <p><strong>À partir de 6 ans</strong> | Packs de 20h à 120h | <a routerLink="/contact">Inscrivez-vous</a></p>
-  </section>
-
-  <!-- Section Témoignages -->
-  <section class="testimonials">
-    <h2>Ils témoignent</h2>
-    <div class="testimonial-list">
-      <div class="testimonial-card" tabindex="0">
-        <img src="assets/temoin1.jpg" alt="Parent satisfait" />
-        <blockquote>
-          “Grâce à BE I.T AFRICA, mon fils a découvert la programmation et a pris confiance en lui !”
-        </blockquote>
-        <cite>Fatou, parent</cite>
-      </div>
-      <div class="testimonial-card" tabindex="0">
-        <img src="assets/temoin2.jpg" alt="Entreprise partenaire" />
-        <blockquote>
-          “Nos équipes ont gagné en productivité grâce à leurs formations sur-mesure.”
-        </blockquote>
-        <cite>Directeur RH, PME locale</cite>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section partenaires -->
-  <section class="partners">
-    <h2>Nos partenaires</h2>
-    <div class="partners-list">
-      <img src="assets/partner1.png" alt="Partenaire 1" />
-      <img src="assets/partner2.png" alt="Partenaire 2" />
-      <img src="assets/partner3.png" alt="Partenaire 3" />
-    </div>
-  </section>
-
-  <!-- Section FAQ -->
-  <section class="faq">
-    <h2>Foire aux questions</h2>
-    <details>
-      <summary>Quels sont les âges ciblés ?</summary>
-      <p>Nos formations s’adressent aux enfants dès 6 ans, adolescents, adultes et entreprises.</p>
-    </details>
-    <details>
-      <summary>Comment s’inscrire au bootcamp ?</summary>
-      <p>Contactez-nous via le formulaire ou par téléphone pour réserver votre place.</p>
-    </details>
-    <details>
-      <summary>Quels sont les moyens de paiement acceptés ?</summary>
-      <p>Nous acceptons les paiements par mobile money, virement bancaire et espèces.</p>
-    </details>
-  </section>
-  <section class="formations">
-  <h2>Nos formations</h2>
-  <div class="formations-list">
-    <div class="formation-card" tabindex="0">
-      <h3>Informatique de base</h3>
-      <p>Maîtrisez les outils essentiels : Windows, Word, Excel, Internet.</p>
-    </div>
-    <div class="formation-card" tabindex="0">
-      <h3>Développement web</h3>
-      <p>Apprenez HTML, CSS, JavaScript, et les frameworks modernes.</p>
-    </div>
-    <div class="formation-card" tabindex="0">
-      <h3>Compétences pro</h3>
-      <p>Formations en gestion de projet, analyse de données, cybersécurité.</p>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title" [ngClass]="{'animate': isAnimated}">
+      Transformez votre avenir avec <br>
+      <span class="highlight">BE I.T. AFRICA</span>
+    </h1>
+    <p class="hero-subtitle">
+      Formations numériques de qualité pour tous les âges et tous les niveaux
+    </p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" (click)="scrollToSection('programs')">
+        Découvrir nos programmes
+      </button>
+      <button class="btn btn-outline" routerLink="/contact">
+        Nous contacter
+      </button>
     </div>
   </div>
+  <div class="hero-image">
+    <img src="assets/formation.jpg" alt="Formation numérique" 
+         [ngClass]="{'fade-in': isAnimated}">
+  </div>
 </section>
-<section class="team">
-  <h2>Notre équipe</h2>
-  <div class="team-list">
-    <div class="team-card" tabindex="0">
-      <img src="assets/team1.jpg" alt="Membre équipe" />
-      <h3>Awa Diop</h3>
-      <p>Formatrice en numérique éducatif</p>
-    </div>
-    <div class="team-card" tabindex="0">
-      <img src="assets/team2.jpg" alt="Membre équipe" />
-      <h3>Ousmane Diallo</h3>
-      <p>Développeur full stack & formateur</p>
+
+<!-- Programs Section -->
+<section id="programs" class="programs">
+  <div class="container">
+    <h2 class="section-title">Nos Programmes de Formation</h2>
+    <p class="section-subtitle">
+      Trois parcours adaptés à vos besoins et objectifs professionnels
+    </p>
+    
+    <div class="programs-grid">
+      <div class="program-card" 
+           *ngFor="let program of programs; let i = index"
+           [ngClass]="{'visible': cardsVisible[i]}"
+           (mouseenter)="onCardHover(i)"
+           (mouseleave)="onCardLeave(i)">
+        <div class="program-icon">
+          <i [class]="program.icon"></i>
+        </div>
+        <h3>{{ program.title }}</h3>
+        <p>{{ program.description }}</p>
+        <ul class="program-features">
+          <li *ngFor="let feature of program.features">{{ feature }}</li>
+        </ul>
+        <div class="program-info">
+          <span class="duration">{{ program.duration }}</span>
+          <span class="level">{{ program.level }}</span>
+        </div>
+        <button class="btn btn-primary" [routerLink]="program.link">
+          En savoir plus
+        </button>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- Values Section -->
+<section class="values">
+  <div class="container">
+    <h2 class="section-title">Nos Valeurs</h2>
+    <div class="values-grid">
+      <div class="value-card" *ngFor="let value of values" 
+           tabindex="0" 
+           [attr.aria-label]="value.title">
+        <div class="value-icon">
+          <i [class]="value.icon"></i>
+        </div>
+        <h3>{{ value.title }}</h3>
+        <p>{{ value.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bootcamp Section -->
+<section class="bootcamp">
+  <div class="container">
+    <div class="bootcamp-content">
+      <div class="bootcamp-text">
+        <h2>Bootcamp Vacances Utiles 2025</h2>
+        <p class="bootcamp-subtitle">
+          Une expérience intensive pour développer rapidement vos compétences numériques
+        </p>
+        <ul class="bootcamp-features">
+          <li *ngFor="let feature of bootcampFeatures">
+            <i class="fas fa-check"></i>
+            {{ feature }}
+          </li>
+        </ul>
+        <div class="bootcamp-info">
+          <div class="info-item">
+            <span class="label">Âge minimum :</span>
+            <span class="value">6 ans</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Durée :</span>
+            <span class="value">20h à 120h</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-large" routerLink="/contact">
+          S'inscrire maintenant
+        </button>
+      </div>
+      <div class="bootcamp-image">
+        <img src="assets/bootcamp.jpg" alt="Bootcamp enfants">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="statistics">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item" *ngFor="let stat of statistics">
+        <div class="stat-number" [attr.data-target]="stat.value">
+          {{ stat.displayValue }}
+        </div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+  <div class="container">
+    <h2 class="section-title">Ils témoignent</h2>
+    <div class="testimonials-slider">
+      <div class="testimonial-card" 
+           *ngFor="let testimonial of testimonials; let i = index"
+           [ngClass]="{'active': currentTestimonial === i}"
+           tabindex="0">
+        <div class="testimonial-content">
+          <div class="quote-icon">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <blockquote>{{ testimonial.quote }}</blockquote>
+          <div class="testimonial-author">
+            <img [src]="testimonial.image" [alt]="testimonial.name">
+            <div class="author-info">
+              <cite>{{ testimonial.name }}</cite>
+              <span class="author-role">{{ testimonial.role }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-controls">
+      <button *ngFor="let t of testimonials; let i = index"
+              [ngClass]="{'active': currentTestimonial === i}"
+              (click)="setCurrentTestimonial(i)">
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Partners Section -->
+<section class="partners">
+  <div class="container">
+    <h2 class="section-title">Nos Partenaires</h2>
+    <div class="partners-grid">
+      <div class="partner-logo" *ngFor="let partner of partners">
+        <img [src]="partner.logo" [alt]="partner.name">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq">
+  <div class="container">
+    <h2 class="section-title">Foire aux Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+        <button class="faq-question" 
+                [ngClass]="{'active': faq.isOpen}"
+                (click)="toggleFaq(i)">
+          <span>{{ faq.question }}</span>
+          <i class="fas fa-chevron-down" [ngClass]="{'rotate': faq.isOpen}"></i>
+        </button>
+        <div class="faq-answer" [ngClass]="{'open': faq.isOpen}">
+          <p>{{ faq.answer }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Prêt à commencer votre transformation numérique ?</h2>
+      <p>Rejoignez des centaines d'étudiants et professionnels qui ont déjà fait confiance à BE I.T AFRICA</p>
+      <div class="cta-buttons">
+        <button class="btn btn-primary btn-large" routerLink="/contact">
+          Commencer maintenant
+        </button>
+        <button class="btn btn-outline btn-large" routerLink="/programs">
+          Voir tous les programmes
+        </button>
+      </div>
+    </div>
+  </div>
 </section>
