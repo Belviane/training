@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\superviseure;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SuperviseureController extends Controller
 {

@@ -5,12 +5,24 @@ namespace App\Http\Controllers\Api;
 use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
+ /**
+    * @OA\Info(
+    *   title="Mon API",
+    *   version="1.0.0",
+    *   @OA\Contact(
+    *     email="Aline@gmail.com"
+    *   ),
+    * )
+    */
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    
     public function index()
     {
         return Role::all();
@@ -19,6 +31,7 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+     
     public function store(Request $request)
     {
         $request->validate(['libelle' => 'required|unique:roles|in:formateur,superviseur,parent,apprenant,administrateur']);
