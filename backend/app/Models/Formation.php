@@ -9,6 +9,8 @@ use App\Models\Inscription;
 class Formation extends Model
 {
    use HasFactory;
+
+    protected $table = 'formations';
     protected $fillable = [
         'nom_formation',
         'libelle_formation',

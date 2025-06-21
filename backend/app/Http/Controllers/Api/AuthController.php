@@ -17,7 +17,6 @@ class AuthController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'login' => 'required|string|unique:utilisateurs',
-            //'mdp' => 'required|string|min:6',
             'email' => 'required|email|unique:utilisateurs,email',
             'password' => 'required|string|min:6|confirmed',
             'genre' => 'required|string',
@@ -42,6 +41,8 @@ class AuthController extends Controller
         return response()->json(['user' => $user, 'token' => $token], 201);
     }
 
+
+    // Connexion avec contrôle email vérifié + changement mot de passe forcé
     public function login(Request $request)
     {
         $request->validate([
@@ -52,32 +53,90 @@ class AuthController extends Controller
         $user = User::where('login', $request->login)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Identifiants incorrects'], 401);
+            return response()->json(['message' => 'Identifiants invalides.'], 401);
         }
 
-        if (!$user->is_active) {
-            return response()->json(['message' => 'Compte désactivé. Contactez un administrateur.'], 403);
+        if (!$user->email_verified) {
+            return response()->json([
+                'message' => 'Veuillez vérifier votre adresse email avant de vous connecter.'
+            ], 403);
         }
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        if ($user->doit_changer_mot_de_passe) {
+            return response()->json([
+                'message' => 'Mot de passe temporaire, changement obligatoire.',
+                'changer_password' => true
+            ], 403);
+        }
+
+        // Génération token (exemple avec Sanctum)
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Connexion réussie',
-            'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'nom' => $user->nom,
-                'prenom' => $user->prenom,
-                'login' => $user->login,
-                'email' => $user->email,
-                'genre' => $user->genre,
-                'date_naissance' => $user->date_naissance,
-                'role' => $user->role->libelle, // <-- ici on renvoie le rôle en string
-                'role_id' => $user->role_id,
-                'is_active' => $user->is_active,
-            ],
+            'message' => 'Connexion réussie.',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
         ]);
     }
+
+    // Modifier login et mot de passe (après première connexion)
+    public function modifierIdentifiants(Request $request)
+    {
+        $request->validate([
+            'login' => 'required|string|unique:utilisateurs,login,' . auth()->id(),
+            'password' => 'required|string|confirmed|min:6',
+        ]);
+
+        $user = auth()->user();
+
+        $user->login = $request->login;
+        $user->password = Hash::make($request->password);
+        $user->doit_changer_mot_de_passe = false;
+        $user->save();
+
+        return response()->json(['message' => 'Identifiants mis à jour avec succès.']);
+    }
+
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'login' => 'required|string',
+    //         'password' => 'required|string'
+    //     ]);
+
+    //     $user = \App\Models\User::where('login', $request->login)->first();
+
+    //     if (!$user || !Hash::check($request->password, $user->password)) {
+    //         return response()->json(['message' => 'Identifiants invalides.'], 401);
+    //     }
+
+    //     if (!$user->is_active) {
+    //         return response()->json(['message' => 'Compte désactivé.'], 403);
+    //     }
+
+    //     // Connexion manuelle + génération du token
+    //     Auth::login($user);
+    //     $token = $user->createToken('API Token')->plainTextToken;
+
+    //     // ✅ S'il doit changer le mot de passe, informer le front
+    //     if ($user->doit_changer_mot_de_passe) {
+    //         return response()->json([
+    //             'message' => 'Mot de passe temporaire. Veuillez le modifier.',
+    //             'changer_password' => true,
+    //             'token' => $token,
+    //             'user' => $user
+    //         ], 200); // On retourne quand même le token
+    //     }
+
+    //     // Sinon, connexion normale
+    //     return response()->json([
+    //         'message' => 'Connexion réussie.',
+    //         'token' => $token,
+    //         'user' => $user
+    //     ]);
+    // }
+
 
 
     public function logout(Request $request)

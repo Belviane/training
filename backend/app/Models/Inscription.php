@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Inscription extends Model
 {
     use HasFactory;
+     protected $table = 'inscriptions';
 
     protected $fillable = ['apprenant_id', 'formation_id', 'date_inscription'];
     public function apprenant()
