@@ -21,6 +21,13 @@ class FormationController extends Controller
     //Store a newly created resource in storage.
     public function store(Request $request)
     {
+
+        $user = auth()->user();
+        if ($user->role->libelle !== 'superviseur') {
+            return response()->json([
+                'message' => 'Accès interdit : seuls les superviseurs peuvent ajouter les formations.'
+            ], 403);
+        }
        try {
         $validated = $request->validate([
             'nom_formation' => 'required|string|max:255',
@@ -46,6 +53,13 @@ class FormationController extends Controller
     // Display the specified resource.
     public function show($id)
     {
+        $user = auth()->user();
+        if ($user->role->libelle !== 'superviseur') {
+            return response()->json([
+                'message' => 'Accès interdit : seuls les superviseurs peuvent avoir acces a toutes les formations.'
+            ], 403);
+        }
+
         $formation = Formation::findOrFail($id); // ← Recherche explicite
         return response()->json($formation);
     }
@@ -58,6 +72,15 @@ class FormationController extends Controller
     //Update the specified resource in storage.
     public function update(Request $request, $id)
     {
+
+        $user = auth()->user();
+        if ($user->role->libelle !== 'superviseur') {
+            return response()->json([
+                'message' => 'Accès interdit : seuls les superviseurs peuvent modifier les formations.'
+            ], 403);
+        }
+
+
         $formation = Formation::findOrFail($id);
         $validated = $request->validate([
             'nom_formation' => 'sometimes|string|max:255',
@@ -74,6 +97,13 @@ class FormationController extends Controller
     //Remove the specified resource from storage.
     public function destroy($id)
     {
+                 $user = auth()->user();
+        if ($user->role->libelle !== 'superviseur') {
+            return response()->json([
+                'message' => 'Accès interdit : seuls les superviseurs peuvent supprimer les formations.'
+            ], 403);
+        }
+
          $formation = Formation::findOrFail($id);
         $formation->delete();
         return response()->json(null, 204);
@@ -86,26 +116,26 @@ class FormationController extends Controller
         return response()->json($apprenants);
     }
 
-    public function ajouterApprenant(Request $request, $id)
-    {
-         try {
-            $formation = Formation::findOrFail($id);
-            $request->validate([
-                'utilisateur_id' => 'required|exists:utilisateurs,id'
-            ]);
+    // public function ajouterApprenant(Request $request, $id)
+    // {
+    //      try {
+    //         $formation = Formation::findOrFail($id);
+    //         $request->validate([
+    //             'utilisateur_id' => 'required|exists:utilisateurs,id'
+    //         ]);
 
-            $formation->apprenants()->attach($request->utilisateur_id, [
-                'formateur_id' => auth()->id(), // ou un testeur
-                'date_inscription' => now(),
-                'statut' => 'inscrit'
-            ]);
+    //         $formation->apprenants()->attach($request->utilisateur_id, [
+    //             'formateur_id' => auth()->id(), // ou un testeur
+    //             'date_inscription' => now(),
+    //             'statut' => 'inscrit'
+    //         ]);
 
-            return response()->json(['message' => 'Apprenant ajouté à la formation.']);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Erreur serveur',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
+    //         return response()->json(['message' => 'Apprenant ajouté à la formation.']);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Erreur serveur',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
 }

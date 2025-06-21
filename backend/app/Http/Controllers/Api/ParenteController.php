@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
-use App\Models\parente;
+use App\Models\Parents;
 use Illuminate\Http\Request;
 
 class ParenteController extends Controller

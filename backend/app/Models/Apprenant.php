@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Apprenant extends Model
 {
     use HasFactory;
+
+     protected $table = 'apprenants';
     protected $fillable = [
         'matricule',
         'utilisateur_id'
@@ -24,6 +26,13 @@ class Apprenant extends Model
         $date = now()->format('d');
 
         return $debutPrenom . $debutNom . $date;
+    }
+
+    public function seances()
+    {
+        return $this->belongsToMany(Seance::class, 'presence')
+                    ->withPivot('est_present', 'justificatif', 'remarque')
+                    ->withTimestamps();
     }
 
    public function formations() {

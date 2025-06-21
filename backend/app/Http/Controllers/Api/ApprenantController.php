@@ -101,20 +101,6 @@ class ApprenantController extends Controller
         ]);
     }
 
-    // Activer/Désactiver
-    public function activate($id)
-    {
-        $apprenant = Apprenant::findOrFail($id);
-        $apprenant->utilisateur()->update(['is_active' => true]);
-        return response()->json(['message' => 'Apprenant activé']);
-    }
-
-    public function deactivate($id)
-    {
-        $apprenant = Apprenant::findOrFail($id);
-        $apprenant->utilisateur()->update(['is_active' => false]);
-        return response()->json(['message' => 'Apprenant désactivé']);
-    }
 
     // Afficher un apprenant
     public function show($id)
