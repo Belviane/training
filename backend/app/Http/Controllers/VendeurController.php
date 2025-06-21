@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Models\superviseure;
+use App\Models\Vendeur;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class SuperviseureController extends Controller
+class VendeurController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +34,7 @@ class SuperviseureController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(superviseure $superviseure)
+    public function show(Vendeur $vendeur)
     {
         //
     }
@@ -43,7 +42,7 @@ class SuperviseureController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(superviseure $superviseure)
+    public function edit(Vendeur $vendeur)
     {
         //
     }
@@ -51,7 +50,7 @@ class SuperviseureController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, superviseure $superviseure)
+    public function update(Request $request, Vendeur $vendeur)
     {
         //
     }
@@ -59,7 +58,7 @@ class SuperviseureController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(superviseure $superviseure)
+    public function destroy(Vendeur $vendeur)
     {
         //
     }

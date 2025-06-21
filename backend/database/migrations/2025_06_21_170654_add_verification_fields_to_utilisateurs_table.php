@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('superviseurs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('utilisateurs', function (Blueprint $table) {
+
+            $table->boolean('doit_changer_mot_de_passe')->default(true)->after('email_verified');
         });
     }
 
@@ -23,6 +22,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('superviseurs');
+
+        Schema::table('utilisateurs', function (Blueprint $table) {
+            $table->dropColumn([ 'doit_changer_mot_de_passe']);
+        });
+
     }
 };
