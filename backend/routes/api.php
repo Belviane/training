@@ -6,26 +6,30 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\FormationController;
 use App\Http\Controllers\Api\FormateurController;
+use App\Http\Controllers\Api\SuperviseurController;
 use App\Http\Controllers\Api\ApprenantController;
 use App\Http\Controllers\Api\UtilisateurController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ProfilController;
 use App\Http\Controllers\Api\InscriptionController;
+use App\Http\Controllers\Api\ClasseController;
+use App\Http\Controllers\Api\SeanceController;
+use App\Http\Controllers\Api\PresenceController;
 
 // Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
+Route::post('/verifier-email', [UtilisateurController::class, 'verifierEmail']);
+
+
 // Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
+    //deconnexion des utilisateur
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Activation/désactivation utilisateur (réservé aux admins)
-    Route::middleware('role:admininistrateur')->group(function () {
-        Route::put('/utilisateurs/{id}/activer', [UtilisateurController::class, 'activer']);
-        Route::put('/utilisateurs/{id}/desactiver', [UtilisateurController::class, 'desactiver']);
-    });
 
     //Formations
     Route::controller(FormationController::class)->group(function () {
@@ -36,102 +40,156 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/formations', 'store');
     });
 
+    //Classes
+    Route::controller(ClasseController::class)->group(function () {
+        Route::get('/classes/{id}', 'show');
+        Route::get('/classes', 'index');
+        Route::put('/classes/{id}', 'update');
+        Route::post('/classes', 'store');
+
+        Route::post('/classes/{id}/verifier-disponibilite', 'verifierDisponibilite');
+        Route::get('/classes/{id}/capacite-restante', 'getCapaciteRestante');
+    });
+
+    //Seances
+    Route::controller(SeanceController::class)->group(function () {
+        Route::get('/classes/{id}', 'show');
+        Route::get('/seances', 'index');
+        Route::put('/seances/{id}', 'update');
+        Route::post('/seances', 'store');
+
+        Route::post('/seances/{id}/annuler', 'annulerSeance');
+        Route::post('/seances/{id}/demarrer', 'demarrerSeance');
+        Route::post('/seances/{id}/terminer', 'terminerSeance');
+        Route::post('/seances/{id}/notifier', 'notifierParticipants');
+        Route::get('/seances/{id}/feuille-presence', 'genererFeuillePresence');
+        Route::get('/seances/{id}/formateur', 'obtenirFormateur');
+        Route::get('/seances/{id}/classe', 'obtenirClasse');
+
+    });
+
+
+
+
+    // Superviseurs
+    Route::prefix('superviseurs')->controller(SuperviseurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDF');
+
+    });
+
+    //Presences
+    Route::controller(PresenceController::class)->group(function () {
+        Route::get('/seance/{seance_id}', 'listePresenceParSeance');
+        Route::get('/presence/date', 'presencesParDate');
+        Route::get('/apprenant/{apprenant_id}', 'listePresenceParApprenant');
+        Route::post('/marquer', 'marquerPresence');
+        Route::post('/justifier', 'justifierAbsence');
+        Route::get('/pdf/{seance_id}', 'exporterPDF');
+        Route::get('/csv/{seance_id}', 'exporterCSV');
+    });
+
+
     // Utilisateurs
     Route::controller(UtilisateurController::class)->group(function () {
+        Route::post('/utilisateurs/changer', 'changerMotDePasse');
         Route::get('/utilisateurs', 'index');
-        Route::get('/utilisateurs/{id}', 'show');
         Route::get('/utilisateurs/apprenants', 'listerApprenants');
-        Route::delete('/utilisateurs/{id}', 'destroy');
-        Route::patch('/utilisateurs/{id}/bloquer', 'bloquer');
         Route::put('/utilisateurs/{id}', 'update');
         Route::post('/utilisateurs', 'store');
+
+        Route::put('/modifier-identifiants', 'modifierIdentifiants');
+
+        // Activation/désactivation utilisateur (réservé aux admins)
+        Route::patch('/utilisateurs/{id}/activer', 'activer');
+        Route::patch('/utilisateurs/{id}/desactiver', 'desactiver');
+
+        //recherche
+        Route::get('/utilisateurs/rechercher',  'rechercher');
+         Route::get('/utilisateurs/{id}', 'show');
     });
 
     // Formateurs
     Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
         Route::get('/', 'index');
-        Route::post('/', 'store')->middleware('role:admin');
+        Route::post('/', 'store');
         Route::get('/{id}', 'show');
         Route::put('/{id}', 'update');
-        Route::patch('/{id}/activate', 'activate');
-        Route::patch('/{id}/deactivate', 'deactivate');
+
     });
 
-    // Apprenants
-    // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::post('/', 'store')->middleware('role:admin');
-    //     Route::get('/{id}', 'show');
-    //     Route::put('/{id}', 'update');
-    //     Route::patch('/{id}/activate', 'activate');
-    //     Route::patch('/{id}/deactivate', 'deactivate');
-    // });
+
       // Apprenants
     Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
         Route::get('/{id}', 'show');
         Route::put('/{id}', 'update');
-        Route::patch('/{id}/activate', 'activate');
-        Route::patch('/{id}/deactivate', 'deactivate');
+
     });
 
 
     // Formateur peut inscrire un apprenant
-    Route::post('/formations/{formation}/inscrire', [InscriptionController::class, 'inscrire'])
-       ;
+    Route::post('/formations/{formation}/inscrire', [InscriptionController::class, 'inscrire']);
 
     // Formateur peut voir ses inscriptions
-    Route::get('/formateur/inscriptions', [InscriptionController::class, 'mesInscriptions'])
-        ->middleware('role:formateur');
+    Route::get('/formateur/inscriptions', [InscriptionController::class, 'mesInscriptions']);
 
     // Profil utilisateur
     Route::get('/profil', [ProfilController::class, 'afficherProfil']);
     Route::put('/profil', [ProfilController::class, 'modifierProfil']);
 
-    // // Inscriptions
-    // Route::get('/inscriptions', [InscriptionController::class, 'index']);
-    // Route::post('/inscriptions', [InscriptionController::class, 'inscrire']);
-});
 
 
-// Formateurs
-Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::post('/', 'store');
-    Route::get('/{id}', 'show');
-    Route::put('/{id}', 'update');
-    Route::patch('/{id}/activate', 'activate');
-    Route::patch('/{id}/deactivate', 'deactivate');
-});
-    // Formateurs
-    // Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::post('/', 'store');
-    //     Route::get('/{id}', 'show');
-    //     Route::put('/{id}', 'update');
-    //     Route::patch('/{id}/activate', 'activate');
-    //     Route::patch('/{id}/deactivate', 'deactivate');
+
+
+
+
+    // Route::get('formations/{id}/apprenants', [FormationController::class, 'getApprenants']);
+    // Route::post('formations/{id}/apprenants', [FormationController::class, 'ajouterApprenant']);
+
+
+
+    // Roles (accessible selon vos besoins)
+    //Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
+
+    // Routes avec contrôle de rôle
+    // Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
+    //     Route::get('/admin-only', function () {
+    //         return response()->json(['message' => 'Bienvenue admin']);
+    //     // Roles (accessible selon vos besoins)
+    //     Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
+
+    //     // Routes avec contrôle de rôle
+    //     Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
+    //         Route::get('/admin-only', function () {
+    //             return response()->json(['message' => 'Bienvenue admin']);
+    //         });
+    //     });
+
+    //     Route::middleware(['auth:sanctum', 'role:formateur,superviseur'])->group(function () {
+    //         Route::get('/gestion-formations', function () {
+    //             return response()->json(['message' => 'Accès formateur/superviseur']);
+    //         });
+    //     });
+
+
+    //     Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
+
+
     // });
 
-//Apprenants
-Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::post('/', 'store');
-    Route::get('/{id}', 'show');
-    Route::put('/{id}', 'update');
-    Route::patch('/{id}/activate', 'activate');
-    Route::patch('/{id}/deactivate', 'deactivate');
-});
-     //Apprenants
-    // Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::post('/', 'store');
-    //     Route::get('/{id}', 'show');
-    //     Route::put('/{id}', 'update');
-    //     Route::patch('/{id}/activate', 'activate');
-    //     Route::patch('/{id}/deactivate', 'deactivate');
+
+
+    // Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
+    //     return $request->user();
     // });
+
+
 
     // Route::controller(FormationController::class)->group(function () {
     //     Route::get('/formations/{id}', 'show');
@@ -141,54 +199,20 @@ Route::prefix('apprenants')->controller(ApprenantController::class)->group(funct
     //     Route::post('/formations', 'store');
     // });
 
-    Route::get('formations/{id}/apprenants', [FormationController::class, 'getApprenants']);
-    Route::post('formations/{id}/apprenants', [FormationController::class, 'ajouterApprenant']);
+    // Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
+
+    // Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
+    //     return $request->user();
+    // });
 
 
 
-// Roles (accessible selon vos besoins)
-Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
-
-// Routes avec contrôle de rôle
-Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
-    Route::get('/admin-only', function () {
-        return response()->json(['message' => 'Bienvenue admin']);
-    });
-});
-
-Route::middleware(['auth:sanctum', 'role:formateur,superviseur'])->group(function () {
-    Route::get('/gestion-formations', function () {
-        return response()->json(['message' => 'Accès formateur/superviseur']);
-    });
-});
-
-
-Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
-    return $request->user();
-});
-
-
-
-Route::controller(FormationController::class)->group(function () {
-    Route::get('/formations/{id}', 'show');
-    Route::get('/formations', 'index');
-    Route::delete('/formations/{id}', 'destroy');
-    Route::put('/formations/{id}', 'update');
-    Route::post('/formations', 'store');
-});
-
-Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
-
-Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
-    return $request->user();
-});
-
-
-
-Route::controller(FormationController::class)->group(function () {
-    Route::get('/formations/{id}', 'show');
-    Route::get('/formations', 'index');
-    Route::delete('/formations/{id}', 'destroy');
-    Route::put('/formations/{id}', 'update');
-    Route::post('/formations', 'store');
+    //     Route::controller(FormationController::class)->group(function () {
+    //         Route::get('/formations/{id}', 'show');
+    //         Route::get('/formations', 'index');
+    //         Route::delete('/formations/{id}', 'destroy');
+    //         Route::put('/formations/{id}', 'update');
+    //         Route::post('/formations', 'store');
+    //     });
+    // });
 });

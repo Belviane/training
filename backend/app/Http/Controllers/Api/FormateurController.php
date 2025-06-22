@@ -108,23 +108,7 @@ class FormateurController extends Controller
         ]);
     }
 
-    // Activer un formateur
-    public function activate($id)
-    {
-        $formateur = Formateur::findOrFail($id);
-        $formateur->utilisateur()->update(['is_active' => true]);
 
-        return response()->json(['message' => 'Formateur activé avec succès']);
-    }
-
-    // Désactiver un formateur
-    public function deactivate($id)
-    {
-        $formateur = Formateur::findOrFail($id);
-        $formateur->utilisateur()->update(['is_active' => false]);
-
-        return response()->json(['message' => 'Formateur désactivé avec succès']);
-    }
 
     // Afficher un formateur spécifique
     public function show($id)

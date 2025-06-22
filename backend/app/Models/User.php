@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $table = 'utilisateurs'; // ← TABLE personnalisée
+    protected $table = 'utilisateurs';
 
     protected $fillable = [
         'nom',
@@ -30,8 +30,8 @@ class User extends Authenticatable
         'password',
         'role_id',
         'login',
-        //'mdp',
-        'is_active'
+        'is_active',
+        'doit_changer_mot_de_passe'
     ];
 
     public function getAuthPassword()
@@ -67,4 +67,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Inscriptions::class, 'formateur_id');
     }
+
+    public function superviseur()
+    {
+        return $this->hasOne(Superviseur::class, 'utilisateur_id');
+    }
+
+
 }
