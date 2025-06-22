@@ -1,53 +1,158 @@
 export enum UserRole {
-  ADMIN = 'admininstrateur',
-  SUPERVISOR = 'superviseur',
-  TRAINER = 'formateur',
-  LEARNER = 'apprenant',
+  ADMINISTRATEUR = 'administrateur', // Correction de la faute de frappe (admininstrateur -> administrateur)
+  SUPERVISEUR = 'superviseur',
+  FORMATEUR = 'formateur',
+  APPRENANT = 'apprenant',
   PARENT = 'parent',
-  CASHIER = 'caissier',
-  AUDITOR = 'auditeur'
+  CAISSIER = 'caissier',
+  AUDITEUR = 'auditeur'
 }
+
+// Correspondance entre role_id et UserRole
+export const ROLE_ID_MAPPING: Record<number, UserRole> = {
+  1: UserRole.ADMINISTRATEUR,
+  2: UserRole.SUPERVISEUR,
+  3: UserRole.FORMATEUR,
+  4: UserRole.APPRENANT,
+  5: UserRole.PARENT,
+  6: UserRole.CAISSIER,
+  7: UserRole.AUDITEUR
+};
 
 export interface User {
   id: number;
   nom: string;
   prenom: string;
   login: string;
-  password: string;
+  password?: string; // Rendre optionnel pour plus de sécurité
   role_id: number;
   email: string;
   genre: string;
-  date_naissance: Date;
-  role: UserRole | String;
+  date_naissance: Date | string; // Permettre les deux types
   createdAt?: Date;
-  updatedAt?: Date; 
+  updatedAt?: Date;
+
+  // Propriété calculée pour accéder plus facilement au rôle
+  role: UserRole; // Déclaration de la propriété (l'implémentation sera dans la classe si nécessaire)
 }
+
+export interface UserProfile {
+  id: number; // ID de l'utilisateur
+  nom: string;
+  prenom: string;
+  email: string;  
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+  expires_in?: number;
+}
+
+export interface LoginRequest {
+  login: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  nom: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  // Ajouter d'autres champs nécessaires à l'inscription
+  prenom?: string;
+  genre?: string;
+  date_naissance?: Date | string;
+  role_id?: number;
+}
+
+// Libellés complets des rôles
+export const ROLE_LABELS: Record<UserRole, string> = {
+  [UserRole.ADMINISTRATEUR]: 'Administrateur',
+  [UserRole.SUPERVISEUR]: 'Superviseur',
+  [UserRole.FORMATEUR]: 'Formateur',
+  [UserRole.APPRENANT]: 'Apprenant',
+  [UserRole.PARENT]: 'Parent',
+  [UserRole.CAISSIER]: 'Caissier',
+  [UserRole.AUDITEUR]: 'Auditeur'
+};
 
 export function getUserRoleName(role: UserRole): string {
-  const roleNames = {
-    [UserRole.ADMIN]: 'Administrateur',
-    [UserRole.SUPERVISOR]: 'Superviseur',
-    [UserRole.TRAINER]: 'Formateur',
-    [UserRole.LEARNER]: 'Apprenant',
-    [UserRole.PARENT]: 'Parent',
-    [UserRole.CASHIER]: 'Caissier',
-    [UserRole.AUDITOR]: 'Auditeur'
-  };
-  return roleNames[role] || role;
+  return ROLE_LABELS[role] || role;
 }
 
-export function getUserRoles(): { value: UserRole; label: string }[] {
-  return Object.values(UserRole).map(role => ({
-    value: role,
-    label: getUserRoleName(role)
+// Version alternative qui accepte soit UserRole soit string
+export function getRoleDisplayName(role: UserRole | string): string {
+  return ROLE_LABELS[role as UserRole] || role;
+}
+
+export function getUserRoles(): { id: number; value: UserRole; label: string }[] {
+  return Object.entries(ROLE_ID_MAPPING).map(([id, value]) => ({
+    id: Number(id),
+    value,
+    label: getUserRoleName(value)
   }));
 }
 
-// Fonctions utilitaires pour vérifier les rôles
+// Fonctions utilitaires améliorées
 export function hasRole(user: User, role: UserRole): boolean {
-  return user.role === role;
+  return ROLE_ID_MAPPING[user.role_id] === role;
 }
 
 export function hasAnyRole(user: User, roles: UserRole[]): boolean {
-  return roles.includes(user.role as UserRole);
+  const userRole = ROLE_ID_MAPPING[user.role_id];
+  return roles.includes(userRole);
+}
+
+// Fonction pour obtenir le UserRole à partir du role_id
+export function getRoleFromId(roleId: number): UserRole {
+  return ROLE_ID_MAPPING[roleId] || UserRole.APPRENANT;
+}
+
+// Classe User si vous souhaitez implémenter des méthodes
+export class UserModel implements User {
+  // Implémentation des propriétés de l'interface
+  id: number = 0;
+  nom: string = '';
+  prenom: string = '';
+  login: string = '';
+  role_id: number = 0;
+  email: string = '';
+  genre: string = '';
+  date_naissance: Date | string = new Date();
+  
+  get role(): UserRole {
+    return getRoleFromId(this.role_id);
+  }
+
+  // Méthodes pratiques
+  isAdministrateur(): boolean {
+    return this.role_id === 1;
+  }
+
+  isFormateur(): boolean {
+    return this.role_id === 3;
+  }
+
+  isSuperviseur(): boolean {
+    return this.role_id === 2;
+  }
+
+  isParent(): boolean {
+    return this.role_id === 5;
+  }
+
+  isApprenant(): boolean {
+    return this.role_id === 4;
+  }
+
+  isCaissier(): boolean {
+    return this.role_id === 6;
+  }
+
+  isAuditeur(): boolean {
+    return this.role_id === 7;
+  }
+
+  // ... autres méthodes spécifiques aux rôles
 }

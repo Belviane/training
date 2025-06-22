@@ -1,23 +1,28 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
-import { TokenInterceptor } from './core/auth/interceptors/token.interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { tokenInterceptor } from './core/auth/interceptors/token.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 
 export const appConfig: ApplicationConfig = {
-  providers: [
+  providers: [ 
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(APP_ROUTES),
-    provideHttpClient(),
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    provideHttpClient(
+      withInterceptors([tokenInterceptor])
+    ),
     provideAnimations(),
     provideToastr({
-      timeOut: 3000,
-      positionClass: 'toast-top-full-width',
+      timeOut: 5000,
+      positionClass: 'toast-top-center',
       preventDuplicates: true,
+       progressBar: true, // Affiche une barre de progression de la disparition
+      newestOnTop: true, // Les nouveaux toasts apparaissent au-dessus des anciens  
     }),
+    provideNativeDateAdapter()
   ]
 };

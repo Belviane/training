@@ -1,13 +1,16 @@
+/* Importez si ce n'est pas déjà fait */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap');
+
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #FFFFFF; /* Fond blanc */
+  background: #ffffff; /* Fond blanc */
   color: #222222; /* Texte noir */
   padding: 0.8rem 2rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Arial, sans-serif;
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   position: fixed;
   width: 100%;
   top: 0;
@@ -44,7 +47,7 @@
 .header-spacer {
   width: 1px;
   height: 24px;
-  background: #DDDDDD;
+  background: #dddddd;
 }
 
 .current-date {
@@ -63,14 +66,14 @@
 }
 
 .site-title::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: #FFD700; /* Jaune or */
+  background: #ffd700; /* Jaune or */
   border-radius: 3px;
 }
 
@@ -87,10 +90,15 @@
   padding: 4px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  display: flex; /* S'assurer que l'icône est centrée */
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Taille fixe pour le cercle */
+  height: 40px;
 }
 
 .notification-wrapper:hover {
-  background-color: #FFFBE6; /* Jaune très clair */
+  background-color: #fffbe6; /* Jaune très clair */
 }
 
 .notification-wrapper mat-icon {
@@ -100,7 +108,7 @@
 }
 
 .notification-wrapper:hover mat-icon {
-  color: #FFD700; /* Jaune or */
+  color: #ffd700; /* Jaune or */
   transform: scale(1.1);
 }
 
@@ -108,46 +116,47 @@
   position: absolute;
   top: -2px;
   right: -2px;
-  background: #FFD700; /* Jaune or */
+  background: #ffd700; /* Jaune or */
   color: #222222;
   border-radius: 50%;
   padding: 3px 6px;
   font-size: 0.65rem;
   font-weight: bold;
-  box-shadow: 0 0 0 2px #FFFFFF;
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 .notifications-dropdown {
   position: absolute;
   right: 0;
   top: 48px;
-  background: #FFFFFF;
+  background: #ffffff;
   color: #222222;
   min-width: 300px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   z-index: 110;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
 }
 
 .notification-item {
   padding: 0.9rem 1.3rem;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid #f5f5f5;
   transition: background-color 0.2s ease;
 }
 
 .notification-item:hover {
-  background-color: #FFFBE6; /* Jaune très clair */
+  background-color: #fffbe6; /* Jaune très clair */
 }
 
 .notification-item.unread {
-  background-color: #FFF8D6; /* Jaune pâle */
+  background-color: #fff8d6; /* Jaune pâle */
   color: #222222;
   font-weight: 500;
 }
 
 /* Profil */
 .profile-wrapper {
+  position: relative; /* Très important pour le positionnement du dropdown */
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -158,7 +167,7 @@
 }
 
 .profile-wrapper:hover {
-  background-color: #FFFBE6; /* Jaune très clair */
+  background-color: #fffbe6; /* Jaune très clair */
 }
 
 .avatar {
@@ -166,23 +175,20 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #EEEEEE;
+  border: 2px solid #eeeeee;
   transition: all 0.3s ease;
 }
 
-.profile-wrapper:hover .avatar {
-  border-color: #FFD700; /* Jaune or */
-  transform: scale(1.05);
-}
-
-.profile-wrapper mat-icon {
-  font-size: 36px;
+.avatar-icon {
+  font-size: 36px; /* Taille de l'icône par défaut */
   color: #555555;
   transition: all 0.3s ease;
 }
 
-.profile-wrapper:hover mat-icon {
-  color: #FFD700; /* Jaune or */
+.profile-wrapper:hover .avatar,
+.profile-wrapper:hover .avatar-icon {
+  border-color: #ffd700; /* Jaune or */
+  transform: scale(1.05);
 }
 
 .user-name {
@@ -193,34 +199,40 @@
 }
 
 .profile-wrapper:hover .user-name {
-  color: #FFD700; /* Jaune or */
+  color: #ffd700; /* Jaune or */
 }
 
 /* Menu déroulant profil */
 .profile-dropdown {
   position: absolute;
   right: 0;
-  top: 48px;
-  background: #FFFFFF;
+  top: 48px; /* Ajustez selon la hauteur de votre header */
+  background: #ffffff;
   color: #222222;
   min-width: 200px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   z-index: 110;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
+  animation: fadeIn 0.2s ease-out forwards; /* Animation d'apparition */
 }
 
 .profile-dropdown-item {
   padding: 0.8rem 1.2rem;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid #f5f5f5;
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer; /* Indiquer que c'est cliquable */
+}
+
+.profile-dropdown-item:last-child {
+  border-bottom: none; /* Pas de bordure pour le dernier élément */
 }
 
 .profile-dropdown-item:hover {
-  background-color: #FFFBE6; /* Jaune très clair */
+  background-color: #fffbe6; /* Jaune très clair */
   color: #222222;
 }
 
@@ -229,48 +241,226 @@
   font-size: 20px;
 }
 
-/* Adaptations pour tablettes */
+/* Styles pour le Modal d'édition de profil */
+.profile-edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fond semi-transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Au-dessus du dropdown et du header */
+  animation: fadeInOverlay 0.2s ease-out forwards;
+}
+
+.profile-edit-modal-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 450px;
+  color: #222222;
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
+.profile-edit-modal-content h3 {
+  color: #222222;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.profile-edit-modal-content .form-group {
+  margin-bottom: 1rem;
+}
+
+.profile-edit-modal-content .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-edit-modal-content .form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  color: #222222;
+  background-color: #f9f9f9;
+}
+
+.profile-edit-modal-content .form-group input:focus {
+  outline: none;
+  border-color: #ffd700;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+.profile-edit-modal-content .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+.profile-edit-modal-content .modal-actions button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-edit-modal-content .modal-actions button[type='submit'] {
+  background: linear-gradient(to right, #edec38, #efef57);
+  color: #000;
+}
+
+.profile-edit-modal-content .modal-actions button[type='submit']:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.profile-edit-modal-content .modal-actions button[type='submit']:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.profile-edit-modal-content .modal-actions button[type='button'] {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.profile-edit-modal-content .modal-actions button[type='button']:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-1px);
+}
+/* Ajoutez ces styles pour organiser le nom et le rôle */
+.user-info {
+  display: flex;
+  flex-direction: column; /* Pour empiler le nom et le rôle */
+  align-items: flex-end; /* Aligner le texte à droite */
+  line-height: 1.2; /* Réduire l'espacement entre les lignes */
+}
+
+.user-name {
+  font-size: 0.95rem;
+  color: #222222;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.user-role {
+  font-size: 0.8rem; /* Taille plus petite pour le rôle */
+  color: #777777; /* Couleur plus discrète */
+  font-weight: 400;
+}
+
+/* Ajustez si nécessaire les hover pour user-info */
+.profile-wrapper:hover .user-info .user-name {
+  color: #ffd700; /* Jaune or */
+}
+
+.profile-wrapper:hover .user-info .user-role {
+  color: #ffd700; /* Jaune or */
+}
+
+/* Mettez à jour les media queries si user-info disparaît */
+@media (max-width: 992px) {
+  .user-info {
+    display: none; /* Cache le nom et le rôle sur les petites écrans */
+  }
+}
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Media Queries existantes, assurez-vous qu'elles n'interfèrent pas */
 @media (max-width: 992px) {
   .menu-toggle {
     display: block;
   }
-  
+
   .header-logo {
     height: 28px;
   }
-  
+
   .site-title {
     font-size: 1.2rem;
   }
-  
+
   .current-date {
     display: none;
   }
-  
+
   .user-name {
     display: none;
   }
-  
+
   .profile-wrapper {
     padding: 4px;
   }
+
+  .profile-wrapper mat-icon {
+    font-size: 28px; /* Ajuster la taille de l'icône de profil */
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
 }
 
-/* Adaptations pour téléphones */
 @media (max-width: 768px) {
   .main-header {
     padding: 0.8rem 1rem;
   }
-  
+
   .site-title {
     font-size: 1rem;
   }
-  
+
   .header-right {
     gap: 1rem;
   }
-  
-  .notifications-dropdown {
+
+  .notifications-dropdown,
+  .profile-dropdown {
     min-width: 280px;
     right: -20px;
   }
@@ -280,7 +470,7 @@
   .site-title {
     display: none;
   }
-  
+
   .header-center {
     flex-grow: 1;
     text-align: center;

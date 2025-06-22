@@ -2,11 +2,12 @@ import { Component, HostListener, EventEmitter, Output, OnInit, OnDestroy, Eleme
 import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Subject, fromEvent, debounceTime, takeUntil, filter } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })

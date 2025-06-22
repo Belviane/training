@@ -1,13 +1,96 @@
-.verset {
-    font-family: 'Georgia', serif;
-    font-size: 1.5em;
-    color: #2c3e50;
-    background-color: #f5f5f5;
-    border-left: 5px solid #E0DB5A;
-    padding: 15px 20px;
-    margin: 20px auto;
-    width: fit-content;
-    max-width: 600px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+/* Conteneur principal */
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: white;
+  text-align: center;
+}
+
+/* Illustration */
+.error-illustration {
+  max-width: 300px;
+  margin-bottom: 2rem;
+}
+
+.error-illustration img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+/* Contenu texte */
+.error-content {
+  max-width: 500px;
+}
+
+
+.error-title {
+  font-size: 2rem;
+  color: #0c0c0c;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #555;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Boutons */
+.error-actions {
+    color: #0c0c0c;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  border-radius: 24px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-button mat-icon {
+  margin-right: 8px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .not-found-container {
+    flex-direction: row;
+    gap: 4rem;
+    text-align: left;
+  }
+  
+  .error-illustration {
+    max-width: 400px;
+    margin-bottom: 0;
+  }
+  
+  .error-code {
+    font-size: 6rem;
+  }
+  
+  .error-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-button {
+    width: 100%;
+  }
 }

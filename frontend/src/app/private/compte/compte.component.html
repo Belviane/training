@@ -1,42 +1,117 @@
-<div class="admin-accounts">
-    <button class="close-btn" (click)="fermerModal()">
-        <mat-icon>close</mat-icon> Fermer
+<div class="compte-container">
+  <!-- Titre et bouton Ajouter -->
+  <div class="header-container">
+    <h2>
+      <mat-icon>people</mat-icon> Liste des utilisateurs
+    </h2>
+    <button mat-raised-button color="primary" (click)="openAddModal()">
+      <mat-icon>person_add</mat-icon> Ajouter
     </button>
-    <h2><mat-icon>group</mat-icon> Liste des Comptes</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of utilisateurs">
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ user.status }}</td>
-            </tr>
-        </tbody>
+  </div>
+
+  <!-- États de chargement -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Chargement des utilisateurs...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <mat-icon>error</mat-icon> {{ errorMessage }}
+  </div>
+
+  <!-- Tableau -->
+  <div class="table-responsive">
+    <table *ngIf="!isLoading && users.length > 0" class="user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.nom }}</td>
+          <td>{{ user.prenom }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="role-badge" [ngClass]="getRoleClass(user.role_id)">
+              {{ getRoleName(user.role_id) }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [class.active]="user.is_active" [class.inactive]="!user.is_active">
+              {{ user.is_active ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button [disabled]="user.isLoading" [color]="user.is_active ? 'warn' : 'primary'"
+              (click)="toggleUserStatus(user)" matTooltip="{{user.is_active ? 'Désactiver' : 'Activer'}}">
+              <mat-icon *ngIf="!user.isLoading">
+                {{user.is_active ? 'toggle_off' : 'toggle_on'}}
+              </mat-icon>
+              <mat-spinner *ngIf="user.isLoading" diameter="24"></mat-spinner>
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
+  </div>
 
-    <h3><mat-icon>person_add</mat-icon> Ajouter un compte</h3>
-    <form (submit)="ajouterUtilisateur()">
-        <input type="text" placeholder="Nom" [(ngModel)]="nouveauUtilisateur.name" name="name" required>
-        <input type="email" placeholder="Email" [(ngModel)]="nouveauUtilisateur.email" name="email" required>
-        <input type="password" placeholder="Mot de passe" [(ngModel)]="nouveauUtilisateur.password" name="password"
-            required>
-        <select [(ngModel)]="nouveauUtilisateur.role" name="role" required>
-            <option value="">-- Sélectionner un rôle --</option>
-            <option value="apprenant">Apprenant</option>
-            <option value="formateur">Formateur</option>
-            <option value="parent">Parent</option>
-            <option value="superviseur">Superviseur</option>
-            <option value="administrateur">Administrateur</option>
-        </select>
-        <button type="submit">Ajouter</button>
-    </form>
-
+  <!-- Message si vide -->
+  <div *ngIf="!isLoading && users.length === 0" class="no-users">
+    <mat-icon>people_outline</mat-icon>
+    <p>Aucun utilisateur trouvé</p>
+  </div>
 </div>
+
+
+
+
+<!-- <div *ngIf="isLoading" class="text-center py-4">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
+  <p>Chargement des utilisateurs...</p>
+</div> -->
+
+<!-- <div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div> -->
+
+<!-- <table *ngIf="!isLoading && users.length > 0" class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Rôle</th>
+      <th>Statut</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.nom }}</td>
+      <td>{{ user.prenom }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ getRoleName(user.role_id) }}</td>
+      <td [class.status-active]="user.is_active" [class.status-inactive]="!user.is_active">
+        {{ user.is_active ? 'Actif' : 'Inactif' }}
+      </td>
+    </tr>
+  </tbody>
+</table> -->
+
+<!-- <div *ngIf="!isLoading && users.length === 0" class="alert alert-info">
+  Aucun utilisateur trouvé.
+</div> -->
