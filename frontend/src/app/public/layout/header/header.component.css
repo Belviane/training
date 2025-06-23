@@ -1,4 +1,6 @@
-/* Définition des variables de couleurs pour une utilisation cohérente dans tout le fichier */
+/* ==========================================================
+  VARIABLES DE COULEURS
+  ========================================================== */
 :root {
   --primary-black: #010101;
   --dark-gray: #222222;
@@ -16,7 +18,9 @@
   --yellow-accent: #EDEC38;
 }
 
-/* Reset et styles de base */
+/* ==========================================================
+  RESET & BASE
+  ========================================================== */
 * {
   box-sizing: border-box;
 }
@@ -27,7 +31,9 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Styles principaux du header du site */
+/* ==========================================================
+  HEADER PRINCIPAL
+  ========================================================== */
 .site-header {
   width: 100%;
   position: fixed;
@@ -37,18 +43,20 @@ body {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Barre de navigation principale */
+/* ==========================================================
+  NAVBAR
+  ========================================================== */
 #navbar {
   background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* Support Safari */
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(239, 239, 87, 0.1);
   padding: 12px 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
-/* Apparence du navbar lors du scroll */
+/* Navbar lors du scroll */
 #navbar.scrolled {
   padding: 8px 0;
   background: #000;
@@ -57,7 +65,9 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Conteneur centralisé et flexible */
+/* ==========================================================
+  CONTAINER CENTRALISÉ
+  ========================================================== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -68,7 +78,9 @@ body {
   position: relative;
 }
 
-/* Section du logo */
+/* ==========================================================
+  LOGO & TITRE
+  ========================================================== */
 .logo-section {
   display: flex;
   align-items: center;
@@ -76,12 +88,10 @@ body {
   transition: transform 0.3s ease;
   z-index: 1001;
 }
-
 .logo-section:hover {
   transform: translateY(-2px);
 }
 
-/* Image du logo */
 .logo-img {
   height: 80px;
   width: 80px;
@@ -90,19 +100,16 @@ body {
   border: 2px solid var(--primary-yellow);
   transition: all 0.3s ease;
 }
-
 .logo-img:hover {
   border-color: var(--neon-yellow);
   box-shadow: 0 0 20px rgba(239, 239, 87, 0.3);
 }
 
-/* Titre du site */
 .site-title {
   display: flex;
   flex-direction: column;
   line-height: 1;
 }
-
 .site-name {
   color: var(--primary-yellow);
   font-weight: 800;
@@ -110,7 +117,6 @@ body {
   letter-spacing: 1px;
   transition: color 0.3s ease;
 }
-
 .site-subtitle {
   color: var(--gold);
   font-weight: 400;
@@ -120,15 +126,17 @@ body {
   transition: color 0.3s ease;
 }
 
+/* Changement de couleur lors du scroll */
 #navbar.scrolled .site-name {
   color: #ffffff;
 }
-
 #navbar.scrolled .site-subtitle {
   color: #f0f0f0;
 }
 
-/* Bouton menu hamburger */
+/* ==========================================================
+  MENU HAMBURGER (MOBILE)
+  ========================================================== */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -140,7 +148,6 @@ body {
   z-index: 1002;
   position: relative;
 }
-
 .menu-toggle span {
   width: 25px;
   height: 3px;
@@ -149,23 +156,22 @@ body {
   border-radius: 2px;
   display: block;
 }
-
 /* Animation hamburger en croix */
 .menu-toggle.active span:nth-child(1) {
   transform: rotate(45deg) translate(6px, 6px);
   background: var(--neon-yellow);
 }
-
 .menu-toggle.active span:nth-child(2) {
   opacity: 0;
 }
-
 .menu-toggle.active span:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
   background: var(--neon-yellow);
 }
 
-/* Menu principal */
+/* ==========================================================
+  MENU PRINCIPAL (DESKTOP)
+  ========================================================== */
 .main-menu {
   display: flex;
   gap: 32px;
@@ -174,11 +180,9 @@ body {
   padding: 0;
   align-items: center;
 }
-
 .main-menu li {
   position: relative;
 }
-
 .main-menu li a {
   display: flex;
   align-items: center;
@@ -193,21 +197,19 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
-
+/* Couleurs lors du scroll */
 #navbar.scrolled .main-menu li a {
   color: #ffffff;
 }
-
 #navbar.scrolled .main-menu li a:hover,
 #navbar.scrolled .main-menu li a:focus {
   color: var(--primary-yellow);
 }
-
 #navbar.scrolled .main-menu li a.active {
   color: var(--primary-yellow);
 }
 
-/* Effet brillance */
+/* Effet brillance sur hover */
 .main-menu li a::before {
   content: '';
   position: absolute;
@@ -218,31 +220,29 @@ body {
   background: linear-gradient(90deg, transparent, rgba(242, 242, 11, 0.1), transparent);
   transition: left 0.5s ease;
 }
-
 .main-menu li a:hover::before {
   left: 100%;
 }
-
 .main-menu li a:hover,
 .main-menu li a:focus {
   color: var(--primary-yellow);
   background: rgba(239, 239, 87, 0.1);
   transform: translateY(-2px);
 }
-
 .main-menu li a.active {
   color: var(--primary-yellow);
   background: rgba(241, 241, 3, 0.765);
   font-weight: 600;
   box-shadow: 0 0 15px rgba(251, 251, 57, 0.2);
 }
-
 .main-menu li a i {
   font-size: 1.1rem;
   opacity: 0.8;
 }
 
-/* Actions header */
+/* ==========================================================
+  ACTIONS HEADER (BOUTONS)
+  ========================================================== */
 .header-actions {
   display: flex;
   gap: 12px;
@@ -250,7 +250,7 @@ body {
   z-index: 1001;
 }
 
-/* Styles boutons */
+/* Boutons génériques */
 .btn {
   padding: 10px 20px;
   border-radius: 25px;
@@ -265,25 +265,24 @@ body {
   white-space: nowrap;
 }
 
-/* Style des boutons lors du scroll */
+/* Boutons lors du scroll */
 #navbar.scrolled .btn {
   color: #fff;
   border-color: #fff;
   background: rgba(255, 255, 255, 0.05);
 }
-
 #navbar.scrolled .btn-primary {
   background: linear-gradient(135deg, #fff700 0%, #f3ee3b 100%);
   color: #010101;
   border-color: #fff700;
 }
-
 #navbar.scrolled .btn-outline {
   color: #fff;
   border-color: #fff;
   background: transparent;
 }
 
+/* Effet brillance bouton */
 .btn::before {
   content: '';
   position: absolute;
@@ -294,17 +293,16 @@ body {
   background: linear-gradient(90deg, transparent, rgba(230, 219, 8, 0.854), transparent);
   transition: left 0.5s ease;
 }
-
 .btn:hover::before {
   left: 100%;
 }
 
+/* Bouton outline */
 .btn-outline {
   color: var(--primary-yellow);
   border-color: var(--primary-yellow);
   background: transparent;
 }
-
 .btn-outline:hover {
   background: var(--primary-accent);
   color: var(--primary-black);
@@ -312,193 +310,136 @@ body {
   box-shadow: 0 5px 15px rgba(228, 228, 4, 0.842);
 }
 
+/* Bouton principal */
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--bright-yellow) 100%);
   color: var(--primary-black);
   border-color: var(--primary-yellow);
   background-size: 200% auto;
 }
-
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--neon-yellow) 0%, var(--primary-yellow) 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(239, 239, 87, 0.879);
 }
 
-/* RESPONSIVE DESIGN */
+/* ==========================================================
+  RESPONSIVE DESIGN
+  ========================================================== */
 
 /* Tablette */
 @media (max-width: 968px) {
-  .main-menu {
-    gap: 20px;
-  }
-  
+  .main-menu { gap: 20px; }
   .main-menu li a {
-    padding: 10px 12px;
-    font-size: 0.9rem;
+   padding: 10px 12px;
+   font-size: 0.9rem;
   }
 }
 
 /* Tablette et mobile */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 15px;
-  }
-  
-  .menu-toggle {
-    display: flex;
-    order: 3;
-  }
-  
-  .header-actions {
-    order: 2;
-    gap: 8px;
-  }
-  
-  .btn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-  
-  /* Menu mobile - CORRECTIF PRINCIPAL */
+  .container { padding: 0 15px; }
+  .menu-toggle { display: flex; order: 3; }
+  .header-actions { order: 2; gap: 8px; }
+  .btn { padding: 8px 16px; font-size: 0.85rem; }
+
+  /* Menu mobile */
   .main-menu {
-    position: fixed; /* Changé de absolute à fixed */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    padding: 40px 20px;
-    margin: 0;
-    transform: translateX(-100%); /* Slide depuis la gauche */
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+   position: fixed;
+   top: 0; left: 0; right: 0; bottom: 0;
+   background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
+   backdrop-filter: blur(20px);
+   -webkit-backdrop-filter: blur(20px);
+   flex-direction: column;
+   justify-content: center;
+   gap: 20px;
+   padding: 40px 20px;
+   margin: 0;
+   transform: translateX(-100%);
+   opacity: 0;
+   visibility: hidden;
+   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   z-index: 1000;
+   display: none;
   }
-  
   .main-menu.open {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
+   display: flex;
+   transform: translateX(0);
+   opacity: 1;
+   visibility: visible;
   }
-  
-  .main-menu li {
-    width: 100%;
-    text-align: center;
-  }
-  
+  .main-menu li { width: 100%; text-align: center; }
   .main-menu li a {
-    justify-content: center;
-    width: 100%;
-    padding: 20px 24px;
-    border-radius: 12px;
-    margin: 8px 0;
-    font-size: 1.1rem;
-    background: rgba(239, 239, 87, 0.05);
-    border: 1px solid rgba(239, 239, 87, 0.2);
+   justify-content: center;
+   width: 100%;
+   padding: 20px 24px;
+   border-radius: 12px;
+   margin: 8px 0;
+   font-size: 1.1rem;
+   background: rgba(239, 239, 87, 0.05);
+   border: 1px solid rgba(239, 239, 87, 0.2);
   }
-  
   .main-menu li a:hover {
-    background: rgba(239, 239, 87, 0.15);
-    transform: scale(1.02);
+   background: rgba(239, 239, 87, 0.15);
+   transform: scale(1.02);
   }
-  
-  .site-name {
-    font-size: 1.1rem;
-  }
-  
-  .site-subtitle {
-    font-size: 0.65rem;
-  }
-  
-  .logo-img {
-    height: 45px;
-    width: 45px;
-  }
+  .site-name { font-size: 1.1rem; }
+  .site-subtitle { font-size: 0.65rem; }
+  .logo-img { height: 45px; width: 45px; }
 }
 
 /* Mobile plus petit */
 @media (max-width: 480px) {
-  .header-actions {
-    gap: 6px;
-  }
-  
-  .btn {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-  
-  .site-title {
-    display: none;
-  }
-  
-  .logo-img {
-    height: 40px;
-    width: 40px;
-  }
-  
-  .main-menu li a {
-    padding: 18px 20px;
-    font-size: 1rem;
-  }
+  .header-actions { gap: 6px; }
+  .btn { padding: 6px 12px; font-size: 0.8rem; }
+  .site-title { display: none; }
+  .logo-img { height: 40px; width: 40px; }
+  .main-menu li a { padding: 18px 20px; font-size: 1rem; }
 }
 
-/* Overlay pour fermer le menu mobile */
+/* ==========================================================
+  OVERLAY MENU MOBILE
+  ========================================================== */
 .menu-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
   z-index: 999;
 }
-
 .menu-overlay.active {
   opacity: 1;
   visibility: visible;
 }
 
-/* Animations */
+/* ==========================================================
+  ANIMATIONS
+  ========================================================== */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes shine {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
-
 .btn-primary {
   animation: shine 4s linear infinite;
 }
 
-/* Amélioration accessibilité */
+/* ==========================================================
+  ACCESSIBILITÉ
+  ========================================================== */
 @media (prefers-reduced-motion: reduce) {
   * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+   animation-duration: 0.01ms !important;
+   animation-iteration-count: 1 !important;
+   transition-duration: 0.01ms !important;
   }
 }
-
-/* Focus visible pour l'accessibilité */
+/* Focus visible */
 .main-menu li a:focus-visible,
 .btn:focus-visible,
 .menu-toggle:focus-visible {

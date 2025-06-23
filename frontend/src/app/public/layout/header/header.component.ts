@@ -266,6 +266,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.openMenu();
     }
+    this.menuOpen = !this.menuOpen;
   }
 
   private openMenu(): void {
@@ -414,6 +415,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.menuOpen && navbar && !navbar.contains(target)) {
       this.closeMenu();
     }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: any): void {
+    this.isScrolled = window.scrollY > 0;
   }
 
   private resizeTimeout: any;

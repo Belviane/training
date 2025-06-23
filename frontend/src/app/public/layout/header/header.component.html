@@ -1,12 +1,11 @@
 <header class="site-header">
-  <nav id="navbar" [class.scrolled]="isScrolled">
+  <nav id="navbar" [ngClass]="{'scrolled': isScrolled}">
     <div class="container">
       <!-- Logo + Nom -->
       <div class="logo-section">
         <img src="assets/logo.jpg" alt="Logo" class="logo-img" />
         <div class="site-title">
-          <span class="site-name">BE I.T.</span>
-          <span class="site-subtitle">AFRICA</span>
+          <span class="site-name">BE I.T AFRICA</span>
         </div>
       </div>
 
