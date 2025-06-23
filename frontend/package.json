@@ -10,11 +10,11 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.2.14",
+    "@angular/animations": "19.2.11",
     "@angular/cdk": "^19.2.18",
-    "@angular/common": "^19.1.0",
+    "@angular/common": "19.2.11",
     "@angular/compiler": "^19.1.0",
-    "@angular/core": "^19.1.0",
+    "@angular/core": "19.2.11",
     "@angular/forms": "^19.1.0",
     "@angular/material": "^19.2.18",
     "@angular/platform-browser": "^19.1.0",
@@ -22,7 +22,7 @@
     "@angular/router": "^19.1.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
-    "ngx-toastr": "^19.0.0",
+    "ngx-toastr": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
