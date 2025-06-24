@@ -1,5 +1,6 @@
-/* Importez si ce n'est pas déjà fait */
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap');
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
 
 .main-header {
   display: flex;
