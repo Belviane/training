@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
-use App\Models\Administrateur;
+use App\Models\Caissier;
 use Illuminate\Http\Request;
 
 
-
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -17,19 +15,14 @@ use Carbon\Carbon;
 use App\Mail\EnvoiIdentifiants;
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
 
-
-
-class AdministrateurController extends Controller
+class CaissierController extends Controller
 {
-    //lister tous les admins
+    //lister tous les caissier
     public function index(Request $request)
     {
-        
 
-        $query = Administrateur::with('utilisateur');
+        $query = Caissier::with('utilisateur');
         if ($request->filled('is_active')) {
             $query->whereHas('utilisateur', function ($q) use ($request) {
                 $q->where('is_active', $request->is_active);
@@ -54,20 +47,20 @@ class AdministrateurController extends Controller
             });
         }
 
-        $administrateurs = $query->paginate($request->get('per_page', 10)); // 10 par défaut
-        return response()->json($administrateurs);
+        $caissiers = $query->paginate($request->get('per_page', 10)); // 10 par défaut
+        return response()->json($caissiers);
     }
 
-   
+  
     public function create()
     {
         //
     }
 
-    //ajouter un admin
+    //ajouter un caissier
     public function store(Request $request)
     {
-        request->validate([
+        $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'genre' => 'required|string',
@@ -87,68 +80,68 @@ class AdministrateurController extends Controller
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance,
             'password' => Hash::make($passwordPlain),
-            'role_id' => 1,
+            'role_id' => 6,
             'verification_code' => $codeVerif,
             'email_verified' => false,
             'doit_changer_mot_de_passe' => true,
         ]);
 
         do {
-            $matricule = 'AD' . now()->format('d') . strtoupper(substr($user->nom, 0, 2)) . Carbon::parse($user->date_naissance)->format('d') . strtoupper(substr($user->prenom, -2)) . Carbon::parse($user->date_naissance)->format('y') . rand(10, 99);
-        } while (Administrateur::where('matriculeAD', $matricule)->exists());
+            $matricule = 'CA' . now()->format('d') . strtoupper(substr($user->nom, 0, 2)) . Carbon::parse($user->date_naissance)->format('d') . strtoupper(substr($user->prenom, -2)) . Carbon::parse($user->date_naissance)->format('y') . rand(10, 99);
+        } while (Caissier::where('matriculeCA', $matricule)->exists());
 
-        $admin = Administrateur::create([
+        $caissier = Caissier::create([
             'utilisateur_id' => $user->id,
-            'matriculeAD' => $matricule,
+            'matriculeCA' => $matricule,
             'date_derniere_action' => now(),
         ]);
 
         Mail::to($user->email)->send(new EnvoiIdentifiants($user, $passwordPlain, $matricule));
 
         return response()->json([
-            'message' => 'Administrateur créé avec succès.',
+            'message' => 'Caissier créé avec succès.',
             'user' => $user,
-            'administrateur' => $admin
+            'caissier' => $caissier
         ]);
     }
 
-    //afficher un admin specifique
+    //afficher un caissier specifique
     public function show( $id)
     {
-        $administrateur = Administrateur::with('utilisateur')->findOrFail($id);
+        $caissier= Caissier::with('utilisateur')->findOrFail($id);
 
-        return response()->json($administrateur);
+        return response()->json($caissier);
     }
-   
-    public function edit(administrateur $administrateur)
+
+
+    public function edit(Caissier $caissier)
     {
         //
     }
 
-    //mettre a jour un admin
+    //mettre a jour un caissier
     public function update(Request $request, $id)
     {
-        $admin = Administrateur::with('utilisateur')->findOrFail($id);
+        $caissier = Caissier::with('utilisateur')->findOrFail($id);
         $user = auth()->user();
 
-        // Vérifie si c’est un admin ou le propriétaire
-        if ($user->role_id !== 1 && $user->id !== $admin->utilisateur_id) {
+        // Vérifie que seul admin ou l'utilisateur concerné peut modifier
+        if ($user->role_id !== 1 && $user->id !== $caissier->utilisateur_id) {
             return response()->json(['message' => 'Non autorisé.'], 403);
         }
 
-        // Validation
         $validated = $request->validate([
             'nom' => 'sometimes|string',
             'prenom' => 'sometimes|string',
             'email' => [
                 'sometimes',
                 'email',
-                Rule::unique('utilisateurs')->ignore($admin->utilisateur_id)
+                Rule::unique('utilisateurs', 'email')->ignore($caissier->utilisateur_id),
             ],
             'login' => [
                 'sometimes',
                 'string',
-                Rule::unique('utilisateurs', 'login')->ignore($admin->utilisateur_id)
+                Rule::unique('utilisateurs', 'login')->ignore($caissier->utilisateur_id),
             ],
             'date_naissance' => 'sometimes|date',
             'genre' => 'sometimes|string',
@@ -156,68 +149,59 @@ class AdministrateurController extends Controller
             'photo_profil' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Mise à jour du mot de passe
+        // Hash du mot de passe si présent
         if ($request->filled('password')) {
-            $admin->utilisateur->password = bcrypt($request->password);
+            $caissier->utilisateur->password = bcrypt($request->password);
         }
 
-        // Mise à jour de la photo
+        // Mise à jour photo
         if ($request->hasFile('photo_profil')) {
-            if ($admin->utilisateur->photo_profil) {
-                Storage::disk('public')->delete($admin->utilisateur->photo_profil);
+            if ($caissier->utilisateur->photo_profil) {
+                Storage::disk('public')->delete($caissier->utilisateur->photo_profil);
             }
             $photoPath = $request->file('photo_profil')->store('photos', 'public');
-            $admin->utilisateur->photo_profil = $photoPath;
+            $caissier->utilisateur->photo_profil = $photoPath;
         }
 
-        // Mise à jour des champs utilisateur
-        $admin->utilisateur->fill($request->only([
+        // Mise à jour des autres champs utilisateur
+        $caissier->utilisateur->fill($request->only([
             'nom', 'prenom', 'login', 'email', 'genre', 'date_naissance'
         ]));
-        $admin->utilisateur->save();
+        $caissier->utilisateur->save();
 
-        // Mise à jour de la date de dernière action
-        $admin->date_derniere_action = now();
-        $admin->save();
+        // Mise à jour date dernière action
+        $caissier->date_derniere_action = now();
+        $caissier->save();
 
         return response()->json([
-            'message' => 'Administrateur mis à jour avec succès.',
-            'administrateur' => $admin->fresh()
+            'message' => 'Caissier mis à jour avec succès.',
+            'caissier' => $caissier->fresh()
         ]);
     }
 
-    //exporter la liste des admins en format pdf
-    public function exportPDFAdministrateurs()
-    {
-        // Récupère les administrateurs avec leurs utilisateurs liés
-        $administrateurs = Administrateur::with('utilisateur')->get();
-        logger()->info('Administrateurs:', $administrateurs->toArray());
 
-        // Construis le HTML à la main
-        $html = '<h1>Liste des administrateurs</h1>';
+    //exporter la liste des caissiers au format pdf
+    public function exportPDFCaissiers()
+    {
+        $caissiers = Caissier::with('utilisateur')->get();
+
+        $html = '<h1>Liste des caissiers</h1>';
         $html .= '<table border="1" cellspacing="0" cellpadding="5">';
         $html .= '<thead><tr><th>Nom</th><th>Prénom</th><th>Email</th></tr></thead><tbody>';
 
-        foreach ($administrateurs as $admin) {
+        foreach ($caissiers as $caissier) {
             $html .= '<tr>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->nom ?? '') . '</td>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->prenom ?? '') . '</td>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->email ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($caissier->utilisateur->nom ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($caissier->utilisateur->prenom ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($caissier->utilisateur->email ?? '') . '</td>';
             $html .= '</tr>';
         }
 
         $html .= '</tbody></table>';
 
-        // Génère le PDF à partir du HTML
         $pdf = Pdf::loadHTML($html);
 
-    
-
-    // Sauvegarder dans storage/app/public/pdfs/
-    Storage::put('public/pdfs/administrateurs.pdf', $pdf->output());
-
-    // Retourne le PDF en téléchargement
-        return $pdf->download('administrateurs.pdf');
+        return $pdf->download('caissiers.pdf');
     }
 
 }

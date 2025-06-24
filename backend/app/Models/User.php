@@ -31,13 +31,12 @@ class User extends Authenticatable
         'role_id',
         'login',
         'is_active',
+        'verification_code',
+        'email_verified',
         'doit_changer_mot_de_passe'
     ];
 
-    public function getAuthPassword()
-    {
-        return $this->mdp;
-    }
+
 
     protected $hidden = [
         'password',
@@ -61,15 +60,42 @@ class User extends Authenticatable
         return $this->hasOne(Apprenant::class);
     }
 
+    public function superviseur()
+    {
+        return $this->hasOne(Superviseur::class, 'utilisateur_id');
+    }
+
+    public function administrateur()
+    {
+        return $this->hasOne(Administrateur::class, 'utilisateur_id');
+    }
+
+    public function parents()
+    {
+        return $this->hasOne(Parents::class, 'utilisateur_id');
+    }
+
+    public function caissier()
+    {
+        return $this->hasOne(Caissier::class, 'utilisateur_id');
+    }
+
+    public function auditeur()
+    {
+        return $this->hasOne(Auditeur::class, 'utilisateur_id');
+    }
+
+    public function vendeur()
+    {
+        return $this->hasOne(Vendeur::class, 'utilisateur_id');
+    }
+
     public function inscriptionsFormateur()
     {
         return $this->hasMany(Inscriptions::class, 'formateur_id');
     }
 
-    public function superviseur()
-    {
-        return $this->hasOne(Superviseur::class, 'utilisateur_id');
-    }
+    
 
 
 }

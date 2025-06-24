@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
-use App\Models\Administrateur;
+use App\Models\Auditeur;
 use Illuminate\Http\Request;
 
 
-
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -17,19 +15,14 @@ use Carbon\Carbon;
 use App\Mail\EnvoiIdentifiants;
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
 
-
-
-class AdministrateurController extends Controller
+class AuditeurController extends Controller
 {
-    //lister tous les admins
+    //lister tous les auditeurs
     public function index(Request $request)
     {
-        
 
-        $query = Administrateur::with('utilisateur');
+        $query = Auditeur::with('utilisateur');
         if ($request->filled('is_active')) {
             $query->whereHas('utilisateur', function ($q) use ($request) {
                 $q->where('is_active', $request->is_active);
@@ -54,8 +47,8 @@ class AdministrateurController extends Controller
             });
         }
 
-        $administrateurs = $query->paginate($request->get('per_page', 10)); // 10 par défaut
-        return response()->json($administrateurs);
+        $auditeurs = $query->paginate($request->get('per_page', 10)); // 10 par défaut
+        return response()->json($auditeurs);
     }
 
    
@@ -64,10 +57,10 @@ class AdministrateurController extends Controller
         //
     }
 
-    //ajouter un admin
+    //ajouter un auditeur
     public function store(Request $request)
     {
-        request->validate([
+        $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'genre' => 'required|string',
@@ -87,68 +80,68 @@ class AdministrateurController extends Controller
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance,
             'password' => Hash::make($passwordPlain),
-            'role_id' => 1,
+            'role_id' => 8,
             'verification_code' => $codeVerif,
             'email_verified' => false,
             'doit_changer_mot_de_passe' => true,
         ]);
 
         do {
-            $matricule = 'AD' . now()->format('d') . strtoupper(substr($user->nom, 0, 2)) . Carbon::parse($user->date_naissance)->format('d') . strtoupper(substr($user->prenom, -2)) . Carbon::parse($user->date_naissance)->format('y') . rand(10, 99);
-        } while (Administrateur::where('matriculeAD', $matricule)->exists());
+            $matricule = 'AU' . now()->format('d') . strtoupper(substr($user->nom, 0, 2)) . Carbon::parse($user->date_naissance)->format('d') . strtoupper(substr($user->prenom, -2)) . Carbon::parse($user->date_naissance)->format('y') . rand(10, 99);
+        } while (Auditeur::where('matriculeAU', $matricule)->exists());
 
-        $admin = Administrateur::create([
+        $auditeur = Auditeur::create([
             'utilisateur_id' => $user->id,
-            'matriculeAD' => $matricule,
-            'date_derniere_action' => now(),
+            'matriculeAU' => $matricule,
+            'date_dernier_Audit' => now(),
         ]);
 
         Mail::to($user->email)->send(new EnvoiIdentifiants($user, $passwordPlain, $matricule));
 
         return response()->json([
-            'message' => 'Administrateur créé avec succès.',
+            'message' => 'Auditeur créé avec succès.',
             'user' => $user,
-            'administrateur' => $admin
+            'auditeur' => $auditeur
         ]);
     }
 
-    //afficher un admin specifique
+    //visualiser un auditeur specifique
     public function show( $id)
     {
-        $administrateur = Administrateur::with('utilisateur')->findOrFail($id);
+        $auditeur = Auditeur::with('utilisateur')->findOrFail($id);
 
-        return response()->json($administrateur);
+        return response()->json($auditeur);
     }
+
    
-    public function edit(administrateur $administrateur)
+    public function edit(Auditeur $auditeur)
     {
         //
     }
 
-    //mettre a jour un admin
+    //mettre a jouur un auditeur
     public function update(Request $request, $id)
     {
-        $admin = Administrateur::with('utilisateur')->findOrFail($id);
+        $auditeur = Auditeur::with('utilisateur')->findOrFail($id);
         $user = auth()->user();
 
-        // Vérifie si c’est un admin ou le propriétaire
-        if ($user->role_id !== 1 && $user->id !== $admin->utilisateur_id) {
+        // Vérification : seul admin ou l'auditeur concerné peut modifier
+        if ($user->role_id !== 1 && $user->id !== $auditeur->utilisateur_id) {
             return response()->json(['message' => 'Non autorisé.'], 403);
         }
 
-        // Validation
         $validated = $request->validate([
             'nom' => 'sometimes|string',
             'prenom' => 'sometimes|string',
             'email' => [
                 'sometimes',
                 'email',
-                Rule::unique('utilisateurs')->ignore($admin->utilisateur_id)
+                Rule::unique('utilisateurs', 'email')->ignore($auditeur->utilisateur_id),
             ],
             'login' => [
                 'sometimes',
                 'string',
-                Rule::unique('utilisateurs', 'login')->ignore($admin->utilisateur_id)
+                Rule::unique('utilisateurs', 'login')->ignore($auditeur->utilisateur_id),
             ],
             'date_naissance' => 'sometimes|date',
             'genre' => 'sometimes|string',
@@ -156,68 +149,58 @@ class AdministrateurController extends Controller
             'photo_profil' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Mise à jour du mot de passe
+        // Hash du mot de passe si fourni
         if ($request->filled('password')) {
-            $admin->utilisateur->password = bcrypt($request->password);
+            $auditeur->utilisateur->password = bcrypt($request->password);
         }
 
-        // Mise à jour de la photo
+        // Mise à jour photo
         if ($request->hasFile('photo_profil')) {
-            if ($admin->utilisateur->photo_profil) {
-                Storage::disk('public')->delete($admin->utilisateur->photo_profil);
+            if ($auditeur->utilisateur->photo_profil) {
+                Storage::disk('public')->delete($auditeur->utilisateur->photo_profil);
             }
             $photoPath = $request->file('photo_profil')->store('photos', 'public');
-            $admin->utilisateur->photo_profil = $photoPath;
+            $auditeur->utilisateur->photo_profil = $photoPath;
         }
 
-        // Mise à jour des champs utilisateur
-        $admin->utilisateur->fill($request->only([
+        // Mise à jour des autres champs utilisateur
+        $auditeur->utilisateur->fill($request->only([
             'nom', 'prenom', 'login', 'email', 'genre', 'date_naissance'
         ]));
-        $admin->utilisateur->save();
+        $auditeur->utilisateur->save();
 
-        // Mise à jour de la date de dernière action
-        $admin->date_derniere_action = now();
-        $admin->save();
+        // Mise à jour de la date du dernier audit
+        $auditeur->date_dernier_Audit = now();
+        $auditeur->save();
 
         return response()->json([
-            'message' => 'Administrateur mis à jour avec succès.',
-            'administrateur' => $admin->fresh()
+            'message' => 'Auditeur mis à jour avec succès.',
+            'auditeur' => $auditeur->fresh()
         ]);
     }
 
-    //exporter la liste des admins en format pdf
-    public function exportPDFAdministrateurs()
+    //exporter la liste des auditeurs au format pdf
+    public function exportPDFAuditeurs()
     {
-        // Récupère les administrateurs avec leurs utilisateurs liés
-        $administrateurs = Administrateur::with('utilisateur')->get();
-        logger()->info('Administrateurs:', $administrateurs->toArray());
+        $auditeurs = Auditeur::with('utilisateur')->get();
 
-        // Construis le HTML à la main
-        $html = '<h1>Liste des administrateurs</h1>';
+        $html = '<h1>Liste des auditeurs</h1>';
         $html .= '<table border="1" cellspacing="0" cellpadding="5">';
         $html .= '<thead><tr><th>Nom</th><th>Prénom</th><th>Email</th></tr></thead><tbody>';
 
-        foreach ($administrateurs as $admin) {
+        foreach ($auditeurs as $auditeur) {
             $html .= '<tr>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->nom ?? '') . '</td>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->prenom ?? '') . '</td>';
-            $html .= '<td>' . htmlspecialchars($admin->utilisateur->email ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($auditeur->utilisateur->nom ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($auditeur->utilisateur->prenom ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($auditeur->utilisateur->email ?? '') . '</td>';
             $html .= '</tr>';
         }
 
         $html .= '</tbody></table>';
 
-        // Génère le PDF à partir du HTML
         $pdf = Pdf::loadHTML($html);
 
-    
-
-    // Sauvegarder dans storage/app/public/pdfs/
-    Storage::put('public/pdfs/administrateurs.pdf', $pdf->output());
-
-    // Retourne le PDF en téléchargement
-        return $pdf->download('administrateurs.pdf');
+        return $pdf->download('auditeurs.pdf');
     }
 
 }

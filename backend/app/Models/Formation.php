@@ -17,6 +17,8 @@ class Formation extends Model
         'date_debutf',
         'date_finf',
         'nombre_seancef',
+        'volume_horaire',
+        
     ];
 
     public function inscriptions()

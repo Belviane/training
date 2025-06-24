@@ -13,16 +13,18 @@ return new class extends Migration
     {
        Schema::create('utilisateurs', function (Blueprint $table) {
             $table->id();
+            $table->string('photo_profil')->nullable();
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('login')->unique();
             $table->string('password');
             $table->string('genre');
             $table->date('date_naissance');
-            $table->string('login')->unique();
-            //$table->string('mdp');
+            $table->boolean('email_verified')->default(false);
+            $table->string('verification_code')->nullable();
+            $table->boolean('doit_changer_mot_de_passe')->default(true);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

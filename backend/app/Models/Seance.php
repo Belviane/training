@@ -10,7 +10,7 @@ class Seance extends Model
 {
     use HasFactory;
 
-     protected $table = 'seances';
+    protected $table = 'seances';
 
     protected $fillable = [
         'titre',

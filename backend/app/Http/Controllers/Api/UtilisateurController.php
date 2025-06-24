@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Formateur;
 use App\Models\Parents;
 use App\Models\Administrateur;
+use App\Models\Superviseur;
+use App\Models\Caissier;
+use App\Models\Auditeur;
+use App\Models\Vendeur;
+use App\Models\Apprenant;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 
@@ -118,6 +123,31 @@ class UtilisateurController extends Controller
         return $this->hasOne(Formateur::class);
     }
 
+    public function superviseur()
+    {
+        return $this->hasOne(Superviseur::class);
+    }
+
+    public function apprenant()
+    {
+        return $this->hasOne(Apprenant::class);
+    }
+
+    public function vendeur()
+    {
+        return $this->hasOne(Vendeur::class);
+    }
+
+    public function caissier()
+    {
+        return $this->hasOne(Caissier::class);
+    }
+
+    public function auditeur()
+    {
+        return $this->hasOne(Auditeur::class);
+    }
+
     public function parent()
     {
         return $this->hasOne(Parents::class);
@@ -220,32 +250,22 @@ class UtilisateurController extends Controller
     }
 
     // Vérifier code email
-    public function verifierEmail(Request $request)
+   public function verifierEmailWeb($id, $code)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'code' => 'required|digits:6',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
-        }
+        $user = User::findOrFail($id);
 
         if ($user->email_verified) {
-            return response()->json(['message' => 'Email déjà vérifié.']);
+            return redirect('http://localhost:4200/login'); // déjà vérifié
         }
 
-        if ($user->verification_code !== $request->code) {
-            return response()->json(['message' => 'Code de vérification invalide.'], 400);
+        if ($user->verification_code == $code) {
+            $user->email_verified = true;
+            $user->save();
+
+            return redirect('http://localhost:4200/login?verified=1'); // ou un toast sur le front
         }
 
-        $user->email_verified = true;
-        $user->verification_code = null;
-        $user->save();
-
-        return response()->json(['message' => 'Email vérifié avec succès.']);
+        return redirect('http://localhost:4200/login?error=verification_failed');
     }
 
 
