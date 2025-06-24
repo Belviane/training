@@ -7,6 +7,15 @@
   --sidebar-width: 260px;
 }
 
+/* Désactive les warnings pour ces sélecteurs */
+:host ::ng-deep {
+  .form-floating > label,
+  .btn-group > .btn,
+  .btn-group-vertical > .btn {
+    /* Styles par défaut ou vides */
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
