@@ -1,6 +1,6 @@
 [build]
-  command = "npm install --legacy-peer-deps && npm run build -- --configuration=production --output-path=dist/frontend"
-  publish = "dist/frontend"
+  command = "npm install --legacy-peer-deps && npm run build -- --configuration=production "
+  publish = "dist/frontend/browser"
 
 [[redirects]]
   from = "/*"
