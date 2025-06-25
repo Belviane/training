@@ -17,75 +17,75 @@ class AuthController extends Controller
     public function register(Request $request)
     {
        $request->validate([
-        'nom' => 'required|string',
-        'prenom' => 'required|string',
-        'email' => 'required|email|unique:utilisateurs,email',
-        'genre' => 'required|string',
-        'date_naissance' => 'required|date',
-        'role_id' => 'required|integer'
-    ]);
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|email|unique:utilisateurs,email',
+            'genre' => 'required|string',
+            'date_naissance' => 'required|date',
+            'role_id' => 'required|integer'
+        ]);
 
-    // Génération automatique du login et du mot de passe
-    $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
-    $passwordPlain = Str::random(10);
-    $verificationCode = rand(100000, 999999);
+        // Génération automatique du login et du mot de passe
+        $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
+        $passwordPlain = Str::random(10);
+        $verificationCode = rand(100000, 999999);
 
-    $user = User::create([
-        'nom' => $request->nom,
-        'prenom' => $request->prenom,
-        'login' => $login,
-        'email' => $request->email,
-        'password' => bcrypt($passwordPlain),
-        'genre' => $request->genre,
-        'date_naissance' => $request->date_naissance,
-        'role_id' => $request->role_id,
-        'email_verified' => false,
-        'doit_changer_mot_de_passe' => true,
-        'verification_code' => $verificationCode,
-    ]);
+        $user = User::create([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'login' => $login,
+            'email' => $request->email,
+            'password' => bcrypt($passwordPlain),
+            'genre' => $request->genre,
+            'date_naissance' => $request->date_naissance,
+            'role_id' => $request->role_id,
+            'email_verified' => false,
+            'doit_changer_mot_de_passe' => true,
+            'verification_code' => $verificationCode,
+        ]);
 
-    // Attendre que l'observer ait créé le matricule
-    $user->refresh(); // Recharge les relations
+        // Attendre que l'observer ait créé le matricule
+        $user->refresh(); // Recharge les relations
 
-    switch ($request->role_id) {
-        case 1: // administrateur
-            $matricule = optional($user->administrateur)->matriculeAD;
-            break;
-        case 2: // superviseur
-            $matricule = optional($user->superviseur)->matriculeSU;
-            break;
-        case 3: // formateur
-            $matricule = optional($user->formateur)->matriculeFO;
-            break;
-        case 4: // apprenant
-            $matricule = optional($user->apprenant)->matriculeAP;
-            break;
-        case 5: // parent
-            $matricule = optional($user->parents)->matriculePA;
-            break;
-        case 6: // caissier
-            $matricule = optional($user->caissier)->matriculeCA;
-            break;
-        case 7: // auditeur
-            $matricule = optional($user->auditeur)->matriculeAU;
-            break;
-        case 8: // vendeur
-            $matricule = optional($user->vendeur)->matriculeVE;
-            break;
-        default:
-            $matricule = 'N/A';
-    }
+        switch ($request->role_id) {
+            case 1: // administrateur
+                $matricule = optional($user->administrateur)->matriculeAD;
+                break;
+            case 2: // superviseur
+                $matricule = optional($user->superviseur)->matriculeSU;
+                break;
+            case 3: // formateur
+                $matricule = optional($user->formateur)->matriculeAD;
+                break;
+            case 4: // apprenant
+                $matricule = optional($user->apprenant)->matriculeAP;
+                break;
+            case 5: // parent
+                $matricule = optional($user->parents)->matriculePA;
+                break;
+            case 6: // caissier
+                $matricule = optional($user->caissier)->matriculeCA;
+                break;
+            case 7: // auditeur
+                $matricule = optional($user->auditeur)->matriculeAU;
+                break;
+            case 8: // vendeur
+                $matricule = optional($user->vendeur)->matriculeVE;
+                break;
+            default:
+                $matricule = 'N/A';
+        }
 
-    // Envoi de l’email
-    Mail::to($user->email)->send(new EnvoiIdentifiants($user, $passwordPlain, $matricule));
+        // Envoi de l’email
+        Mail::to($user->email)->send(new EnvoiIdentifiants($user, $passwordPlain, $matricule));
 
-    $token = $user->createToken('authToken')->plainTextToken;
+        $token = $user->createToken('authToken')->plainTextToken;
 
-    return response()->json([
-        'message' => 'Utilisateur inscrit avec succès. Vérifiez votre email pour vos identifiants.',
-        'user' => $user,
-        'token' => $token
-    ], 201);
+        return response()->json([
+            'message' => 'Utilisateur inscrit avec succès. Vérifiez votre email pour vos identifiants.',
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
 

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Models\Formateur;
 use Illuminate\Support\Facades\Hash;
@@ -150,7 +151,7 @@ class FormateurController extends Controller
             'email' => [
                 'sometimes',
                 'email',
-                Rule::unique('utilisateurs', 'email')->ignore($superviseur->utilisateur_id)
+                Rule::unique('utilisateurs', 'email')->ignore($formateur->utilisateur_id)
             ],
             'login' => [
                 'sometimes',

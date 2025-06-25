@@ -1,24 +1,43 @@
 <?php
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
+
 use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
+
 use App\Http\Controllers\Api\FormationController;
+
 use App\Http\Controllers\Api\FormateurController;
+
 use App\Http\Controllers\Api\SuperviseurController;
+
 use App\Http\Controllers\Api\ApprenantController;
+
 use App\Http\Controllers\Api\UtilisateurController;
+
 use App\Http\Controllers\Api\AuthController;
+
 use App\Http\Controllers\Api\RoleController;
+
 use App\Http\Controllers\Api\ProfilController;
+
 use App\Http\Controllers\Api\InscriptionController;
+
 use App\Http\Controllers\Api\ClasseController;
+
 use App\Http\Controllers\Api\SeanceController;
+
 use App\Http\Controllers\Api\PresenceController;
+
 use App\Http\Controllers\Api\AuditeurController;
+
 use App\Http\Controllers\Api\CaissierController;
+
 use App\Http\Controllers\Api\VendeurController;
+
 use App\Http\Controllers\Api\AdministrateurController;
 
 // Routes publiques

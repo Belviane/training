@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Parents;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -188,7 +189,7 @@ class ParenteController extends Controller
     //exporter la liste des parent aux format pdf
     public function exportPDFParents()
     {
-        $parents = ParentModel::with('utilisateur')->get();
+        $parents = Parens::with('utilisateur')->get();
 
         $html = '<h1>Liste des parents</h1>';
         $html .= '<table border="1" cellspacing="0" cellpadding="5">';
