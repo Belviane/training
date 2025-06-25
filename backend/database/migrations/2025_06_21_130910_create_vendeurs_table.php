@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('vendeurs', function (Blueprint $table) {
             $table->id();
+            $table->string('matriculeVE')->unique();
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->timestamp('date_derniere_connexion')->nullable();
             $table->timestamps();
         });
     }

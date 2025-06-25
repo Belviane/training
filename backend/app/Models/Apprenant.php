@@ -10,23 +10,21 @@ class Apprenant extends Model
 {
     use HasFactory;
 
-     protected $table = 'apprenants';
+    protected $table = 'apprenants';
+    
     protected $fillable = [
-        'matricule',
-        'utilisateur_id'
+        'matriculeAP',
+        'niveau_etude',
+        'statut_actuel',
+        'utilisateur_id',
+        'parent_id',
+        'derniere_connexion'
     ];
 
     public function utilisateur() {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }
-    public static function genererMatricule($prenom, $nom)
-    {
-        $debutPrenom = strtoupper(substr($prenom, 0, 2));
-        $debutNom = strtoupper(substr($nom, 0, 2));
-        $date = now()->format('d');
 
-        return $debutPrenom . $debutNom . $date;
-    }
 
     public function seances()
     {

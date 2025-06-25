@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Superviseur extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'matriculeSU',
         'utilisateur_id',
-        'matricule',
+        'date_derniere_action'
     ];
-     protected $table = 'uperviseurs';
+    protected $table = 'superviseurs';
 
-     protected static function booted()
+    protected static function booted()
     {
         static::creating(function ($superviseur) {
             $user = $superviseur->utilisateur;
@@ -39,7 +41,7 @@ class Superviseur extends Model
 
 
 
-     public function utilisateur()
+    public function utilisateur()
     {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }

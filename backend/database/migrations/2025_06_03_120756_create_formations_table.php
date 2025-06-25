@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('superviseurs', function (Blueprint $table) {
+        Schema::create('formations', function (Blueprint $table) {
             $table->id();
-            $table->string('matriculeSU')->unique();
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
-            $table->timestamp('date_derniere_action')->nullable();
+            $table->string('nom_formation');
+            $table->text('libelle_formation');
+            $table->date('date_debutf');
+            $table->date('date_finf');
+            $table->integer('nombre_seancef');
+            
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('superviseurs');
+        Schema::dropIfExists('formations');
     }
 };

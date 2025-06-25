@@ -3,8 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Parents extends Model
 {
+     use HasFactory;
+
      protected $table = 'parents';
+     protected $fillable = [
+        'matriculePA',
+        'date_derniere_action',
+        'utilisateur_id'
+    ];
+
+     public function utilisateur() {
+        return $this->belongsTo(User::class, 'utilisateur_id');
+    }
 }

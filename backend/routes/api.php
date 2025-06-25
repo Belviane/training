@@ -16,19 +16,134 @@ use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\ClasseController;
 use App\Http\Controllers\Api\SeanceController;
 use App\Http\Controllers\Api\PresenceController;
+use App\Http\Controllers\Api\AuditeurController;
+use App\Http\Controllers\Api\CaissierController;
+use App\Http\Controllers\Api\VendeurController;
+use App\Http\Controllers\Api\AdministrateurController;
 
 // Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
-Route::post('/verifier-email', [UtilisateurController::class, 'verifierEmail']);
+//Route::post('/email/verify', [UtilisateurController::class, 'verifierEmail']);
+Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
 
 
 // Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
     //deconnexion des utilisateur
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
+
+    // Utilisateurs
+    Route::controller(UtilisateurController::class)->group(function () {
+        Route::post('/utilisateurs/changer', 'changerMotDePasse');
+        Route::get('/utilisateurs', 'index');
+        Route::get('/utilisateurs/apprenants', 'listerApprenants');
+        Route::put('/utilisateurs/{id}', 'update');
+        Route::post('/utilisateurs', 'store');
+
+        // Activation/désactivation utilisateur (réservé aux admins)
+        Route::patch('/utilisateurs/{id}/activer', 'activer');
+        Route::patch('/utilisateurs/{id}/desactiver', 'desactiver');
+
+        //recherche
+        Route::get('/utilisateurs/rechercher',  'rechercher');
+        Route::get('/utilisateurs/{id}', 'show');
+
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFUtilisateurs');
+    });
+
+    // Administrateurs
+    Route::prefix('administrateurs')->controller(AdministrateurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFAdministrateurs');
+
+    });
+
+    
+    // Superviseurs
+    Route::prefix('superviseurs')->controller(SuperviseurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFSuperviseurs');
+
+    });
+
+    // Formateurs
+    Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFformateurs');
+
+    });
+
+    // Apprenants
+    Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFApprenants');
+
+    });
+
+    // Parents
+    Route::prefix('parents')->controller(ParenteController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFParents');
+
+    });
+
+    // Caissiers
+    Route::prefix('caissierss')->controller(CaissierController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFCaissiers');
+
+    });
+
+    // Auditeurs
+    Route::prefix('auditeurs')->controller(AuditeurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFAuditeurs');
+
+    });
+
+    // Vendeurs
+    Route::prefix('vendeurs')->controller(VendeurController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::put('/{id}', 'update');
+        Route::get('/export/excel', 'exportExcel');
+        Route::get('/export/pdf', 'exportPDFVendeurs');
+
+    });
 
 
     //Formations
@@ -71,16 +186,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    // Superviseurs
-    Route::prefix('superviseurs')->controller(SuperviseurController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
-        Route::get('/export/excel', 'exportExcel');
-        Route::get('/export/pdf', 'exportPDF');
 
-    });
+
 
     //Presences
     Route::controller(PresenceController::class)->group(function () {
@@ -94,43 +201,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 
-    // Utilisateurs
-    Route::controller(UtilisateurController::class)->group(function () {
-        Route::post('/utilisateurs/changer', 'changerMotDePasse');
-        Route::get('/utilisateurs', 'index');
-        Route::get('/utilisateurs/apprenants', 'listerApprenants');
-        Route::put('/utilisateurs/{id}', 'update');
-        Route::post('/utilisateurs', 'store');
-
-        Route::put('/modifier-identifiants', 'modifierIdentifiants');
-
-        // Activation/désactivation utilisateur (réservé aux admins)
-        Route::patch('/utilisateurs/{id}/activer', 'activer');
-        Route::patch('/utilisateurs/{id}/desactiver', 'desactiver');
-
-        //recherche
-        Route::get('/utilisateurs/rechercher',  'rechercher');
-         Route::get('/utilisateurs/{id}', 'show');
-    });
-
-    // Formateurs
-    Route::prefix('formateurs')->controller(FormateurController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
-
-    });
+   
 
 
-      // Apprenants
-    Route::prefix('apprenants')->controller(ApprenantController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
 
-    });
+
+
 
 
     // Formateur peut inscrire un apprenant
@@ -145,74 +221,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-
-
-
-
-    // Route::get('formations/{id}/apprenants', [FormationController::class, 'getApprenants']);
-    // Route::post('formations/{id}/apprenants', [FormationController::class, 'ajouterApprenant']);
-
-
-
-    // Roles (accessible selon vos besoins)
-    //Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
-
-    // Routes avec contrôle de rôle
-    // Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
-    //     Route::get('/admin-only', function () {
-    //         return response()->json(['message' => 'Bienvenue admin']);
-    //     // Roles (accessible selon vos besoins)
-    //     Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum', 'role:administrateur']);
-
-    //     // Routes avec contrôle de rôle
-    //     Route::middleware(['auth:sanctum', 'role:administrateur'])->group(function () {
-    //         Route::get('/admin-only', function () {
-    //             return response()->json(['message' => 'Bienvenue admin']);
-    //         });
-    //     });
-
-    //     Route::middleware(['auth:sanctum', 'role:formateur,superviseur'])->group(function () {
-    //         Route::get('/gestion-formations', function () {
-    //             return response()->json(['message' => 'Accès formateur/superviseur']);
-    //         });
-    //     });
-
-
-    //     Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
-
-
-    // });
-
-
-
-    // Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
-    //     return $request->user();
-    // });
-
-
-
-    // Route::controller(FormationController::class)->group(function () {
-    //     Route::get('/formations/{id}', 'show');
-    //     Route::get('/formations', 'index');
-    //     Route::delete('/formations/{id}', 'destroy');
-    //     Route::put('/formations/{id}', 'update');
-    //     Route::post('/formations', 'store');
-    // });
-
-    // Route::middleware('auth:sanctum')->get('/user-info', [UtilisateurController::class, 'userInfo']);
-
-    // Route::middleware('auth:sanctum')->get('/userinfo', function (Request $request) {
-    //     return $request->user();
-    // });
-
-
-
-    //     Route::controller(FormationController::class)->group(function () {
-    //         Route::get('/formations/{id}', 'show');
-    //         Route::get('/formations', 'index');
-    //         Route::delete('/formations/{id}', 'destroy');
-    //         Route::put('/formations/{id}', 'update');
-    //         Route::post('/formations', 'store');
-    //     });
-    // });
 });

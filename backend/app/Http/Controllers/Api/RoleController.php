@@ -34,7 +34,7 @@ class RoleController extends Controller
      
     public function store(Request $request)
     {
-        $request->validate(['libelle' => 'required|unique:roles|in:formateur,superviseur,parent,apprenant,administrateur,auditeur,caissier']);
+        $request->validate(['libelle' => 'required|unique:roles|in:formateur,superviseur,parent,apprenant,administrateur,auditeur,caissier,vendeur']);
 
         return Role::create($request->only('libelle'));
     }
@@ -52,7 +52,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $request->validate(['libelle' => 'required|unique:roles,libelle|in:formateur,superviseur,parent,apprenant,administrateur,auditeur,caissier' . $role->id]);
+        $request->validate(['libelle' => 'required|unique:roles,libelle|in:formateur,superviseur,parent,apprenant,administrateur,auditeur,caissier,vendeur' . $role->id]);
         $role->update($request->only('libelle'));
         return $role;
     }
