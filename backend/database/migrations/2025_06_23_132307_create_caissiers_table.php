@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parents', function (Blueprint $table) {
+        Schema::create('caissiers', function (Blueprint $table) {
             $table->id();
+            $table->string('matriculeCA')->unique();
             $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
-            $table->integer('nb_enfants')->default(1);
+            $table->timestamp('date_derniere_action')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parents');
+        Schema::dropIfExists('caissiers');
     }
 };

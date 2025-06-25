@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('apprenants', function (Blueprint $table) {
             $table->id();
-            $table->string('matricule')->unique();
-            //$table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->string('matriculeAP')->unique();
+            $table->string('niveau_etude')->nullable();
+            $table->string('statut_actuel')->default('Actif');
             $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('utilisateurs') ->onDelete('set null'); 
+            $table->timestamp('derniere_connexion')->nullable();
             $table->timestamps();
         });
     }

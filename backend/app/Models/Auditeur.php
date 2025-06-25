@@ -2,25 +2,21 @@
 
 namespace App\Models;
 
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-class Formateur extends Model
+class Auditeur extends Model
 {
     use HasFactory;
 
-    protected $table = 'formateurs';
+    protected $table = 'auditeurs';
     protected $fillable = [
-        'matriculeAD',
-        'specialite',
-        'CV',
-        'date_derniere_action',
+        'matriculeAU',
+        'date_dernier_Audit',
         'utilisateur_id'
     ];
+
     public function utilisateur() {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }
-
 }
