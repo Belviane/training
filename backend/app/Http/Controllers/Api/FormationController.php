@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Formation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FormationController extends Controller
 {

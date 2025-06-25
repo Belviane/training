@@ -78,7 +78,7 @@ class UtilisateurObserver
             case 7: // auditeur
                 Auditeur::create([
                     'utilisateur_id' => $utilisateur->id,
-                    'matriculeAU' => $matricule
+                    'matriculeFO' => $matricule
                 ]);
                 break;
 

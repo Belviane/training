@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Routing\Controller;
 
-use App\Models\Utilisateur;
+use App\Http\Controllers\Controller; 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -270,3 +271,5 @@ class UtilisateurController extends Controller
 
 
 }
+
+

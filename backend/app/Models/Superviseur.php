@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Superviseur extends Model
 {
@@ -16,27 +17,7 @@ class Superviseur extends Model
     ];
     protected $table = 'superviseurs';
 
-    protected static function booted()
-    {
-        static::creating(function ($superviseur) {
-            $user = $superviseur->utilisateur;
 
-            $date = Carbon::parse($user->date_naissance);
-            $annee = $date->format('Y'); // 1995
-            $jour = $date->format('d');  // 13
-            $mois = $date->format('m');  // 04
-
-            $nom = ucfirst(strtolower($user->nom));
-            $prenom = ucfirst(strtolower($user->prenom));
-
-            $superviseur->matricule = 'SU' .
-                substr($annee, -2) .
-                substr($nom, 0, 2) .
-                $jour .
-                substr($prenom, -2) .
-                $mois;
-        });
-    }
 
 
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Apprenant;
+use Barryvdh\DomPDF\Facade\Pdf;
 use OpenApi\Annotations as OA;
 
 class InscriptionController extends Controller

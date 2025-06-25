@@ -11,7 +11,7 @@ class Auditeur extends Model
 
     protected $table = 'auditeurs';
     protected $fillable = [
-        'matriculeAU',
+        'matriculeFO',
         'date_dernier_Audit',
         'utilisateur_id'
     ];

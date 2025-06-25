@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Vendeur;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller; 
+use Barryvdh\DomPDF\Facade\Pdf;
 
-
-use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
