@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EnvoiIdentifiants;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 use App\Http\Controllers\Controller;

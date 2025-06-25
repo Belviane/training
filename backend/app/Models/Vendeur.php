@@ -11,6 +11,7 @@ class Vendeur extends Model
 
     protected $table = 'vendeurs';
     protected $fillable = [
+        'matriculeVE',
         'utilisateur_id',
         'date_derniere_connexion'
         

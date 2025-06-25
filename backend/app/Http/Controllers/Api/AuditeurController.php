@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Auditeur;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 use App\Http\Controllers\Controller;
@@ -92,7 +93,7 @@ class AuditeurController extends Controller
 
         $auditeur = Auditeur::create([
             'utilisateur_id' => $user->id,
-            'matriculeAU' => $matricule,
+            'matriculeFO' => $matricule,
             'date_dernier_Audit' => now(),
         ]);
 

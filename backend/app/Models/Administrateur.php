@@ -16,7 +16,7 @@ class Administrateur extends Model
         'date_derniere_action'
     ];
 
-     public function utilisateur() {
+    public function utilisateur() {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }
 }

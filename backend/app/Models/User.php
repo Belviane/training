@@ -52,12 +52,12 @@ class User extends Authenticatable
 
     public function formateur()
     {
-        return $this->hasOne(Formateur::class);
+        return $this->hasOne(Formateur::class, 'utilisateur_id');
     }
 
     public function apprenant()
     {
-        return $this->hasOne(Apprenant::class);
+        return $this->hasOne(Apprenant::class, 'utilisateur_id');
     }
 
     public function superviseur()
