@@ -197,10 +197,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Partners
   partners: Partner[] = [
     {
-      name: 'Microsoft',
-      logo: 'assets/partner1.png'
-    },
-    {
       name: 'Google',
       logo: 'assets/partner2.png'
     },
@@ -211,14 +207,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       name: 'Oracle',
       logo: 'assets/partner1.png'
-    },
-    {
-      name: 'Cisco',
-      logo: 'assets/partner2.png'
-    },
-    {
-      name: 'Adobe',
-      logo: 'assets/partner3.png'
     }
   ];
 

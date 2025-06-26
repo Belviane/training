@@ -6,6 +6,7 @@ import { FormationsComponent } from './views/formations/formations.component';
 import { AboutComponent } from './views/about/about.component';
 import { ContactComponent } from './views/contact/contact.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 
 export const PUBLIC_ROUTES: Routes = [
   { 
@@ -22,7 +23,8 @@ export const PUBLIC_ROUTES: Routes = [
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'register', component: RegisterComponent },
-      { path: 'login', component: LoginComponent }
+      { path: 'login', component: LoginComponent },
+      { path: 'change-password', component: ChangePasswordComponent }
     ]
   }
 ];

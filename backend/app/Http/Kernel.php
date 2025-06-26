@@ -11,7 +11,6 @@ class Kernel
         ],
     ];
     protected $routeMiddleware = [
-        'role' => \App\Http\Middleware\CheckRole::class,
+        'role' => \App\Http\Middleware\CheckRol::class,
     ];
-
 }

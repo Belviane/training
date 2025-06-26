@@ -103,11 +103,11 @@ class AuthController extends Controller
             return response()->json(['message' => 'Identifiants invalides.'], 401);
         }
 
-        if (!$user->email_verified) {
-            return response()->json([
-                'message' => 'Veuillez vérifier votre adresse email avant de vous connecter.'
-            ], 403);
-        }
+        // if (!$user->email_verified) {
+        //     return response()->json([
+        //         'message' => 'Veuillez vérifier votre adresse email avant de vous connecter.'
+        //     ], 403);
+        // }
 
         // Génération token (exemple avec Sanctum)
         $token = $user->createToken('auth_token')->plainTextToken;

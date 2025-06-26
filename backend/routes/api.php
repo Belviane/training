@@ -45,14 +45,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
-//Route::post('/email/verify', [UtilisateurController::class, 'verifierEmail']);
+Route::post('/email/verify', [UtilisateurController::class, 'verifierEmail']);
 Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
 
 
 // Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
     //deconnexion des utilisateur
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
 
     // Utilisateurs

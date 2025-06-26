@@ -31,6 +31,7 @@ export interface User {
   date_naissance: Date | string; // Permettre les deux types
   createdAt?: Date;
   updatedAt?: Date;
+  doit_changer_mot_de_passe?: boolean;
 
   // Propriété calculée pour accéder plus facilement au rôle
   role: UserRole; // Déclaration de la propriété (l'implémentation sera dans la classe si nécessaire)
@@ -44,9 +45,11 @@ export interface UserProfile {
 }
 
 export interface AuthResponse {
-  user: User;
-  token: string;
-  expires_in?: number;
+    token: string;
+    access_token?: string; // Selon ce que renvoie votre backend
+    user: User;
+    changer_password?: boolean;
+    message?: string;
 }
 
 export interface LoginRequest {

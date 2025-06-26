@@ -8,6 +8,8 @@ export const LaravelApi = {
   utilisateurs: `${BASE_URL}/utilisateurs`,
   profil: `${BASE_URL}/profil`,
   formations: ` ${BASE_URL}/formations`,
+  changePassword: `${BASE_URL}/modifier-identifiants`,
+  emailverify: `${BASE_URL}/email/verify`,
 
   activerUtilisateur(id: number): string {
     return `${BASE_URL}/utilisateurs/${id}/activer`;

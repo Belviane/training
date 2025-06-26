@@ -23,12 +23,18 @@
   ========================================================== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Arial', sans-serif;
+  padding-top: 80px; /* Compensation pour le header fixe */
 }
 
 /* ==========================================================
@@ -53,7 +59,6 @@ body {
   border-bottom: 1px solid rgba(239, 239, 87, 0.1);
   padding: 12px 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
 }
 
 /* Navbar lors du scroll */
@@ -88,48 +93,55 @@ body {
   transition: transform 0.3s ease;
   z-index: 1001;
 }
-.logo-section:hover {
-  transform: translateY(-2px);
-}
 
 .logo-img {
-  height: 80px;
-  width: 80px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--primary-yellow);
   transition: all 0.3s ease;
 }
+
 .logo-img:hover {
   border-color: var(--neon-yellow);
-  box-shadow: 0 0 20px rgba(239, 239, 87, 0.3);
+  box-shadow: 0 0 15px rgba(239, 239, 87, 0.3);
 }
+
+.logo-section:hover {
+  transform: translateY(-2px);
+}
+.logo-section:hover .logo-img {
+  transform: scale(1.05);
+}
+
 
 .site-title {
   display: flex;
   flex-direction: column;
   line-height: 1;
 }
+
 .site-name {
   color: var(--primary-yellow);
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   letter-spacing: 1px;
-  transition: color 0.3s ease;
 }
+
 .site-subtitle {
   color: var(--gold);
   font-weight: 400;
   font-size: 0.7rem;
-  letter-spacing: 2px;
-  margin-top: -2px;
-  transition: color 0.3s ease;
+  letter-spacing: 1px;
+  margin-top: 2px;
 }
 
 /* Changement de couleur lors du scroll */
 #navbar.scrolled .site-name {
   color: #ffffff;
 }
+
 #navbar.scrolled .site-subtitle {
   color: #f0f0f0;
 }
@@ -140,71 +152,86 @@ body {
 .menu-toggle {
   display: none;
   flex-direction: column;
-  background: none;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
   border: none;
   cursor: pointer;
-  padding: 8px;
-  gap: 4px;
+  padding: 0;
   z-index: 1002;
-  position: relative;
 }
+
 .menu-toggle span {
-  width: 25px;
-  height: 3px;
-  background: var(--primary-yellow);
-  transition: all 0.3s ease;
-  border-radius: 2px;
   display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--primary-yellow);
+  border-radius: 2px;
+  transition:  all 0.3s ease;
+  transform-origin: center;
+  margin: 3px 0;
 }
-/* Animation hamburger en croix */
+
+/* Quand la navbar a scrollé (fond sombre) */
+#navbar.scrolled .menu-toggle span {
+  background: white; /* Blanc sur fond noir */
+}
+
+
 .menu-toggle.active span:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
-  background: var(--neon-yellow);
+  transform: translateY(5px) rotate(45deg);
 }
+
 .menu-toggle.active span:nth-child(2) {
   opacity: 0;
 }
+
 .menu-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
-  background: var(--neon-yellow);
+  transform: translateY(-5px) rotate(-45deg);
 }
+
+
 
 /* ==========================================================
   MENU PRINCIPAL (DESKTOP)
   ========================================================== */
 .main-menu {
   display: flex;
-  gap: 32px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
-  align-items: center;
 }
+
 .main-menu li {
   position: relative;
 }
+
 .main-menu li a {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--gold);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
-  padding: 12px 16px;
-  border-radius: 8px;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
+
 /* Couleurs lors du scroll */
 #navbar.scrolled .main-menu li a {
   color: #ffffff;
 }
+
 #navbar.scrolled .main-menu li a:hover,
 #navbar.scrolled .main-menu li a:focus {
   color: var(--primary-yellow);
 }
+
 #navbar.scrolled .main-menu li a.active {
   color: var(--primary-yellow);
 }
@@ -220,23 +247,27 @@ body {
   background: linear-gradient(90deg, transparent, rgba(242, 242, 11, 0.1), transparent);
   transition: left 0.5s ease;
 }
+
 .main-menu li a:hover::before {
   left: 100%;
 }
+
 .main-menu li a:hover,
 .main-menu li a:focus {
   color: var(--primary-yellow);
   background: rgba(239, 239, 87, 0.1);
   transform: translateY(-2px);
 }
+
 .main-menu li a.active {
   color: var(--primary-yellow);
   background: rgba(241, 241, 3, 0.765);
   font-weight: 600;
   box-shadow: 0 0 15px rgba(251, 251, 57, 0.2);
 }
+
 .main-menu li a i {
-  font-size: 1.1rem;
+  font-size: 1rem;
   opacity: 0.8;
 }
 
@@ -245,24 +276,22 @@ body {
   ========================================================== */
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
-  z-index: 1001;
 }
 
 /* Boutons génériques */
 .btn {
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   border: 2px solid transparent;
   cursor: pointer;
-  white-space: nowrap;
 }
 
 /* Boutons lors du scroll */
@@ -271,11 +300,13 @@ body {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.05);
 }
+
 #navbar.scrolled .btn-primary {
   background: linear-gradient(135deg, #fff700 0%, #f3ee3b 100%);
   color: #010101;
   border-color: #fff700;
 }
+
 #navbar.scrolled .btn-outline {
   color: #fff;
   border-color: #fff;
@@ -293,18 +324,20 @@ body {
   background: linear-gradient(90deg, transparent, rgba(230, 219, 8, 0.854), transparent);
   transition: left 0.5s ease;
 }
+
 .btn:hover::before {
   left: 100%;
 }
 
 /* Bouton outline */
 .btn-outline {
-  color: var(--primary-yellow);
-  border-color: var(--primary-yellow);
+  color: var(--primary-yellow); /* ou var(--primary-yellow) si fond clair */
+  border-color: var(--primary-black); 
   background: transparent;
 }
+
 .btn-outline:hover {
-  background: var(--primary-accent);
+  background: var(--primary-yellow);
   color: var(--primary-black);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(228, 228, 4, 0.842);
@@ -317,6 +350,7 @@ body {
   border-color: var(--primary-yellow);
   background-size: 200% auto;
 }
+
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--neon-yellow) 0%, var(--primary-yellow) 100%);
   transform: translateY(-2px);
@@ -324,125 +358,128 @@ body {
 }
 
 /* ==========================================================
-  RESPONSIVE DESIGN
+  MENU PRINCIPAL (RESPONSIVE) - REMPLACEZ LES DEUX BLOCS EXISTANTS
   ========================================================== */
-
-/* Tablette */
-@media (max-width: 968px) {
-  .main-menu { gap: 20px; }
-  .main-menu li a {
-   padding: 10px 12px;
-   font-size: 0.9rem;
-  }
+.main-menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
 }
 
-/* Tablette et mobile */
+/* Styles pour mobile */
 @media (max-width: 768px) {
-  .container { padding: 0 15px; }
-  .menu-toggle { display: flex; order: 3; }
-  .header-actions { order: 2; gap: 8px; }
-  .btn { padding: 8px 16px; font-size: 0.85rem; }
+  
+  .menu-toggle {
+    display: flex;
+  }
 
-  /* Menu mobile */
+  /* Ajustement pour petit écran */
+  .menu-toggle span {
+    width: 22px;
+    margin: 3px 0;
+  }
+
   .main-menu {
-   position: fixed;
-   top: 0; left: 0; right: 0; bottom: 0;
-   background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
-   backdrop-filter: blur(20px);
-   -webkit-backdrop-filter: blur(20px);
-   flex-direction: column;
-   justify-content: center;
-   gap: 20px;
-   padding: 40px 20px;
-   margin: 0;
-   transform: translateX(-100%);
-   opacity: 0;
-   visibility: hidden;
-   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-   z-index: 1000;
-   display: none;
+    position: fixed;
+    top: 70px;
+    /* Ajustez selon la hauteur de votre header */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 20px 15px;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    z-index: 999;
+    display: flex;
+    /* Important: doit être flex même quand caché */
   }
 
   .main-menu.open {
-   display: flex;
-   transform: translateX(0);
-   opacity: 1;
-   visibility: visible;
+    transform: translateX(0);
+    opacity: 1;
   }
 
-  .main-menu li { width: 100%; text-align: center; }
+  .main-menu li {
+    width: 100%;
+    color: white;
+  }
 
   .main-menu li a {
-   justify-content: center;
-   width: 100%;
-   padding: 20px 24px;
-   border-radius: 12px;
-   margin: 8px 0;
-   font-size: 1.1rem;
-   background: rgba(239, 239, 87, 0.05);
-   border: 1px solid rgba(239, 239, 87, 0.2);
+    justify-content: center;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    background: rgba(234, 234, 221, 0.05);
+    border: 1px solid rgba(212, 212, 17, 0.906);
   }
-  .main-menu li a:hover {
-   background: rgba(239, 239, 87, 0.15);
-   transform: scale(1.02);
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
-  .site-name { font-size: 1.1rem; }
-  .site-subtitle { font-size: 0.65rem; }
-  .logo-img { height: 45px; width: 45px; }
 }
 
-/* Mobile plus petit */
-@media (max-width: 480px) {
-  .header-actions { gap: 6px; }
-  .btn { padding: 6px 12px; font-size: 0.8rem; }  
+/* Styles pour desktop */
+@media (min-width: 769px) {
+  .main-menu {
+    display: flex;
+    position: static;
+    background: transparent;
+    backdrop-filter: none;
+    height: auto;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+}
+/* ==========================================================
+  CORRECTION OVERFLOW QUAND MENU OUVERT
+  ========================================================== */
+body.menu-open {
+  overflow: hidden;
 }
 
 /* ==========================================================
-  OVERLAY MENU MOBILE
+  ACCESSIBILITÉ
   ========================================================== */
-.menu-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  z-index: 999;
+.menu-toggle:focus-visible,
+.main-menu li a:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--neon-yellow);
+  outline-offset: 2px;
 }
-.menu-overlay.active {
-  opacity: 1;
-  visibility: visible;
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* ==========================================================
   ANIMATIONS
   ========================================================== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes shine {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-.btn-primary {
-  animation: shine 4s linear infinite;
-}
-
-/* ==========================================================
-  ACCESSIBILITÉ
-  ========================================================== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-   animation-duration: 0.01ms !important;
-   animation-iteration-count: 1 !important;
-   transition-duration: 0.01ms !important;
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-}
-/* Focus visible */
-.main-menu li a:focus-visible,
-.btn:focus-visible,
-.menu-toggle:focus-visible {
-  outline: 2px solid var(--primary-yellow);
-  outline-offset: 2px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

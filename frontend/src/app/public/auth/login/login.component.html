@@ -12,10 +12,10 @@
         <button (click)="errorMessage = null">X</button>
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="login">Identifiant</label>
         <div class="input-wrapper">
-          <input type="email" id="email" name="email" placeholder="Entrez votre email" autocomplete="email" required
-            aria-required="true" [(ngModel)]="credentials.login" />
+          <input type="text" id="login" name="login" placeholder="Entrez votre identifiant" autocomplete="username" 
+                 required aria-required="true" [(ngModel)]="credentials.login" />
         </div>
       </div>
 
@@ -23,9 +23,9 @@
         <label for="password">Mot de passe</label>
         <div class="input-wrapper">
           <input [type]="passwordFieldType" id="password" name="password" placeholder="Entrez votre mot de passe"
-            autocomplete="current-password" required aria-required="true" [(ngModel)]="credentials.password" />
+                 autocomplete="current-password" required aria-required="true" [(ngModel)]="credentials.password" />
           <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
-            aria-label="Toggle password visibility">
+                  aria-label="Toggle password visibility">
             <i class="fa" [ngClass]="
                 passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash'
               "></i>

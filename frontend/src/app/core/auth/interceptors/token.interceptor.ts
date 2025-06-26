@@ -25,13 +25,20 @@ import { AuthService } from "../services/auth.services";
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
+
+  // Ne pas ajouter le token pour les routes sanctum
+  if (req.url.includes('/sanctum/')) {
+    return next(req);
+  }
   
   if (token) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      withCredentials: true
     });
   }
   return next(req);

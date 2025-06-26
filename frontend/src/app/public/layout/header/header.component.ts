@@ -41,9 +41,25 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
+  // Ajoutez cette méthode pour fermer le menu lors du redimensionnement
+  private handleResize(): void {
+    if (window.innerWidth > 768 && this.menuOpen) {
+      this.closeMenu();
+    }
+  }
+
   ngOnInit(): void {
     this.initializeComponent();
     this.setupRouterSubscription();
+
+    if (isPlatformBrowser(this.platformId)) {
+      fromEvent(window, 'resize')
+        .pipe(
+          debounceTime(200),
+          takeUntil(this.destroy$)
+        )
+      .subscribe(() => this.handleResize());
+    }
   }
 
   ngAfterViewInit(): void {
@@ -261,12 +277,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleMenu(): void {
-    if (this.menuOpen) {
-      this.closeMenu();
-    } else {
-      this.openMenu();
-    }
     this.menuOpen = !this.menuOpen;
+    if (this.menuOpen) {
+      this.openMenu();
+    } else {
+      this.closeMenu();
+    }
   }
 
   private openMenu(): void {
