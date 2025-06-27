@@ -17,10 +17,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     provideToastr({
-      timeOut: 5000,
-      positionClass: 'toast-top-center',
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
       preventDuplicates: true,
-       progressBar: true, // Affiche une barre de progression de la disparition
       newestOnTop: true, // Les nouveaux toasts apparaissent au-dessus des anciens  
     }),
     provideNativeDateAdapter()

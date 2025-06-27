@@ -1,6 +1,6 @@
 <div class="form-container">
   <h2 mat-dialog-title>{{ data.user ? 'Modifier' : 'Créer' }} un utilisateur</h2>
-  
+
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()" mat-dialog-content>
     <div class="form-grid">
       <!-- Rôle -->
@@ -19,7 +19,7 @@
       <!-- Nom -->
       <mat-form-field appearance="outline">
         <mat-label>Nom</mat-label>
-        <input matInput formControlName="nom" required>
+        <input matInput formControlName="nom" required />
         <mat-error *ngIf="userForm.get('nom')?.hasError('required')">
           Ce champ est obligatoire
         </mat-error>
@@ -28,7 +28,7 @@
       <!-- Prénom -->
       <mat-form-field appearance="outline">
         <mat-label>Prénom</mat-label>
-        <input matInput formControlName="prenom" required>
+        <input matInput formControlName="prenom" required />
         <mat-error *ngIf="userForm.get('prenom')?.hasError('required')">
           Ce champ est obligatoire
         </mat-error>
@@ -37,51 +37,36 @@
       <!-- Genre -->
       <mat-form-field appearance="outline">
         <mat-label>Genre</mat-label>
-        <mat-select formControlName="genre">
-          <mat-option value="M">Masculin</mat-option>
-          <mat-option value="F">Féminin</mat-option>
-          <mat-option value="A">Autre</mat-option>
+        <mat-select formControlName="genre" required>
+          <mat-option value="Masculin">Masculin</mat-option>
+          <mat-option value="Feminin">Féminin</mat-option>
+          <mat-option value="Autre">Autre</mat-option>
         </mat-select>
+        <mat-error *ngIf="userForm.get('genre')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
       </mat-form-field>
 
       <!-- Date de naissance -->
       <mat-form-field appearance="outline">
         <mat-label>Date de naissance</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date_naissance">
+        <input matInput [matDatepicker]="picker" formControlName="date_naissance" required />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="userForm.get('date_naissance')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
       </mat-form-field>
 
       <!-- Email -->
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" required>
+        <input matInput formControlName="email" type="email" required />
         <mat-error *ngIf="userForm.get('email')?.hasError('required')">
           Ce champ est obligatoire
         </mat-error>
         <mat-error *ngIf="userForm.get('email')?.hasError('email')">
           Email invalide
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Login -->
-      <mat-form-field appearance="outline">
-        <mat-label>Login</mat-label>
-        <input matInput formControlName="login" required>
-        <mat-error *ngIf="userForm.get('login')?.hasError('required')">
-          Ce champ est obligatoire
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Password -->
-      <mat-form-field appearance="outline">
-        <mat-label>Mot de passe</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
-        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-          Ce champ est obligatoire
         </mat-error>
       </mat-form-field>
     </div>

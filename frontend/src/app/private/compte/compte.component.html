@@ -19,12 +19,14 @@
     <mat-icon>error</mat-icon> {{ errorMessage }}
   </div>
 
-  <!-- Tableau -->
-  <div class="table-responsive">
+  <!-- Tableau amélioré -->
+  <div class="table-container">
+  <table class="data-table">
+    <div class="table-responsive">
     <table *ngIf="!isLoading && users.length > 0" class="user-table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Matricule</th>
           <th>Nom</th>
           <th>Prénom</th>
           <th>Email</th>
@@ -34,11 +36,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{ user.id }}</td>
+        <tr *ngFor="let user of users" [class.inactive-row]="!user.is_active">
+          <td><strong>{{ getMatricule(user) }}</strong></td>
           <td>{{ user.nom }}</td>
           <td>{{ user.prenom }}</td>
-          <td>{{ user.email }}</td>
+          <td class="email-cell">{{ user.email }}</td>
           <td>
             <span class="role-badge" [ngClass]="getRoleClass(user.role_id)">
               {{ getRoleName(user.role_id) }}
@@ -65,6 +67,8 @@
       </tbody>
     </table>
   </div>
+  </table>
+</div>
 
   <!-- Message si vide -->
   <div *ngIf="!isLoading && users.length === 0" class="no-users">
@@ -72,46 +76,3 @@
     <p>Aucun utilisateur trouvé</p>
   </div>
 </div>
-
-
-
-
-<!-- <div *ngIf="isLoading" class="text-center py-4">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Chargement...</span>
-  </div>
-  <p>Chargement des utilisateurs...</p>
-</div> -->
-
-<!-- <div *ngIf="errorMessage" class="alert alert-danger">
-  {{ errorMessage }}
-</div> -->
-
-<!-- <table *ngIf="!isLoading && users.length > 0" class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>Email</th>
-      <th>Rôle</th>
-      <th>Statut</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.id }}</td>
-      <td>{{ user.nom }}</td>
-      <td>{{ user.prenom }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ getRoleName(user.role_id) }}</td>
-      <td [class.status-active]="user.is_active" [class.status-inactive]="!user.is_active">
-        {{ user.is_active ? 'Actif' : 'Inactif' }}
-      </td>
-    </tr>
-  </tbody>
-</table> -->
-
-<!-- <div *ngIf="!isLoading && users.length === 0" class="alert alert-info">
-  Aucun utilisateur trouvé.
-</div> -->

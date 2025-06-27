@@ -16,18 +16,18 @@ Styles pour les badges de rôle - Version CSS
   ===========================================
 */
 
-/* Administrateur */
-.stat-card .stat-icon.administrateur {
+/* Vendeur */
+.stat-card .stat-icon.vendeur {
   background: rgba(255, 215, 0, 0.1);
   color: #FFD700;
 }
-.stat-card .stat-icon.administrateur mat-icon {
+.stat-card .stat-icon.vendeur mat-icon {
   color: #FFD700;
 }
-.stat-card .stat-value.administrateur {
+.stat-card .stat-value.vendeur {
   color: #FFD700;
 }
-.role-badge.administrateur {
+.role-badge.vendeur {
   background: #FFD700;
   color: #2c3e50;
 }
@@ -192,13 +192,13 @@ Styles pour les badges de rôle - Version CSS
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 10px;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -216,8 +216,8 @@ Styles pour les badges de rôle - Version CSS
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-right: 20px;
   transition: all 0.3s ease;
@@ -236,12 +236,12 @@ Styles pour les badges de rôle - Version CSS
 
 .stat-value {
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .stat-label {
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 0.90rem;
+  font-weight: 400;
   color: #64748b;
   display: block;
 }
@@ -611,263 +611,6 @@ Styles pour les badges de rôle - Version CSS
   =============================================
 */
 
-/* Carte de bienvenue */
-.welcome-card {
-  background-color: #FFF8D6;
-  border-left: 4px solid #E0DB5A;
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.welcome-content h2 {
-  margin: 0;
-  color: #222222;
-  font-size: 1.5rem;
-}
-
-.welcome-content p {
-  margin: 5px 0 0;
-  color: #555555;
-}
-
-.date-display {
-  background-color: #FFFFFF;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-weight: 500;
-  color: #222222;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Statistiques rapides */
-.quick-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.stat-card {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.stat-card mat-icon {
-  color: #CCBC6E;
-  font-size: 36px;
-  margin-right: 15px;
-}
-
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #222222;
-}
-
-.stat-label {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-/* Contenu principal */
-.main-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.left-column,
-.right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Cartes de section */
-.sessions-card,
-.evaluations-card,
-.activity-card {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #222222;
-}
-
-.section-title mat-icon {
-  color: #CCBC6E;
-  margin-right: 10px;
-}
-
-/* Sessions */
-.session-item {
-  display: flex;
-  padding: 12px 0;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.session-item:last-child {
-  border-bottom: none;
-}
-
-.session-time {
-  min-width: 100px;
-  font-weight: 500;
-  color: #222222;
-}
-
-.session-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.session-details strong {
-  color: #222222;
-}
-
-.session-details span {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-/* Évaluations */
-.evaluation-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.evaluation-item:last-child {
-  border-bottom: none;
-}
-
-.eval-icon {
-  margin-right: 15px;
-}
-
-.eval-icon.success mat-icon {
-  color: #4CAF50;
-}
-
-.eval-icon.warning mat-icon {
-  color: #FFC107;
-}
-
-.eval-details {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.eval-details strong {
-  color: #222222;
-}
-
-.eval-details span {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-.eval-grade {
-  font-weight: 600;
-  color: #222222;
-}
-
-/* Activité */
-.timeline-item {
-  display: flex;
-  margin-bottom: 15px;
-}
-
-.timeline-badge {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  margin-right: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeline-badge.evaluation {
-  background-color: #FFF3E0;
-}
-
-.timeline-badge.session {
-  background-color: #E8F5E9;
-}
-
-.timeline-badge.message {
-  background-color: #E3F2FD;
-}
-
-.timeline-badge.resource {
-  background-color: #F3E5F5;
-}
-
-.timeline-badge mat-icon {
-  font-size: 16px;
-  color: #555555;
-}
-
-.timeline-content {
-  flex-grow: 1;
-}
-
-.timeline-content p {
-  margin: 0;
-  color: #222222;
-}
-
-.timeline-content small {
-  color: #777777;
-  font-size: 0.8rem;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .trainer-dashboard {
-    margin-left: 80px;
-  }
-
-  .main-content {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .trainer-dashboard {
-    margin-left: 0;
-    padding: 15px;
-  }
-
-  .quick-stats {
-    grid-template-columns: 1fr;
-  }
-}
-
-
 
 
 /* 
@@ -875,89 +618,3 @@ Styles pour les badges de rôle - Version CSS
   STYLES SUPERVISEUR 
   =============================================
 */
-/* Variables de couleurs */
-.supervisor-dashboard {
-  padding: 20px;
-}
-
-.overview-section {
-  margin-bottom: 40px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.stat-card {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.stat-icon {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.stat-content {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.trainings-section {
-  margin-bottom: 40px;
-}
-
-.trainings-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.trainings-table th, .trainings-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-.trainings-table th {
-  background-color: #f0f0f0;
-}
-
-.kpi-section {
-  margin-bottom: 40px;
-}
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.kpi-card {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.kpi-header {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.kpi-value {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.kpi-details {
-  font-size: 14px;
-  color: #666;
-}

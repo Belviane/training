@@ -13,8 +13,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+// Interface pour typer les données reçues dans la boîte de dialogue
 interface UserDialogData {
-  user?: any; // Le ? indique que la propriété est optionnelle
+  user?: any; // Utilisateur optionnel (pour modification)
 }
 
 @Component({
@@ -38,27 +39,39 @@ interface UserDialogData {
   providers: [DatePipe]
 })
 export class AjouterComponent implements OnInit {
+  // Formulaire utilisateur
   userForm: FormGroup;
+
+  // Pour masquer/afficher le mot de passe
   hidePassword = true;
+
+  // Indique si une requête HTTP est en cours
   isLoading = false;
+
+  // Liste des rôles disponibles
   rolesList = [
-    { id: 1, label: 'Administrateur' },
+    //{ id: 1, label: 'Administrateur' },
     { id: 2, label: 'Superviseur' },
     { id: 3, label: 'Formateur' },
     { id: 4, label: 'Apprenant' },
     { id: 5, label: 'Parent' },
     { id: 6, label: 'Caissier' },
-    { id: 7, label: 'Auditeur' }
+    { id: 7, label: 'Auditeur' },
+    { id: 8, label: 'Vendeur' }
   ];
 
+  /**
+   * Constructeur : injection des dépendances nécessaires
+   */
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private snackBar: MatSnackBar,
-    private datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AjouterComponent>,
-  @Inject(MAT_DIALOG_DATA) public data: UserDialogData = {}
+    private fb: FormBuilder, // Pour construire le formulaire
+    private http: HttpClient, // Pour les requêtes HTTP
+    private snackBar: MatSnackBar, // Pour afficher des notifications
+    private datePipe: DatePipe, // Pour formater les dates
+    public dialogRef: MatDialogRef<AjouterComponent>, // Référence à la boîte de dialogue
+    @Inject(MAT_DIALOG_DATA) public data: UserDialogData = {} // Données injectées (utilisateur à modifier)
   ) {
+    // Initialisation du formulaire avec les champs et leurs validateurs
     this.userForm = this.fb.group({
       role_id: ['', Validators.required],
       nom: ['', Validators.required],
@@ -66,17 +79,22 @@ export class AjouterComponent implements OnInit {
       genre: ['M'],
       date_naissance: [''],
       email: ['', [Validators.required, Validators.email]],
-      login: ['', Validators.required],
-      password: ['', Validators.required]
     });
   }
 
+  /**
+   * Initialisation du composant
+   * Si un utilisateur est passé en paramètre, on pré-remplit le formulaire
+   */
   ngOnInit(): void {
     if (this.data?.user) {
       this.patchFormValues();
     }
   }
 
+  /**
+   * Remplit le formulaire avec les valeurs de l'utilisateur à modifier
+   */
   patchFormValues(): void {
     const user = this.data.user;
     this.userForm.patchValue({
@@ -88,38 +106,51 @@ export class AjouterComponent implements OnInit {
       email: user.email,
       login: user.login
     });
+    // Si modification, on retire la validation du mot de passe
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('password')?.updateValueAndValidity();
   }
 
+  /**
+   * Soumission du formulaire
+   * - Crée ou modifie un utilisateur selon le contexte
+   * - Affiche une notification de succès ou d'erreur
+   */
   onSubmit(): void {
     if (this.userForm.invalid) return;
 
     this.isLoading = true;
     const formData = this.prepareFormData();
 
-    const apiCall = this.data?.user
-      ? this.http.put(`${LaravelApi.utilisateurs}/${this.data.user.id}`, formData)
-      : this.http.post(LaravelApi.utilisateurs, formData);
+    // Choix de la requête selon création ou modification
+    const apiCall = this.http.post(LaravelApi.register, formData);
 
     apiCall.subscribe({
       next: () => {
-        this.snackBar.open(`Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`, 'Fermer', {
-          duration: 3000
-        });
+        this.snackBar.open(
+          `Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`,
+          'Fermer',
+          { duration: 3000 }
+        );
         this.dialogRef.close('success');
       },
       error: (err) => {
         console.error('Erreur:', err);
-        this.snackBar.open('Une erreur est survenue', 'Fermer', {
-          duration: 3000,
-          panelClass: ['snackbar-error']
-        });
+        this.snackBar.open(
+          err.error?.message || 'Une erreur est survenue',
+          'Fermer',
+          { duration: 3000, panelClass: ['snackbar-error'] }
+        );
         this.isLoading = false;
       }
     });
   }
 
+  /**
+   * Prépare les données du formulaire avant envoi à l'API
+   * - Formate la date de naissance
+   * - Ajoute le statut actif
+   */
   prepareFormData(): any {
     const formValue = this.userForm.value;
     return {
@@ -129,6 +160,9 @@ export class AjouterComponent implements OnInit {
     };
   }
 
+  /**
+   * Annule et ferme la boîte de dialogue
+   */
   onCancel(): void {
     this.dialogRef.close();
   }

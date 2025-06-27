@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router'; // Importation du Router pour la navigation
 import { AuthService } from '../../../core/auth/services/auth.services' // Service d'authentification
@@ -25,26 +25,34 @@ interface MenuItem {
 export class SidebarComponent implements OnInit {
   [x: string]: any;
 
+  isMobile = false;
+  
+  @Input() isCollapsed = false;
+  @Input() isSidebarOpen = false;
+  @Output() closeSidebar = new EventEmitter<void>();
+
+  onCloseSidebar() {
+    this.closeSidebar.emit();
+  }
+
   isLoggedIn: boolean = false;
   userRole: string | null = null;
   route: string | undefined;
 
   expandedMenus: any[] = [];
 
-isExpanded(menu: any) {
-  return this.expandedMenus.includes(menu.label);
-}
-
-toggleExpansion(menu: any) {
-  if (this.expandedMenus.includes(menu.label)) {
-    this.expandedMenus = this.expandedMenus.filter(label => label !== menu.label);
-  } else {
-    this.expandedMenus.push(menu.label);
+  isExpanded(menu: any) {
+    return this.expandedMenus.includes(menu.label);
   }
-}
 
-  // Ajoutez cette propriété à votre classe
-  isSidebarOpen: boolean = false;
+  toggleExpansion(menu: any) {
+    if (this.expandedMenus.includes(menu.label)) {
+      this.expandedMenus = this.expandedMenus.filter(label => label !== menu.label);
+    } else {
+      this.expandedMenus.push(menu.label);
+    }
+  }
+
 
   // Ajoutez cette méthode
   toggleSidebar() {
@@ -125,19 +133,5 @@ toggleExpansion(menu: any) {
     } else {
       this.filteredSidebarItems = [];
     }
-  }
-
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        // Vider tout, puis forcer la redirection propre
-        this.router.navigateByUrl('/login').then(() => {
-          window.location.reload(); // 👈 Force le rechargement complet
-        });
-      },
-      error: (err) => {
-        console.error('Erreur lors de la déconnexion:', err);
-      }
-    });
   }
 }

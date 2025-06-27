@@ -1,16 +1,157 @@
+/* 
+  =============================================
+  STYLES GENERAUX 
+  =============================================
+*/
 :host {
   display: block;
-  height: 100%;
   width: 100%;
-  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
+
+/* 
+  ===========================================
+Styles pour les badges de rôle - Version CSS
+  ===========================================
+*/
+
+/* Vendeur */
+.stat-card .stat-icon.vendeur {
+  background: rgba(255, 215, 0, 0.1);
+  color: #FFD700;
+}
+.stat-card .stat-icon.vendeur mat-icon {
+  color: #FFD700;
+}
+.stat-card .stat-value.vendeur {
+  color: #FFD700;
+}
+.role-badge.vendeur {
+  background: #FFD700;
+  color: #2c3e50;
+}
+
+/* Superviseur */
+.stat-card .stat-icon.superviseur {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+.stat-card .stat-icon.superviseur mat-icon {
+  color: #4CAF50;
+}
+.stat-card .stat-value.superviseur {
+  color: #4CAF50;
+}
+.role-badge.superviseur {
+  background: #4CAF50;
+  color: white;
+}
+
+/* Formateur */
+.stat-card .stat-icon.formateur {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+.stat-card .stat-icon.formateur mat-icon {
+  color: #2196F3;
+}
+.stat-card .stat-value.formateur {
+  color: #2196F3;
+}
+.role-badge.formateur {
+  background: #2196F3;
+  color: white;
+}
+
+/* Apprenant */
+.stat-card .stat-icon.apprenant {
+  background: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+.stat-card .stat-icon.apprenant mat-icon {
+  color: #9C27B0;
+}
+.stat-card .stat-value.apprenant {
+  color: #9C27B0;
+}
+.role-badge.apprenant {
+  background: #9C27B0;
+  color: white;
+}
+
+/* Parent (même couleur que Apprenant) */
+.stat-card .stat-icon.parent {
+  background: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+.stat-card .stat-icon.parent mat-icon {
+  color: #9C27B0;
+}
+.stat-card .stat-value.parent {
+  color: #9C27B0;
+}
+.role-badge.parent {
+  background: #9C27B0;
+  color: white;
+}
+
+/* Caissier */
+.stat-card .stat-icon.caissier {
+  background: rgba(13, 148, 136, 0.1);
+  color: #0d9488;
+}
+.stat-card .stat-icon.caissier mat-icon {
+  color: #0d9488;
+}
+.stat-card .stat-value.caissier {
+  color: #0d9488;
+}
+.role-badge.caissier {
+  background: #0d9488;
+  color: white;
+}
+
+/* Auditeur */
+.stat-card .stat-icon.auditeur {
+  background: rgba(71, 85, 105, 0.1);
+  color: #475569;
+}
+.stat-card .stat-icon.auditeur mat-icon {
+  color: #475569;
+}
+.stat-card .stat-value.auditeur {
+  color: #475569;
+}
+.role-badge.auditeur {
+  background: #475569;
+  color: white;
+}
+
+/* Styles communs */
+.role-badge {
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.05);
+}
+
 
 .compte-container {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 5px;
+  padding: 2px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  height: 100%;
+  height: 80%;
+  overflow-y: auto;
 }
 
 .header-container {
@@ -18,12 +159,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .header-container h2 {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin: 0;
   color: #2c3e50;
 }
@@ -38,7 +180,7 @@
 }
 
 .loading-text {
-  margin-top: 15px;
+  margin-top: 10px;
   color: #555;
 }
 
@@ -60,37 +202,39 @@
 /* Tableau */
 .table-responsive {
   overflow-x: auto;
+  width: 100%;
 }
 
 .user-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 60px;
 }
 
 .user-table th {
   background: #f8f9fa;
-  padding: 12px 15px;
+  padding: 10px 12px;
   text-align: left;
   font-weight: 500;
   color: #495057;
 }
 
 .user-table td {
-  padding: 12px 15px;
+  padding: 6px 8px;
   border-bottom: 1px solid #eee;
 }
 
 /* Badges */
 .role-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .status-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -108,7 +252,8 @@
 /* Actions */
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 /* État vide */
@@ -138,6 +283,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .user-table {
+    min-width: 800px;
+  }
+}
+
 @media (max-width: 768px) {
   :host {
     padding: 10px;
@@ -154,6 +305,16 @@
   }
 
   .user-table {
-    min-width: 700px;
+    min-width: 600px;
   }
 }
+
+@media (max-width: 480px) {
+  .user-table {
+    min-width: 400px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+} 

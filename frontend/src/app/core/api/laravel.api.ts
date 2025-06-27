@@ -11,6 +11,10 @@ export const LaravelApi = {
   changePassword: `${BASE_URL}/modifier-identifiants`,
   emailverify: `${BASE_URL}/email/verify`,
 
+  updateUtilisateur(id: number): string {
+    return `${BASE_URL}/utilisateurs/${id}`;
+  },
+
   activerUtilisateur(id: number): string {
     return `${BASE_URL}/utilisateurs/${id}/activer`;
   },

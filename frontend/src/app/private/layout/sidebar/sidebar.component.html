@@ -1,4 +1,6 @@
-<nav class="sidebar" [class.open]="isSidebarOpen">
+<div class="sidebar-overlay" [class.visible]="isSidebarOpen && isMobile" (click)="onCloseSidebar()"></div>
+
+<nav class="sidebar" [class.open]="isSidebarOpen" [class.collapsed]="isCollapsed">
   <ul>
     <li *ngFor="let item of filteredSidebarItems">
       <div *ngIf="item.children">
@@ -28,11 +30,4 @@
       </div>
     </li>
   </ul>
-
-  <div class="logout-container">
-    <button class="logout-button" (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon>
-      <span class="menu-label">Déconnexion</span>
-    </button>
-  </div>
 </nav>

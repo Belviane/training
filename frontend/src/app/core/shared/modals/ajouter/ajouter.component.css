@@ -1,5 +1,8 @@
 .form-container {
   padding: 20px;
+  background-color: #FFFFFF; /* fond blanc */
+  color: #000000; /* texte noir */
+  border-radius: 8px;
 }
 
 .form-grid {
@@ -13,8 +16,58 @@ mat-form-field {
   width: 100%;
 }
 
+mat-form-field .mat-form-field-underline {
+  background-color: #EFEF57; /* jaune clair */
+}
+
+mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #B8860B; /* or foncé */
+}
+
+mat-label, mat-option {
+  color: #000000 !important; /* texte noir */
+}
+
+.mat-select-value {
+  color: #000000;
+}
+
+input.mat-input-element, 
+.mat-input-element, 
+.mat-select {
+  color: #000000;
+  background-color: transparent;
+}
+
+::placeholder {
+  color: #B6B6B6;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #B8860B;
+}
+
+mat-error {
+  color: #B8860B !important; /* erreurs en or foncé */
+}
+
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Boutons */
+button[mat-button] {
+  color: #B8860B;
+}
+
+button[mat-raised-button] {
+  background-color: #B8860B; /* or */
+  color: #FFFFFF; /* texte blanc */
+}
+
+button[mat-raised-button]:hover {
+  background-color: #EFEF57; /* jaune clair au hover */
+  color: #000000; /* texte noir */
 }

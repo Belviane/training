@@ -12,8 +12,11 @@
 
 
 <div class="layout-wrapper">
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+    <app-sidebar
+    [isCollapsed]="isSidebarCollapsed" 
+  [isSidebarOpen]="isSidebarOpen"
+  (closeSidebar)="closeSidebar()"></app-sidebar>
 
     <div class="main-content">
         <div class="router-content"> <!-- Nouveau conteneur -->

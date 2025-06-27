@@ -8,6 +8,9 @@ import { NavigationStart, Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '@app/core/auth/services/auth.services';
 import { CommonModule } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +20,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
+  
+  isSidebarCollapsed = false;
+  isSidebarOpen = false;
+  isMobile = false;
+
   responsiveService = inject(ResponsiveService);
 
   themeSelectorMode = computed(() => {
@@ -33,11 +41,37 @@ export class DashboardComponent implements OnInit {
     return 'side';
   });
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(
+    private router: Router, 
+    private authService: AuthService,
+    private breakpointObserver: BreakpointObserver,) {
+      this.breakpointObserver.observe([Breakpoints.Handset])
+      .pipe(
+        map(result => result.matches),
+        shareReplay()
+      ).subscribe(isMobile => {
+        this.isMobile = isMobile;
+        if (!isMobile) {
+          this.isSidebarOpen = false;
+        }
+      });
+     }
 
   ngOnInit(): void {
     console.log('connecté ?', this.authService.isAuthenticated());
     console.log('utilisateur', this.authService.getCurrentUser());
   }
 
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (!this.isMobile) {
+      this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    }
+  }
+
+  closeSidebar() {
+    if (this.isMobile) {
+      this.isSidebarOpen = false;
+    }
+  }
 }

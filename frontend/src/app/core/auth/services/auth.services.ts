@@ -101,7 +101,6 @@ export class AuthService {
                     if (user) {
                         user.doit_changer_mot_de_passe = false;
                         this.currentUserSubject.next(user);
-                        this.setUser(user);
                     }
                 }),
                 catchError(error => {
@@ -183,7 +182,6 @@ export class AuthService {
      */
     getToken(): string | null {
         const currentUserJson = localStorage.getItem('currentUser');
-        console.log('currentUser dans localStorage:', currentUserJson);
         if (!currentUserJson) return null;
 
         try {
@@ -243,33 +241,26 @@ export class AuthService {
     }
 
     /**
-     * Stocke le token dans le localStorage.
-     */
-    private setToken(token: string): void {
-        localStorage.setItem('token', token);
-    }
-
-    /**
-     * Stocke l'utilisateur dans le localStorage.
-     */
-    private setUser(user: User): void {
-        localStorage.setItem('user', JSON.stringify(user));
-    }
-
-    /**
      * Récupère l'utilisateur stocké dans le localStorage.
      */
     private getUserFromStorage(): User | null {
-        const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : null;
+        const currentUserJson = localStorage.getItem('currentUser');
+        if (!currentUserJson) return null;
+
+        try {
+            const currentUser = JSON.parse(currentUserJson);
+            return currentUser?.user || null;
+        } catch (e) {
+            console.error('Erreur lors de la lecture de currentUser:', e);
+            return null;
+        }
     }
 
     /**
      * Supprime les données d'authentification du localStorage.
      */
     private clearAuthData(): void {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
 

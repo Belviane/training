@@ -56,15 +56,22 @@ export class CompteComponent implements OnInit {
 
   loadUsers(): void {
     this.isLoading = true;
-    this.http.get<any[]>(LaravelApi.utilisateurs).subscribe({
-      next: (data) => {
-        this.users = data;
+    this.http.get<any>(LaravelApi.utilisateurs).subscribe({
+      next: (response) => {
+        console.log('Données reçues:', response);
+        // Accéder au tableau des utilisateurs dans la propriété 'data' de la réponse
+        this.users = response.data;
         this.isLoading = false;
       },
       error: (err) => {
         this.errorMessage = 'Erreur lors du chargement des utilisateurs';
         this.isLoading = false;
         console.error('Erreur:', err);
+
+        // Afficher un message d'erreur plus détaillé si disponible
+        if (err.error?.message) {
+          this.errorMessage = err.error.message;
+        }
       }
     });
   }
@@ -95,9 +102,22 @@ export class CompteComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe((result: string) => {
-      if (result === 'success') {
-        this.loadUsers();
+    dialogRef.afterClosed().subscribe((updatedUserData: any) => {
+      if (updatedUserData) {
+        // Afficher un loader pendant la requête
+        user.isLoading = true;
+
+        this.http.put(LaravelApi.updateUtilisateur(user.id), updatedUserData).subscribe({
+          next: () => {
+            this.showSnackbar('Utilisateur mis à jour avec succès', 'success');
+            this.loadUsers(); // Recharger la liste
+          },
+          error: (err) => {
+            user.isLoading = false;
+            console.error('Erreur lors de la mise à jour:', err);
+            this.showSnackbar('Échec de la mise à jour', 'error');
+          }
+        });
       }
     });
   }
@@ -110,7 +130,7 @@ export class CompteComponent implements OnInit {
       ? LaravelApi.desactiverUtilisateur(user.id)
       : LaravelApi.activerUtilisateur(user.id);
 
-    this.http.post(endpoint, {}).subscribe({
+    this.http.patch(endpoint, {}).subscribe({
       next: () => {
         user.is_active = !user.is_active;
         user.isLoading = false;
@@ -146,7 +166,33 @@ export class CompteComponent implements OnInit {
       case 5: return 'parent';
       case 6: return 'caissier';
       case 7: return 'auditeur';
+      case 8: return 'vendeur';
       default: return '';
+    }
+  }
+
+
+  getMatricule(user: any): string {
+    switch (user.role_id) {
+      case 1: // Administrateur
+        return user.administrateur?.matriculeAD || '';
+      case 2: // Superviseur
+        return user.superviseur?.matriculeSU || ''; // Notez que dans votre table c'est matriculeSU, pas matriculeSV
+      case 3: // Formateur
+        return user.formateur?.matriculeAD || '';
+      case 4: // Apprenant
+        return user.apprenant?.matriculeAP || '';
+      case 5: // Parent
+        return user.parents?.matriculePA || '';
+      case 6: // Caissier
+        return user.caissier?.matriculeCA || '';
+      case 7: // Auditeur
+        return user.auditeur?.matriculeAU || '';
+      case 8: // vendeur
+        return user.vendeur?.matriculeVE || '';
+
+      default:
+        return '';
     }
   }
 }

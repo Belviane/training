@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import localeFr from '@angular/common/locales/fr'; // Importez la locale française
 import { UserProfile, getRoleDisplayName, User, getRoleFromId } from '@app/core/shared/models/user.model';
 import { ProfileService } from 'src/app/services/profile.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Enregistrez la locale française une fois au niveau global de l'application
 registerLocaleData(localeFr, 'fr');
@@ -16,7 +18,7 @@ registerLocaleData(localeFr, 'fr');
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule],
+  imports: [CommonModule, MatIconModule, FormsModule, MatMenuModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -37,17 +39,23 @@ export class HeaderComponent implements OnInit {
     id: 0, // Assurez-vous que l'ID est là pour la mise à jour
   };
 
+    @Output() toggleSidebar = new EventEmitter<void>();
+
+    onToggleSidebar() {
+      this.toggleSidebar.emit();
+    }
+
   isLoadingProfileUpdate: boolean = false;
 
   // Rendre la fonction getRoleDisplayName accessible dans le template
   getRoleDisplayName = getRoleDisplayName;
 
   constructor(
+    public themeService: ThemeService, // Service pour gérer le thème
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService,
     private profileService: ProfileService,
-
   ) { }
 
   ngOnInit() {

@@ -6,8 +6,27 @@
     </span>
   </div>
 
+  <button class="menu-toggle" (click)="onToggleSidebar()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <div class="header-center">
     <h1 class="site-title">BE I.T CLASSROOM</h1>
+  </div>
+
+  <div class="mode-system">
+    <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
+      <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
+    </button>
+
+    <mat-menu #themeMenu="matMenu">
+      @for (theme of themeService.getThemes(); track theme.name) {
+      <button mat-menu-item (click)="themeService.setTheme(theme.name)">
+        <mat-icon>{{ theme.icon }}</mat-icon>
+        <span>{{ theme.name | titlecase }}</span>
+      </button>
+      }
+    </mat-menu>
   </div>
 
   <div class="header-right">
@@ -19,7 +38,7 @@
     <div class="profile-wrapper" (click)="toggleProfileDropdown()">
       <img src="assets/avatar.jpg" class="avatar" alt="Avatar de l'utilisateur" />
       <div class="user-info" *ngIf="currentUser">
-        <span class="user-name">{{ currentUser.prenom }}</span> 
+        <span class="user-name">{{ currentUser.prenom }}</span>
         <span class="user-role" *ngIf="currentUser?.role_id">{{ getRoleDisplayName(currentUser.role) }}</span>
       </div>
       <mat-icon fontIcon="arrow_drop_down"></mat-icon>
