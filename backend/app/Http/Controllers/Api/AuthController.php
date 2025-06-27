@@ -10,22 +10,80 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Mail\EnvoiIdentifiants;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
-       $request->validate([
+        $currentUser = $request->user(); // utilisateur connecté qui fait la requête
+
+        $roleToCreate = $request->role_id;
+
+        // Vérification des droits de création
+        if ($currentUser->role_id == 1) {
+            // Admin peut créer tout sauf on interdit pas explicitement ici
+            // On autorise donc la création de superviseur (2) ici
+            } elseif ($currentUser->role_id == 2) {
+            // Superviseur ne peut pas créer admin (1) ni superviseur (2)
+            if (in_array($roleToCreate, [1, 2])) {
+                return response()->json([
+                    'message' => "Vous n'êtes pas autorisé à créer ce type d'utilisateur."
+                ], 403);
+            }
+            } else {
+            // Tous les autres n'ont pas le droit de créer des utilisateurs
+            return response()->json([
+                'message' => "Vous n'avez pas la permission de créer des utilisateurs."
+            ], 403);
+        }
+        // Règles de validation de base
+        $rules = [
             'nom' => 'required|string',
             'prenom' => 'required|string',
-            'email' => 'required|email|unique:utilisateurs,email',
+           'email' => [
+                'required',
+                'email',
+                'unique:utilisateurs,email',
+                'regex:/^([a-zA-Z0-9._%+-]+)@(gmail\.com|institutsaintjean\.org)$/i',
+            ],
             'genre' => 'required|string',
             'date_naissance' => 'required|date',
-            'role_id' => 'required|integer'
-        ]);
+            'role_id' => 'required|integer',
+        ];
 
-        // Génération automatique du login et du mot de passe
+        $messages = [
+            'email.regex' => "L'email doit être une adresse gmail.com ou institutsaintjean.org valide.",
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        // Validation de base échoue ?
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Calculer l'âge
+        $dateNaissance = Carbon::parse($request->date_naissance);
+        $age = $dateNaissance->age;
+
+        // Règles d'âge selon rôle
+        if ($request->role_id == 4 && $age < 6) {
+            return response()->json([
+                'message' => "Un apprenant doit avoir au moins 6 ans.",
+            ], 422);
+        } elseif ($request->role_id != 4 && $age < 18) {
+            return response()->json([
+                'message' => "Les autres rôles doivent avoir au moins 18 ans.",
+            ], 422);
+        }
+
+        // Toutes validations passées, création de l'utilisateur
         $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
         $passwordPlain = Str::random(10);
         $verificationCode = rand(100000, 999999);
@@ -44,7 +102,6 @@ class AuthController extends Controller
             'verification_code' => $verificationCode,
         ]);
 
-        // Attendre que l'observer ait créé le matricule
         $user->refresh(); // Recharge les relations
 
         switch ($request->role_id) {
@@ -97,29 +154,58 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('login', $request->login)->first();
+        $user = User::where('login', $request->login)
+                    //->orWhere('matricule', $request->login)
+                    ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Identifiants invalides.'], 401);
+        if (!$user) {
+            return response()->json(['message' => 'Login ou matricule incorrect.'], 401);
         }
 
-        if (!$user->email_verified) {
+        // Vérifie si le compte est désactivé IMMÉDIATEMENT
+        if ($user->is_active == 0) {
+            return response()->json(['message' => 'Votre compte est désactivé. Veuillez contacter un administrateur.'], 403);
+        }
+
+        // Vérifie si le compte est verrouillé
+        if ($user->verrouille_jusqua && now()->lessThan($user->verrouille_jusqua)) {
             return response()->json([
-                'message' => 'Veuillez vérifier votre adresse email avant de vous connecter.'
+                'message' => 'Votre compte est temporairement verrouillé. Réessayez après ' . $user->verrouille_jusqua->diffForHumans()
             ], 403);
         }
 
-        // Génération token (exemple avec Sanctum)
+        if (!Hash::check($request->password, $user->password)) {
+            $user->tentatives_echouees += 1;
+
+            if ($user->tentatives_echouees >= 5) {
+                $user->verrouille_jusqua = now()->addMinutes(15);
+                $user->tentatives_echouees = 0;
+            }
+
+            $user->save();
+            return response()->json(['message' => 'Mot de passe incorrect.'], 401);
+        }
+
+        if (!$user->email_verified) {
+            return response()->json(['message' => 'Veuillez vérifier votre adresse email.'], 403);
+        }
+
+        // Reset sécurité
+        $user->tentatives_echouees = 0;
+        $user->verrouille_jusqua = null;
+        $user->save();
+
+        // Génération du token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         if ($user->doit_changer_mot_de_passe) {
             return response()->json([
-                'message' => 'Mot de passe temporaire, changement obligatoire.',
+                'message' => 'Mot de passe temporaire. Vous devez le modifier.',
                 'changer_password' => true,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user' => $user,
-            ], 200);  // code 200 ici, pour dire que c’est OK mais action attendue
+            ]);
         }
 
         return response()->json([
@@ -155,5 +241,63 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Déconnecté avec succès']);
+    }
+
+   public function forgotPassword(Request $request)
+{
+    try {
+        $data = $request->all();
+        \Log::info('Request data:', $data);
+
+        $request->validate([
+            'email' => 'required|email|exists:utilisateurs,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+        }
+
+        $code = rand(100000, 999999);
+        $user->verification_code = $code;
+        $user->save();
+
+        Mail::raw("Votre code de réinitialisation est : $code", function ($message) use ($user) {
+            $message->to($user->email)
+                ->subject('Réinitialisation du mot de passe');
+        });
+
+        return response()->json(['message' => 'Un code de réinitialisation a été envoyé à votre adresse email.']);
+    } catch (\Exception $e) {
+        \Log::error('Erreur forgotPassword: ' . $e->getMessage());
+        return response()->json(['message' => 'Erreur serveur interne.'], 500);
+    }
+}
+
+
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:utilisateurs,email',
+            'verification_code' => 'required',
+            'new_password' => 'required|confirmed|min:6',
+        ]);
+
+        $user = User::where('email', $request->email)
+                    ->where('verification_code', $request->verification_code)
+                    ->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Code de vérification invalide.'], 400);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->verification_code = null; // On le vide
+        $user->doit_changer_mot_de_passe = false; // Facultatif
+        $user->save();
+
+        return response()->json(['message' => 'Mot de passe réinitialisé avec succès.']);
     }
 }

@@ -41,16 +41,19 @@ use App\Http\Controllers\Api\VendeurController;
 use App\Http\Controllers\Api\AdministrateurController;
 
 // Routes publiques
-Route::post('/register', [AuthController::class, 'register']);
+//Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
 //Route::post('/email/verify', [UtilisateurController::class, 'verifierEmail']);
 Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 
 // Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
     //deconnexion des utilisateur
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::put('/modifier-identifiants', [AuthController::class, 'modifierIdentifiants']);
@@ -86,7 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 
-    
+
     // Superviseurs
     Route::prefix('superviseurs')->controller(SuperviseurController::class)->group(function () {
         Route::get('/', 'index');
@@ -220,7 +223,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 
-   
+
 
 
 

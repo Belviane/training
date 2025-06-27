@@ -36,6 +36,10 @@ class User extends Authenticatable
         'doit_changer_mot_de_passe'
     ];
 
+    protected $casts = [
+        'verrouille_jusqua' => 'datetime',
+    ];
+
 
 
     protected $hidden = [
