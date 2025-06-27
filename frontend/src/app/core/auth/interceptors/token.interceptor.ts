@@ -1,34 +1,45 @@
-import { Injectable } from "@angular/core";
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { inject } from "@angular/core";
+import { HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from "../services/auth.services";
-import { catchError } from 'rxjs/operators';
-import { throwError, Observable  } from 'rxjs';
-import { Router } from "@angular/router";
+// export class TokenInterceptor implements HttpInterceptor {
 
-@Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+//   constructor(private authService: AuthService) { }
 
-  constructor(private authService: AuthService, private router: Router) { }
+//   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+//     const token = this.authService.getToken();
+    
+//     if (token) {
+//       request = request.clone({
+//         setHeaders: {
+//           Authorization: `Bearer ${token}`,
+//           'Content-Type': 'application/json',
+//           'Accept': 'application/json'
+//         }
+//       });
+//     }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token');
-    let clonedRequest = request;
+//     return next.handle(request);
+//   }
+// }
 
-    if (token) {
-      clonedRequest = request.clone({
-        headers: request.headers.set('Authorization', `Bearer ${token}`)
-      });
-    }
+export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
 
-    return next.handle(clonedRequest).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          // Token invalide ou expiré : logout + redirection login
-          this.authService.logout();
-          this.router.navigate(['/login']);
-        }
-        return throwError(() => error);
-      })
-    );
+  // Ne pas ajouter le token pour les routes sanctum
+  if (req.url.includes('/sanctum/')) {
+    return next(req);
   }
-}
+  
+  if (token) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      withCredentials: true
+    });
+  }
+  return next(req);
+};

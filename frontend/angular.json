@@ -8,29 +8,39 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",    
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/frontend",
+            "baseHref": "/",
+            "deployUrl": "/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "bootstrap",
+              "ngx-bootstrap"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets",
               "src/favicon.ico",
               {
-                "glob": "**/*",
-                "input": "public"
+                "glob": "redirects",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": false,
+                "bundleName": "bootstrap"
+              },
               "src/styles.css"
             ],
             "scripts": [
@@ -39,16 +49,17 @@
           },
           "configurations": {
             "production": {
+              "prerender": false,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "12kB",
+                  "maximumError": "15kB"
                 }
               ],
               "outputHashing": "all"
@@ -63,6 +74,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.config.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"
@@ -91,9 +105,6 @@
                 "glob": "**/*",
                 "input": "public"
               }
-            ],
-            "styles": [
-              "src/styles.css"
             ],
             "scripts": [
               "assets/libs/bootstrap/js/bootstrap.bundle.min.js",

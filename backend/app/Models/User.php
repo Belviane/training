@@ -48,6 +48,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    
+
 
     public function role(): BelongsTo
     {

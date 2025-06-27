@@ -7,7 +7,6 @@ import { AjouterComponent } from '@app/core/shared/modals/ajouter/ajouter.compon
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ListeComponent } from '@app/core/shared/modals/liste/liste.component';
 import { LaravelApi } from '@app/core/api/laravel.api';
 import { CompteComponent } from '../compte/compte.component';
 
@@ -19,6 +18,23 @@ import { CompteComponent } from '../compte/compte.component';
 })
 export class ContentComponent implements OnInit {
 
+  ongoingTrainings: number = 0;
+  registeredUsers: number = 0;
+  completionRate: number = 0;
+  participationRate: number = 0;
+  skillImprovement: number = 0;
+  learnerSatisfaction: number = 0;
+  feedbackCount: number = 0;
+  participantsCount: number = 0;
+  totalSeats: number = 0;
+  skillImprovementValue: number = 0;
+
+  ongoingTrainingsList = [
+    { name: 'Formation 1', startDate: new Date('2023-01-01'), endDate: new Date('2023-01-31'), registeredUsers: 10, completionRate: 80 },
+    { name: 'Formation 2', startDate: new Date('2023-02-01'), endDate: new Date('2023-02-28'), registeredUsers: 15, completionRate: 90 },
+    // ...
+  ];
+
   userStats = [
     {
       label: 'Superviseurs',
@@ -28,9 +44,6 @@ export class ContentComponent implements OnInit {
   ];
 
   recentAccounts: any[] = [];
-  participationRate: number = 0;
-  participantsCount: number = 0;
-  totalSeats: number = 0;
   averageTimeSpent: number = 0;
   timeTrend: 'up' | 'down' = 'up';
   timeTrendValue: number = 0;
@@ -42,8 +55,6 @@ export class ContentComponent implements OnInit {
   trainingCost: number = 0;
   trainingBenefit: number = 0;
   monthlyActiveUsers: number = 0;
-  skillImprovement: number = 0;
-  skillImprovementValue: number = 0;
 
   userRole: string | null = null;
   isLoggedIn: boolean = false;
@@ -120,6 +131,7 @@ export class ContentComponent implements OnInit {
     }
   ];
 
+  
 
   constructor(private authService: AuthService,
     private router: Router,
@@ -137,10 +149,102 @@ export class ContentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isLoggedIn = this.authService.isLoggedIn();
-    this.userRole = this.authService.getUserRole();
+    this.isLoggedIn = this.authService.isLoggedIn;
+    this.userRole = this.authService.userRole;
+
+    this.loadUserStats();
+
+    this.loadRecentAccounts();
+
+    // Initialisation des données
+    this.ongoingTrainings = 5;
+    this.registeredUsers = 100;
+    this.completionRate = 85;
+    this.participationRate = 90;
+    this.skillImprovement = 20;
+    this.learnerSatisfaction = 95;
+    this.feedbackCount = 50;
+    this.participantsCount = 80;
+    this.totalSeats = 100;
+    this.skillImprovementValue = 10;
   }
 
+  loadUserStats() {
+    this.http.get<any[]>(LaravelApi.utilisateurs).subscribe({
+      next: (users: any[]) => {
+        const counts = {
+          administrateur: 0,
+          superviseur: 0,
+          formateur: 0,
+          apprenant: 0,
+          parent: 0,
+          caissier: 0,
+          auditeur: 0
+        };
+
+        users.forEach(user => {
+          switch (user.role_id) {
+            case 1: counts.administrateur++; break;
+            case 2: counts.superviseur++; break;
+            case 3: counts.formateur++; break;
+            case 4: counts.apprenant++; break;
+            case 5: counts.parent++; break;
+            case 6: counts.caissier++; break;
+            case 7: counts.auditeur++; break;
+          }
+        });
+
+        this.userStats = [
+          { label: 'Administrateurs', value: counts.administrateur, icon: 'admin_panel_settings' },
+          { label: 'Superviseurs', value: counts.superviseur, icon: 'supervisor_account' },
+          { label: 'Formateurs', value: counts.formateur, icon: 'school' },
+          { label: 'Apprenants', value: counts.apprenant, icon: 'person' },
+          { label: 'Parents', value: counts.parent, icon: 'family_restroom' },
+          { label: 'Caissiers', value: counts.caissier, icon: 'payments' },
+          { label: 'Auditeurs', value: counts.auditeur, icon: 'hearing' }
+        ];
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des utilisateurs', err);
+      }
+    });
+  }
+
+  loadRecentAccounts() {
+    this.http.get<any[]>(LaravelApi.utilisateurs).subscribe({
+      next: (accounts: any[]) => {
+        // Tri par date de création décroissante
+        const sortedAccounts = [...accounts].sort((a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
+        // Prendre les 8 premiers
+        this.recentAccounts = sortedAccounts.slice(0, 8).map(account => ({
+          name: `${account.prenom} ${account.nom}`,
+          email: account.email,
+          role: this.getRoleName(account.role_id),
+          createdAt: account.created_at,
+          status: account.is_active ? 'active' : 'inactive'
+        }));
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des utilisateurs', err);
+      }
+    });
+  }
+
+  getRoleName(roleId: number): string {
+    switch (roleId) {
+      case 1: return 'Administrateur';
+      case 2: return 'Superviseur';
+      case 3: return 'Formateur';
+      case 4: return 'Apprenant';
+      case 5: return 'Parent';
+      case 6: return 'Caissier';
+      case 7: return 'Auditeur';
+      default: return 'Unknown';
+    }
+  }
 
   openAjouterModal() {
     this.dialog.open(AjouterComponent, {
@@ -153,17 +257,19 @@ export class ContentComponent implements OnInit {
   }
   openCompteModal() {
     this.dialog.open(CompteComponent, {
-      width: '5000px',
-      panelClass: 'custom-modal', // Classe supplémentaire pour des styles globaux
+      width: '80vw', // Utilisez des unités relatives
+      maxWidth: '1200px', // Largeur maximale
+      height: '90vh',
+      panelClass: 'compte-modal', // Classe spécifique pour cette modal
       autoFocus: false,
-      disableClose: true // Empêche la fermeture en cliquant à l'extérieur
+      disableClose: true // Empêche la fermeture accidentelle
     });
   }
 
   onSubmit() {
     if (this.formationForm.invalid) return;
 
-    this.http.post(LaravelApi.formations(), this.formationForm.value)
+    this.http.post(LaravelApi.formations, this.formationForm.value)
       .subscribe({
         next: (response: any) => {
           this.successMessage = response.message;
@@ -193,10 +299,4 @@ export class ContentComponent implements OnInit {
     this.router.navigate(['/admin', route]);
   }
 
-  openListeModal(): void {
-    this.dialog.open(ListeComponent, {
-      width: '800px',
-      disableClose: false
-    });
-  }
 }

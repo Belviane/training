@@ -1,0 +1,19 @@
+<form [formGroup]="inscriptionForm">
+  <mat-form-field>
+    <mat-label>Formation</mat-label>
+    <mat-select formControlName="formation_id">
+      <mat-option *ngFor="let formation of formations" [value]="formation.id">
+        {{ formation.nom_formation }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Apprenant</mat-label>
+    <mat-select formControlName="apprenant_id">
+      <mat-option *ngFor="let apprenant of apprenants" [value]="apprenant.id">
+        {{ apprenant.nom }} {{ apprenant.prenom }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="addInscription()">Ajouter</button>
+</form>

@@ -1,0 +1,39 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #FFFFFF; /* Blanc */
+  border: 1px solid #F7DC6F; /* Jaune */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+mat-label {
+  color: #F2C464; /* Jaune or */
+}
+
+mat-select {
+  background-color: #FFFFFF; /* Blanc */
+  border: 1px solid #F7DC6F; /* Jaune */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+button[mat-raised-button] {
+  background-color: #F2C464; /* Jaune or */
+  color: #FFFFFF; /* Blanc */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[mat-raised-button]:hover {
+  background-color: #FFD700; /* Jaune or plus foncé */
+}

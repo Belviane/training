@@ -17,5 +17,4 @@ class Kernel
         'role' => \App\Http\Middleware\CheckRole::class,
         'active' => \App\Http\Middleware\CheckUserIsActive::class,
     ];
-
 }

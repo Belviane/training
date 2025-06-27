@@ -1,0 +1,16 @@
+[build]
+  command = "npm install --legacy-peer-deps && npm run build -- --configuration=production"
+  publish = "dist/frontend/browser"
+
+# Règle pour les assets (images, CSS, JS) - prioritaire
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  force = true
+
+# Règle pour les routes Angular - catch-all
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

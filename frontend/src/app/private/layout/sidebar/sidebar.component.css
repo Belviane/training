@@ -105,6 +105,20 @@
   border-left: 3px solid #EEEEEE;
 }
 
+.submenu {
+  padding-left: 20px;
+  background-color: #f0f0f0;
+}
+
+.submenu li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.submenu li:last-child {
+  border-bottom: none;
+}
+
 .submenu ul li a:hover,
 .submenu ul li a.active {
   color: #222222;

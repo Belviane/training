@@ -1,7 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
+/* You can add global styles to this file, and also import other style files */
+/* styles.css */
+:root {
+  --header-height: 60px;
+  --sidebar-width: 260px;
+}
+
+/* Désactive les warnings pour ces sélecteurs */
+:host ::ng-deep {
+  .form-floating > label,
+  .btn-group > .btn,
+  .btn-group-vertical > .btn {
+    /* Styles par défaut ou vides */
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: #333;
   margin: 0;
   padding: 0;
 }
@@ -10,5 +34,138 @@ body {
 html {
   scroll-behavior: smooth;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+
+
+/* styles.css (ou un fichier global de styles) */
+
+/* Styles généraux pour le conteneur des toasts */
+#toast-container {
+  /* Assure que le conteneur est au-dessus de tout le reste */
+  z-index: 999999 !important;
+}
+
+/* Styles pour les toasts individuels (succès) */
+.toast-success {
+  background-color: #28a745 !important;
+  /* Vert plus vif */
+  color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  /* Ombre plus prononcée */
+  padding: 15px 20px !important;
+  font-size: 1.1em !important;
+  opacity: 0.95 !important;
+  /* Un peu moins transparent */
+}
+
+/* Styles pour les toasts individuels (erreur) */
+.toast-error {
+  background-color: #dc3545 !important;
+  /* Rouge plus vif */
+  color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  padding: 15px 20px !important;
+  font-size: 1.1em !important;
+  opacity: 0.95 !important;
+}
+
+/* Styles pour la barre de progression (si activée) */
+.toast-progress {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  /* Couleur de la barre de progression */
+  height: 5px !important;
+  /* Épaisseur de la barre */
+}
+
+/* Assurez-vous que le texte du message est bien visible */
+.toast-message {
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+/* Styles pour le titre du toast (si utilisé) */
+.toast-title {
+  font-weight: 700 !important;
+  font-size: 1.2em !important;
+  margin-bottom: 5px !important;
+}
+
+/* styles.css */
+:root {
+  --primary-color: #D4ED30;
+  --secondary-color: #010101;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --medium-gray: #ccc;
+  --dark-gray: #666;
+  --white: #fff;
+  --black: #000;
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Media Queries de base */
+@media (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+}

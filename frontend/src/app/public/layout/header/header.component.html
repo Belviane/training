@@ -1,40 +1,62 @@
 <header class="site-header">
-  <nav id="navbar">
+  <nav id="navbar" [ngClass]="{'scrolled': isScrolled}">
     <div class="container">
       <!-- Logo + Nom -->
-      <a href="/" class="logo-link">
-        <img src="assets/logo.jpg" alt="Logo" class="logo-img"/>
+      <div class="logo-section">
+        <img src="assets/logo.jpg" alt="Logo" class="logo-img" />
         <div class="site-title">
-          BE I.T AFRICA
+          <span class="site-name">BE I.T AFRICA</span>
         </div>
-      </a>
+      </div>
 
       <!-- Menu principal -->
-      <ul class="main-menu">
+      <ul class="main-menu" [class.open]="menuOpen">
         <li>
-          <a href="#" 
-             (click)="onNavClick('accueil')" 
-             [class.active]="activeLink === 'accueil'"><i class="fi fi-sr-home"></i>Accueil</a>
-        </li>
-         <li>
-          <a href="#" 
-             (click)="onNavClick('blog')" 
-             [class.active]="activeLink === 'blog'">Nos formations</a>
+          <a routerLink="/" 
+             [class.active]="activeLink === 'accueil'" 
+             (click)="navigateTo('/')">
+            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+            <span>Accueil</span>
+          </a>
         </li>
         <li>
-          <a href="#" 
-             (click)="onNavClick('apropos')" 
-             [class.active]="activeLink === 'apropos'">À propos</a>
+          <a routerLink="/formations" 
+             [class.active]="activeLink === 'formations'" 
+             (click)="navigateTo('/formations')">
+            <i class="fi fi-sr-graduation-cap"></i>
+            <span>Formations</span>
+          </a>
         </li>
         <li>
-          <a href="#" 
-             (click)="onNavClick('contact')" 
-             [class.active]="activeLink === 'contact'">Contact</a>
+          <a routerLink="/about" 
+             [class.active]="activeLink === 'about'" 
+             (click)="navigateTo('/about')">
+            <i class="fi fi-sr-info"></i>
+            <span>À Propos</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/contact" 
+             [class.active]="activeLink === 'contact'" 
+             (click)="navigateTo('/contact')">
+            <i class="fi fi-sr-envelope"></i>
+            <span>Contact</span>
+          </a>
         </li>
       </ul>
 
-      <!-- Bouton Connexion -->
-      <a href="/login" class="btn-login">Connexion</a>
+      <!-- Actions -->
+      <div class="header-actions">
+        <a href="/register" class="btn btn-outline">Inscription</a>
+        <a href="/login" class="btn btn-primary">Connexion</a>
+      </div>
+
+      <!-- Menu hamburger pour mobile -->
+      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Menu" aria-expanded="false" [attr.aria-expanded]="menuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </nav>
 </header>
