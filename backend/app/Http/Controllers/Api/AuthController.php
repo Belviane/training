@@ -85,18 +85,29 @@ class AuthController extends Controller
 
         // Toutes validations passées, création de l'utilisateur
         $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
+        // Assurez-vous que ce login est unique
+        while (User::where('login', $login)->exists()) {
+            $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
+        }
+        // Assurez-vous que ce login est unique
+        while (User::where('login', $login)->exists()) {
+            $login = strtolower(Str::slug($request->prenom)) . rand(100, 999);
+        }
         $passwordPlain = Str::random(10);
         $verificationCode = rand(100000, 999999);
 
         $user = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
-            'login' => $login,
-            'email' => $request->email,
-            'password' => bcrypt($passwordPlain),
             'genre' => $request->genre,
             'date_naissance' => $request->date_naissance,
+            'email' => $request->email,
+            'password' => bcrypt($passwordPlain),
+            'email' => $request->email,
+            'password' => bcrypt($passwordPlain),
             'role_id' => $request->role_id,
+            'login' => $login,
+            'login' => $login,
             'email_verified' => false,
             'doit_changer_mot_de_passe' => true,
             'verification_code' => $verificationCode,

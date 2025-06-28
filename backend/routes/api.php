@@ -124,7 +124,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Parents
-    Route::prefix('parents')->controller(ParenteController::class)->group(function () {
+    Route::prefix('parents')->controller(ParentController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
         Route::get('/{id}', 'show');

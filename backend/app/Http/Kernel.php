@@ -12,6 +12,7 @@ class Kernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+         \Illuminate\Http\Middleware\HandleCors::class,
     ];
     protected $routeMiddleware = [
         'role' => \App\Http\Middleware\CheckRole::class,
