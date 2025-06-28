@@ -1,4 +1,7 @@
 <?php
+namespace App\Http;
+
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 
 class Kernel
@@ -11,6 +14,7 @@ class Kernel
         ],
     ];
     protected $routeMiddleware = [
-        'role' => \App\Http\Middleware\CheckRol::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
+        'active' => \App\Http\Middleware\CheckUserIsActive::class,
     ];
 }

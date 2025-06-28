@@ -18,6 +18,12 @@ return new class extends Migration
             $table->date('date_debutf');
             $table->date('date_finf');
             $table->integer('nombre_seancef');
+            $table->integer('volume_horaire');
+            $table->boolean('certifiante')->default(false);
+            $table->decimal('prix_certification', 10, 2)->nullable();
+            $table->decimal('prix', 10, 2)->default(0);
+            $table->string('statut')->default('en cours');
+            $table->text('objectif')->nullable();
             
             $table->timestamps();
         });

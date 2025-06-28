@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Routing\Controller;
+//use Illuminate\Routing\Controller;
 
 use App\Http\Controllers\Controller; 
 use Barryvdh\DomPDF\Facade\Pdf;
