@@ -358,6 +358,41 @@ export class ContentComponent implements OnInit {
   }
 
   /**
+   * Vérifie si l'utilisateur est superviseur
+   */
+  isLearner(): boolean {
+    return this.userRole === 'apprenant';
+  }
+
+  /**
+   * Vérifie si l'utilisateur est superviseur
+   */
+  isParent(): boolean {
+    return this.userRole === 'parent';
+  }
+
+  /**
+   * Vérifie si l'utilisateur est superviseur
+   */
+  isCaissier(): boolean {
+    return this.userRole === 'caissier';
+  }
+
+  /**
+   * Vérifie si l'utilisateur est superviseur
+   */
+  isAuditeur(): boolean {
+    return this.userRole === 'auditeur';
+  }
+
+  /**
+   * Vérifie si l'utilisateur est superviseur
+   */
+  isVendeur(): boolean {
+    return this.userRole === 'vendeur';
+  }
+
+  /**
    * Navigation vers une route d'administration
    * @param route Route cible
    */

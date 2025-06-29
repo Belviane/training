@@ -173,6 +173,7 @@ export class AuthService {
             case 5: return 'parent';
             case 6: return 'caissier';
             case 7: return 'auditeur';
+            case 8: return 'vendeur';
             default: return null;
         }
     }

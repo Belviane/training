@@ -23,10 +23,10 @@
           <h3 class="footer-title">Navigation</h3>
           <div class="quick-links">
             <ul>
-              <li><a routerLink="/">Accueil</a></li>
-              <li><a routerLink="/">Formations</a></li>
-              <li><a routerLink="/">À propos</a></li>
-              <li><a routerLink="/">Contact</a></li>
+              <li><a routerLink="" (click)="navigateTo('')">Accueil</a></li>
+              <li><a routerLink="/formations" (click)="navigateTo('/formations')">Formations</a></li>
+              <li><a routerLink="/about" (click)="navigateTo('/about')">À propos</a></li>
+              <li><a routerLink="/contact" (click)="navigateTo('/contact')">Contact</a></li>
             </ul>
           </div>
         </div>

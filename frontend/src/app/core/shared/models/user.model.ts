@@ -160,5 +160,9 @@
       return this.role_id === 7;
     }
 
+    isVendeur(): boolean {
+      return this.role_id === 8;
+    }
+
     // ... autres méthodes spécifiques aux rôles
   }

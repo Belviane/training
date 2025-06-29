@@ -61,7 +61,7 @@ export class SidebarComponent implements OnInit {
 
   sidebarItems: MenuItem[] = [
     // Commun à tous
-    { label: 'Dashboard', icon: 'dashboard', route: '/app', roles: ['apprenant', 'parent', 'formateur', 'superviseur', 'administrateur'], exact: true },
+    { label: 'Dashboard', icon: 'dashboard', route: '/app', roles: ['apprenant', 'parent', 'formateur', 'superviseur', 'administrateur', 'caissier', 'auditeur', 'vendeur'], exact: true },
 
     // apprenant
     { label: 'Mon évolution', icon: 'trending_up', route: '/evolution', roles: ['apprenant'], exact: false },

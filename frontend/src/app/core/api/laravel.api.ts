@@ -10,6 +10,8 @@ export const LaravelApi = {
   formations: ` ${BASE_URL}/formations`,
   changePassword: `${BASE_URL}/modifier-identifiants`,
   emailverify: `${BASE_URL}/email/verify`,
+  forgotpassword: `${BASE_URL}/forgot-password`,
+  resetpassword: `${BASE_URL}/reset-password`,
 
   updateUtilisateur(id: number): string {
     return `${BASE_URL}/utilisateurs/${id}`;
