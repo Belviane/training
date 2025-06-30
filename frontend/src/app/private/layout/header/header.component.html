@@ -4,11 +4,11 @@
     <span class="current-date">
       {{ currentDate | date:' d MMMM y' : 'fr' }}
     </span>
-  </div>
 
-  <button class="menu-toggle" (click)="onToggleSidebar()">
-    <mat-icon>menu</mat-icon>
-  </button>
+    <button class="menu-toggle" (click)="toggleSidebar.emit()">
+      <i class="material-icons">menu</i>
+    </button>
+  </div>
 
   <div class="header-center">
     <h1 class="site-title">BE I.T CLASSROOM</h1>
@@ -59,7 +59,18 @@
 
 
 <div *ngIf="showProfileEditModal" class="profile-edit-modal-overlay" (click)="closeProfileModal()">
+
   <div class="profile-edit-modal-content" (click)="$event.stopPropagation()">
+    <div class="form-group">
+      <label for="avatar">Photo de profil</label>
+      <input type="file" id="avatar" (change)="onAvatarSelected($event)" accept="image/*" />
+    </div>
+
+    <div class="form-group">
+      <img *ngIf="avatarPreviewUrl" [src]="avatarPreviewUrl" alt="Prévisualisation de l'avatar"
+        class="avatar-preview" />
+    </div>
+
     <h3>Modifier mon profil</h3>
     <form (ngSubmit)="updateProfile()">
       <div class="form-group">
@@ -74,6 +85,12 @@
         <label for="email">Email</label>
         <input type="email" id="email" name="email" [(ngModel)]="editableUser.email" required />
       </div>
+
+      <div class="form-group">
+        <label for="login">Nom d'utilisateur</label>
+        <input type="texte" id="login" name="login" [(ngModel)]="editableUser.login" required />
+      </div>
+      
       <div class="modal-actions">
         <button type="submit" [disabled]="isLoadingProfileUpdate">
           {{ isLoadingProfileUpdate ? 'Mise à jour...' : 'Enregistrer' }}

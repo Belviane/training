@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from "../../private/layout/header/header.component";
 import { FooterComponent } from '../../private/layout/footer/footer.component';
 import { SidebarComponent } from "../layout/sidebar/sidebar.component";
@@ -21,9 +21,8 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   
-  isSidebarCollapsed = false;
-  isSidebarOpen = false;
-  isMobile = false;
+  sidebarCollapsed = signal(false);
+
 
   responsiveService = inject(ResponsiveService);
 
@@ -34,27 +33,11 @@ export class DashboardComponent implements OnInit {
     return 'over';
   });
 
-  componentSelectorMode = computed(() => {
-    if (this.responsiveService.smallWidth()) {
-      return 'over';
-    }
-    return 'side';
-  });
 
   constructor(
     private router: Router, 
     private authService: AuthService,
     private breakpointObserver: BreakpointObserver,) {
-      this.breakpointObserver.observe([Breakpoints.Handset])
-      .pipe(
-        map(result => result.matches),
-        shareReplay()
-      ).subscribe(isMobile => {
-        this.isMobile = isMobile;
-        if (!isMobile) {
-          this.isSidebarOpen = false;
-        }
-      });
      }
 
   ngOnInit(): void {
@@ -62,16 +45,7 @@ export class DashboardComponent implements OnInit {
     console.log('utilisateur', this.authService.getCurrentUser());
   }
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (!this.isMobile) {
-      this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    }
-  }
-
-  closeSidebar() {
-    if (this.isMobile) {
-      this.isSidebarOpen = false;
-    }
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update(collapsed => !collapsed);
   }
 }

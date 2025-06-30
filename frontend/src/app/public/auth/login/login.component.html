@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-header">
       <img src="assets/logo.jpg" alt="Logo BE I.T. CLASSROOM" class="logo" />
-      <h2>BE I.T. CLASSROOM</h2>
+      <h2>BE I.T CLASSROOM</h2>
       <p class="subtitle">Connectez-vous à votre espace</p>
     </div>
 
@@ -12,10 +12,10 @@
         <button (click)="errorMessage = null">X</button>
       </div>
       <div class="form-group">
-        <label for="login">Identifiant</label>
+        <label for="login">Nom d'utilisateur</label>
         <div class="input-wrapper">
-          <input type="text" id="login" name="login" placeholder="Entrez votre identifiant" autocomplete="username" 
-                 required aria-required="true" [(ngModel)]="credentials.login" />
+          <input type="text" id="login" name="login" placeholder="Entrez votre nom d'utilisateur" autocomplete="username"
+            required aria-required="true" [(ngModel)]="credentials.login" />
         </div>
       </div>
 
@@ -23,9 +23,9 @@
         <label for="password">Mot de passe</label>
         <div class="input-wrapper">
           <input [type]="passwordFieldType" id="password" name="password" placeholder="Entrez votre mot de passe"
-                 autocomplete="current-password" required aria-required="true" [(ngModel)]="credentials.password" />
+            autocomplete="current-password" required aria-required="true" [(ngModel)]="credentials.password" />
           <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
-                  aria-label="Toggle password visibility">
+            aria-label="Toggle password visibility">
             <i class="fa" [ngClass]="
                 passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash'
               "></i>
@@ -39,10 +39,54 @@
       </button>
 
       <div class="login-footer">
-        <a href="##" class="forgot-password">Mot de passe oublié ?</a>
+        <a (click)="openForgotPasswordModal()" class="forgot-password">Mot de passe oublié ?</a>
       </div>
+
     </form>
+
+    <!-- MODAL Mot de passe oublié -->
+    <div class="reset-password-modal" *ngIf="showForgotPasswordModal">
+      <div class="modal-content">
+        <h3>Réinitialisation du mot de passe</h3>
+        <form (ngSubmit)="submitForgotPassword()">
+          <label for="email">Adresse email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="forgotPasswordEmail" required />
+          <div class="modal-actions">
+            <button type="submit" [disabled]="isSubmittingForgot">
+              <span *ngIf="!isSubmittingForgot">Envoyer</span>
+              <span *ngIf="isSubmittingForgot">Envoi en cours...</span>
+            </button>
+            <button type="button" (click)="closeForgotPasswordModal()">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
+
+  <!-- MODAL Réinitialisation Mot de passe -->
+  <div class="forgot-password-modal" *ngIf="showResetPasswordModal">
+    <div class="modal-content">
+      <h3>Nouveau mot de passe</h3>
+      <form (ngSubmit)="submitResetPassword()">
+        <label for="code">Code de vérification</label>
+        <input type="text" id="code" name="code" [(ngModel)]="resetPasswordData.verification_code" required />
+
+        <label for="new_password">Nouveau mot de passe</label>
+        <input type="password" id="new_password" name="new_password" [(ngModel)]="resetPasswordData.new_password"
+          required />
+
+        <label for="new_password_confirmation">Confirmer le mot de passe</label>
+        <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+          [(ngModel)]="resetPasswordData.new_password_confirmation" required />
+
+        <div class="modal-actions">
+          <button type="submit">Réinitialiser</button>
+          <button type="button" (click)="showResetPasswordModal = false">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <footer class="auth-footer">
     <p>&copy; {{ currentYear }} BE IT AFRICA. Tous droits réservés.</p>

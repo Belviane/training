@@ -23,6 +23,10 @@ registerLocaleData(localeFr, 'fr');
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
+  avatarFile: File | null = null;
+  avatarPreviewUrl: string | null = null;
+
+
   currentDate = new Date();
   dateInterval: any; // Pour stocker l'intervalle de la date
 
@@ -36,14 +40,15 @@ export class HeaderComponent implements OnInit {
     nom: '',
     prenom: '',
     email: '',
+    login: '',
+    password: '',
     id: 0, // Assurez-vous que l'ID est là pour la mise à jour
   };
 
-    @Output() toggleSidebar = new EventEmitter<void>();
+  @Output() toggleSidebar = new EventEmitter<void>();
 
-    onToggleSidebar() {
-      this.toggleSidebar.emit();
-    }
+  showUserMenu = false;
+
 
   isLoadingProfileUpdate: boolean = false;
 
@@ -72,6 +77,21 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  onAvatarSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.avatarFile = input.files[0];
+
+      // Prévisualisation de l'image sélectionnée
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.avatarPreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.avatarFile);
+    }
+  }
+
+
   loadUserProfile(): void {
     this.profileService.getProfile().subscribe({
       next: (userFromApi: User) => { // Explicitly type the user coming from API as User
@@ -81,7 +101,9 @@ export class HeaderComponent implements OnInit {
           id: userFromApi.id, // ID is now number
           nom: userFromApi.nom,
           prenom: userFromApi.prenom,
-          email: userFromApi.email
+          email: userFromApi.email,
+          login: userFromApi.login,
+          password: userFromApi.password !== undefined ? userFromApi.password : ''
         };
       },
       error: (err) => {
@@ -109,7 +131,10 @@ export class HeaderComponent implements OnInit {
     this.showProfileDropdown = false;
     // Si l'utilisateur actuel est chargé, faire une copie pour l'édition
     if (this.currentUser) {
-      this.editableUser = { ...this.currentUser };
+      this.editableUser = {
+        ...this.currentUser,
+        password: this.currentUser?.password ?? ''
+      };
     }
     this.showProfileEditModal = true;
   }
@@ -118,7 +143,10 @@ export class HeaderComponent implements OnInit {
     this.showProfileEditModal = false;
     // Réinitialiser editableUser au cas où l'utilisateur annule
     if (this.currentUser) {
-      this.editableUser = { ...this.currentUser };
+      this.editableUser = {
+        ...this.currentUser,
+        password: this.currentUser?.password ?? ''
+      };
     }
   }
 
@@ -131,6 +159,8 @@ export class HeaderComponent implements OnInit {
           this.currentUser.nom = this.editableUser.nom;
           this.currentUser.prenom = this.editableUser.prenom;
           this.currentUser.email = this.editableUser.email;
+          this.currentUser.login = this.editableUser.login;
+          this.currentUser.password = this.editableUser.password;
           // If the API returns more, you'd update those here as well.
           // Or, better, re-fetch the full user profile after a successful update:
           // this.loadUserProfile();

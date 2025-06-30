@@ -44,6 +44,8 @@
     nom: string;
     prenom: string;
     email: string;  
+    login: string,
+    password: string,
   }
 
   export interface AuthResponse {

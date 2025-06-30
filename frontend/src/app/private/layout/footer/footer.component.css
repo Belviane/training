@@ -18,8 +18,12 @@
 }
 
 .auth-footer .container {
-  padding-right: 2rem; /* Alignement avec le header */
-  padding-left: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Modifications existantes et ajouts */

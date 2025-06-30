@@ -1,0 +1,248 @@
+<div class="evaluations-container">
+    <div class="page-header">
+        <h1>Mes Évaluations</h1>
+        <p>Consultez vos évaluations passées et à venir</p>
+    </div>
+
+    <div class="evaluations-tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'pending'" (click)="activeTab = 'pending'">
+            À faire (2)
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'completed'" (click)="activeTab = 'completed'">
+            Terminées (5)
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'results'" (click)="activeTab = 'results'">
+            Résultats (5)
+        </button>
+    </div>
+
+    <!-- Évaluations à faire -->
+    <div class="evaluations-content" *ngIf="activeTab === 'pending'">
+        <div class="evaluation-card urgent">
+            <div class="evaluation-header">
+                <div class="evaluation-type">
+                    <i class="material-icons">quiz</i>
+                    <span>Test de connaissances</span>
+                </div>
+                <span class="urgency-badge">Urgent</span>
+            </div>
+
+            <div class="evaluation-body">
+                <h3>Test Angular Components</h3>
+                <p class="evaluation-description">
+                    Évaluation sur les composants Angular, les templates et le data binding.
+                </p>
+
+                <div class="evaluation-meta">
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <i class="material-icons">book</i>
+                            <span>Formation: Développement Web Frontend</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="material-icons">person</i>
+                            <span>Formateur: M. Bernard</span>
+                        </div>
+                    </div>
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <i class="material-icons">schedule</i>
+                            <span>Durée: 45 minutes</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="material-icons">event</i>
+                            <span>À rendre avant: 25 Jan 2025, 23:59</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="evaluation-info">
+                    <div class="info-item">
+                        <strong>Questions:</strong> 20 QCM + 3 questions ouvertes
+                    </div>
+                    <div class="info-item">
+                        <strong>Note maximale:</strong> 20 points
+                    </div>
+                    <div class="info-item">
+                        <strong>Prérequis:</strong> Avoir terminé le module "Components & Templates"
+                    </div>
+                </div>
+            </div>
+
+            <div class="evaluation-actions">
+                <button class="btn btn-primary">
+                    <i class="material-icons">play_arrow</i>
+                    Commencer l'évaluation
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="material-icons">info</i>
+                    Plus d'informations
+                </button>
+            </div>
+        </div>
+
+        <div class="evaluation-card">
+            <div class="evaluation-header">
+                <div class="evaluation-type">
+                    <i class="material-icons">assignment</i>
+                    <span>Évaluation finale</span>
+                </div>
+                <span class="time-badge">5 jours restants</span>
+            </div>
+
+            <div class="evaluation-body">
+                <h3>Évaluation SQL - Base de Données</h3>
+                <p class="evaluation-description">
+                    Évaluation finale sur SQL, requêtes complexes et conception de bases de données.
+                </p>
+
+                <div class="evaluation-meta">
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <i class="material-icons">book</i>
+                            <span>Formation: Base de Données</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="material-icons">person</i>
+                            <span>Formatrice: Mme Dubois</span>
+                        </div>
+                    </div>
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <i class="material-icons">schedule</i>
+                            <span>Durée: 2 heures</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="material-icons">event</i>
+                            <span>À rendre avant: 30 Jan 2025, 18:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prerequis-warning">
+                    <i class="material-icons">warning</i>
+                    <span>Vous devez passer un test de connaissances avant cette évaluation</span>
+                </div>
+            </div>
+
+            <div class="evaluation-actions">
+                <button class="btn btn-secondary" disabled>
+                    <i class="material-icons">lock</i>
+                    Test prérequis nécessaire
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="material-icons">info</i>
+                    Plus d'informations
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Évaluations terminées -->
+    <div class="evaluations-content" *ngIf="activeTab === 'completed'">
+        <div class="results-grid">
+            <div class="result-card excellent">
+                <div class="result-header">
+                    <h3>Test JavaScript Avancé</h3>
+                    <div class="result-score">18/20</div>
+                </div>
+                <div class="result-body">
+                    <p>Formation: Initiation à la Programmation</p>
+                    <p>Date: 15 Janvier 2025</p>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: 90%"></div>
+                    </div>
+                    <p class="result-comment">Excellent travail ! Maîtrise parfaite des concepts.</p>
+                </div>
+            </div>
+
+            <div class="result-card good">
+                <div class="result-header">
+                    <h3>Évaluation HTML/CSS</h3>
+                    <div class="result-score">15/20</div>
+                </div>
+                <div class="result-body">
+                    <p>Formation: Développement Web Frontend</p>
+                    <p>Date: 10 Janvier 2025</p>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: 75%"></div>
+                    </div>
+                    <p class="result-comment">Bonne maîtrise, quelques points à améliorer en CSS Grid.</p>
+                </div>
+            </div>
+
+            <div class="result-card average">
+                <div class="result-header">
+                    <h3>Test TypeScript</h3>
+                    <div class="result-score">12/20</div>
+                </div>
+                <div class="result-body">
+                    <p>Formation: Développement Web Frontend</p>
+                    <p>Date: 5 Janvier 2025</p>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: 60%"></div>
+                    </div>
+                    <p class="result-comment">Bases acquises, travaillez les interfaces et types génériques.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Résultats détaillés -->
+    <div class="evaluations-content" *ngIf="activeTab === 'results'">
+        <div class="statistics-overview">
+            <div class="stat-card">
+                <div class="stat-value">15.2</div>
+                <div class="stat-label">Moyenne générale</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Taux de réussite</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Évaluations passées</div>
+            </div>
+        </div>
+
+        <div class="detailed-results">
+            <h3>Historique détaillé</h3>
+            <div class="results-table">
+                <div class="table-header">
+                    <div>Évaluation</div>
+                    <div>Formation</div>
+                    <div>Date</div>
+                    <div>Note</div>
+                    <div>Actions</div>
+                </div>
+                <div class="table-row">
+                    <div>Test JavaScript Avancé</div>
+                    <div>Initiation Programmation</div>
+                    <div>15/01/2025</div>
+                    <div class="grade excellent">18/20</div>
+                    <div>
+                        <button class="btn-small btn-primary">Voir détail</button>
+                    </div>
+                </div>
+                <div class="table-row">
+                    <div>Évaluation HTML/CSS</div>
+                    <div>Développement Web</div>
+                    <div>10/01/2025</div>
+                    <div class="grade good">15/20</div>
+                    <div>
+                        <button class="btn-small btn-primary">Voir détail</button>
+                    </div>
+                </div>
+                <div class="table-row">
+                    <div>Test TypeScript</div>
+                    <div>Développement Web</div>
+                    <div>05/01/2025</div>
+                    <div class="grade average">12/20</div>
+                    <div>
+                        <button class="btn-small btn-primary">Voir détail</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

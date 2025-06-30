@@ -28,7 +28,6 @@ export class SidebarComponent implements OnInit {
   isMobile = false;
   
   @Input() isCollapsed = false;
-  @Input() isSidebarOpen = false;
   @Output() closeSidebar = new EventEmitter<void>();
 
   onCloseSidebar() {
@@ -54,11 +53,6 @@ export class SidebarComponent implements OnInit {
   }
 
 
-  // Ajoutez cette méthode
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
-
   sidebarItems: MenuItem[] = [
     // Commun à tous
     { label: 'Dashboard', icon: 'dashboard', route: '/app', roles: ['apprenant', 'parent', 'formateur', 'superviseur', 'administrateur', 'caissier', 'auditeur', 'vendeur'], exact: true },
@@ -67,6 +61,7 @@ export class SidebarComponent implements OnInit {
     { label: 'Mon évolution', icon: 'trending_up', route: '/evolution', roles: ['apprenant'], exact: false },
     { label: 'Mes formations', icon: 'school', route: '/formations', roles: ['apprenant'], exact: false },
     { label: 'Fiche d\'évaluation', icon: 'assignment', route: '/fiche-evaluation', roles: ['apprenant'], exact: false },
+    { label: 'Mes évaluations', icon: 'task', route: '/app/evaluation', roles: ['apprenant'], exact: false },
 
     // Parent
     { label: 'Évolution enfant', icon: 'child_care', route: '/enfant/evolution', roles: ['parent'], exact: false },
@@ -118,7 +113,10 @@ export class SidebarComponent implements OnInit {
 
   filteredSidebarItems: MenuItem[] = [];
 
-  constructor(private authService: AuthService, private router: Router, private http: HttpClient) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private http: HttpClient) { }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn;

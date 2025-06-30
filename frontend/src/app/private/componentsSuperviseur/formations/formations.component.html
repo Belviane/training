@@ -2,7 +2,7 @@
     <h2>Liste des formations</h2>
     <button mat-raised-button color="primary" (click)="openAddModal()">
         <mat-icon>add</mat-icon>
-        Ajouter une formation
+        Nouvelle formation
     </button>
 </div>
 
@@ -38,39 +38,52 @@
 
 <!-- Formulaire modal -->
 <ng-template #addFormationModal>
-    <div class="modal-header">
-        <h2>Ajouter une formation</h2>
+  <div class="form-container">
+    <div class="form-card">
+      <!-- Header -->
+      <div class="form-header">
+        <h1 class="form-title">
+          <lucide-icon name="book-open"></lucide-icon>
+          Création d'une Formation
+        </h1>
+      </div>
+
+      <form [formGroup]="formationForm" (ngSubmit)="onSubmit()" class="form-content">
+        <!-- Basic Information Section -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <lucide-icon name="book-open"></lucide-icon>
+            Informations Générales
+          </h2>
+          
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="nom_formation" class="form-label">Nom de la Formation *</label>
+              <input type="text" id="nom_formation" formControlName="nom_formation" class="form-input" />
+              @if (getFieldError('nom_formation')) {
+                <p class="error-message">
+                  <lucide-icon name="alert-circle"></lucide-icon>
+                  {{ getFieldError('nom_formation') }}
+                </p>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="statut" class="form-label">Statut</label>
+              <select id="statut" formControlName="statut" class="form-select">
+                <option value="brouillon">Brouillon</option>
+                <option value="active">Active</option>
+                <option value="terminee">Terminée</option>
+                <option value="suspendue">Suspendue</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ... -->
+        </div>
+
+        <!-- ... -->
+      </form>
     </div>
-    <div class="modal-body">
-        <form >
-            <mat-form-field>
-                <mat-label>Nom</mat-label>
-                <input matInput formControlName="nom">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Libellé</mat-label>
-                <input matInput formControlName="libelle">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Date de début</mat-label>
-                <input matInput [matDatepicker]="dateDebut" formControlName="dateDebut">
-                <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
-                <mat-datepicker #dateDebut></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Date de fin</mat-label>
-                <input matInput [matDatepicker]="dateFin" formControlName="dateFin">
-                <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
-                <mat-datepicker #dateFin></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Nombre de séances</mat-label>
-                <input matInput formControlName="nombreSeance" type="number">
-            </mat-form-field>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button mat-raised-button (click)="closeModal()">Annuler</button>
-        <button mat-raised-button color="primary" (click)="addFormation()">Ajouter</button>
-    </div>
+  </div>
 </ng-template>

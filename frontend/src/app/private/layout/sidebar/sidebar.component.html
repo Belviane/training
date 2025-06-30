@@ -1,6 +1,6 @@
-<div class="sidebar-overlay" [class.visible]="isSidebarOpen && isMobile" (click)="onCloseSidebar()"></div>
+<div class="sidebar-overlay" [class.collapsed]="isCollapsed"></div>
 
-<nav class="sidebar" [class.open]="isSidebarOpen" [class.collapsed]="isCollapsed">
+<nav class="sidebar">
   <ul>
     <li *ngFor="let item of filteredSidebarItems">
       <div *ngIf="item.children">

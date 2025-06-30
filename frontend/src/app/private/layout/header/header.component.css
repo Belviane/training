@@ -3,11 +3,16 @@ body {
 }
 
 .main-header {
+  height: 64px;
+  justify-content: space-between;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ffffff; /* Fond blanc */
-  color: #222222; /* Texte noir */
+  background: #ffffff;
+  /* Fond blanc */
+  color: #222222;
+  /* Texte noir */
   padding: 0.8rem 2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -20,24 +25,28 @@ body {
 
 /* Ajout des styles pour le bouton de toggle du sidebar */
 .menu-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 12px;
+  background: none;
+  border: none;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
+  color: var(--gray-600);
 }
 
 .menu-toggle:hover {
-  background-color: #fffbe6;
+  background-color: var(--gray-100);
+  color: var(--gray-900);
 }
 
-.menu-toggle mat-icon {
-  color: #222222;
-  font-size: 24px;
+.breadcrumb {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item {
+  color: var(--gray-700);
+  font-weight: 500;
 }
 
 .header-left {
@@ -84,7 +93,8 @@ body {
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: #ffd700; /* Jaune or */
+  background: #ffd700;
+  /* Jaune or */
   border-radius: 3px;
 }
 
@@ -101,15 +111,18 @@ body {
   padding: 4px;
   border-radius: 50%;
   transition: all 0.3s ease;
-  display: flex; /* S'assurer que l'icône est centrée */
+  display: flex;
+  /* S'assurer que l'icône est centrée */
   align-items: center;
   justify-content: center;
-  width: 40px; /* Taille fixe pour le cercle */
+  width: 40px;
+  /* Taille fixe pour le cercle */
   height: 40px;
 }
 
 .notification-wrapper:hover {
-  background-color: #fffbe6; /* Jaune très clair */
+  background-color: #fffbe6;
+  /* Jaune très clair */
 }
 
 .notification-wrapper mat-icon {
@@ -119,7 +132,8 @@ body {
 }
 
 .notification-wrapper:hover mat-icon {
-  color: #ffd700; /* Jaune or */
+  color: #ffd700;
+  /* Jaune or */
   transform: scale(1.1);
 }
 
@@ -127,7 +141,8 @@ body {
   position: absolute;
   top: -2px;
   right: -2px;
-  background: #ffd700; /* Jaune or */
+  background: #ffd700;
+  /* Jaune or */
   color: #222222;
   border-radius: 50%;
   padding: 3px 6px;
@@ -156,18 +171,21 @@ body {
 }
 
 .notification-item:hover {
-  background-color: #fffbe6; /* Jaune très clair */
+  background-color: #fffbe6;
+  /* Jaune très clair */
 }
 
 .notification-item.unread {
-  background-color: #fff8d6; /* Jaune pâle */
+  background-color: #fff8d6;
+  /* Jaune pâle */
   color: #222222;
   font-weight: 500;
 }
 
 /* Profil */
 .profile-wrapper {
-  position: relative; /* Très important pour le positionnement du dropdown */
+  position: relative;
+  /* Très important pour le positionnement du dropdown */
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -178,7 +196,8 @@ body {
 }
 
 .profile-wrapper:hover {
-  background-color: #fffbe6; /* Jaune très clair */
+  background-color: #fffbe6;
+  /* Jaune très clair */
 }
 
 .avatar {
@@ -191,14 +210,16 @@ body {
 }
 
 .avatar-icon {
-  font-size: 36px; /* Taille de l'icône par défaut */
+  font-size: 36px;
+  /* Taille de l'icône par défaut */
   color: #555555;
   transition: all 0.3s ease;
 }
 
 .profile-wrapper:hover .avatar,
 .profile-wrapper:hover .avatar-icon {
-  border-color: #ffd700; /* Jaune or */
+  border-color: #ffd700;
+  /* Jaune or */
   transform: scale(1.05);
 }
 
@@ -210,14 +231,16 @@ body {
 }
 
 .profile-wrapper:hover .user-name {
-  color: #ffd700; /* Jaune or */
+  color: #ffd700;
+  /* Jaune or */
 }
 
 /* Menu déroulant profil */
 .profile-dropdown {
   position: absolute;
   right: 0;
-  top: 48px; /* Ajustez selon la hauteur de votre header */
+  top: 48px;
+  /* Ajustez selon la hauteur de votre header */
   background: #ffffff;
   color: #222222;
   min-width: 200px;
@@ -225,7 +248,8 @@ body {
   border-radius: 8px;
   z-index: 110;
   border: 1px solid #eeeeee;
-  animation: fadeIn 0.2s ease-out forwards; /* Animation d'apparition */
+  animation: fadeIn 0.2s ease-out forwards;
+  /* Animation d'apparition */
 }
 
 .profile-dropdown-item {
@@ -235,15 +259,18 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer; /* Indiquer que c'est cliquable */
+  cursor: pointer;
+  /* Indiquer que c'est cliquable */
 }
 
 .profile-dropdown-item:last-child {
-  border-bottom: none; /* Pas de bordure pour le dernier élément */
+  border-bottom: none;
+  /* Pas de bordure pour le dernier élément */
 }
 
 .profile-dropdown-item:hover {
-  background-color: #fffbe6; /* Jaune très clair */
+  background-color: #fffbe6;
+  /* Jaune très clair */
   color: #222222;
 }
 
@@ -259,11 +286,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Fond semi-transparent */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Fond semi-transparent */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* Au-dessus du dropdown et du header */
+  z-index: 1050;
+  /* Au-dessus du dropdown et du header */
   animation: fadeInOverlay 0.2s ease-out forwards;
 }
 
@@ -353,12 +382,16 @@ body {
   background-color: #d0d0d0;
   transform: translateY(-1px);
 }
+
 /* Ajoutez ces styles pour organiser le nom et le rôle */
 .user-info {
   display: flex;
-  flex-direction: column; /* Pour empiler le nom et le rôle */
-  align-items: flex-end; /* Aligner le texte à droite */
-  line-height: 1.2; /* Réduire l'espacement entre les lignes */
+  flex-direction: column;
+  /* Pour empiler le nom et le rôle */
+  align-items: flex-end;
+  /* Aligner le texte à droite */
+  line-height: 1.2;
+  /* Réduire l'espacement entre les lignes */
 }
 
 .user-name {
@@ -369,32 +402,39 @@ body {
 }
 
 .user-role {
-  font-size: 0.8rem; /* Taille plus petite pour le rôle */
-  color: #777777; /* Couleur plus discrète */
+  font-size: 0.8rem;
+  /* Taille plus petite pour le rôle */
+  color: #777777;
+  /* Couleur plus discrète */
   font-weight: 400;
 }
 
 /* Ajustez si nécessaire les hover pour user-info */
 .profile-wrapper:hover .user-info .user-name {
-  color: #ffd700; /* Jaune or */
+  color: #ffd700;
+  /* Jaune or */
 }
 
 .profile-wrapper:hover .user-info .user-role {
-  color: #ffd700; /* Jaune or */
+  color: #ffd700;
+  /* Jaune or */
 }
 
 /* Mettez à jour les media queries si user-info disparaît */
 @media (max-width: 992px) {
   .user-info {
-    display: none; /* Cache le nom et le rôle sur les petites écrans */
+    display: none;
+    /* Cache le nom et le rôle sur les petites écrans */
   }
 }
+
 /* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -405,6 +445,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -415,6 +456,7 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -448,7 +490,8 @@ body {
   }
 
   .profile-wrapper mat-icon {
-    font-size: 28px; /* Ajuster la taille de l'icône de profil */
+    font-size: 28px;
+    /* Ajuster la taille de l'icône de profil */
   }
 
   .avatar {
@@ -462,11 +505,11 @@ body {
   .header-left {
     gap: 0.5rem;
   }
-  
+
   .header-logo {
     height: 26px;
   }
-  
+
   .current-date {
     display: none;
   }
@@ -476,21 +519,21 @@ body {
   .main-header {
     padding: 0.8rem 1rem;
   }
-  
+
   .site-title {
     font-size: 1.1rem;
   }
-  
+
   .header-right {
     gap: 0.8rem;
   }
-  
+
   .notification-wrapper,
   .profile-wrapper {
     width: 36px;
     height: 36px;
   }
-  
+
   .notification-wrapper mat-icon,
   .profile-wrapper mat-icon {
     font-size: 24px;
@@ -501,11 +544,11 @@ body {
   .site-title {
     font-size: 1rem;
   }
-  
+
   .header-logo {
     height: 24px;
   }
-  
+
   .mode-system {
     display: none;
   }

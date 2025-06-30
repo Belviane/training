@@ -8,6 +8,7 @@ import { AjouterComponent } from '@app/core/shared/modals/ajouter/ajouter.compon
 import { ListecompteComponent } from './componentsSuperviseur/listecompte/listecompte.component';
 import { FormationsComponent } from './componentsSuperviseur/formations/formations.component';
 import { SuiviapprenantComponent } from './componentsFormateur/suiviapprenant/suiviapprenant.component';
+import { EvaluationComponent } from './componentsApprenant/evaluation/evaluation.component';
 
 export const PRIVATE_ROUTES: Routes = [
   {
@@ -43,6 +44,11 @@ export const PRIVATE_ROUTES: Routes = [
       {
         path: 'apprenants',
         component: SuiviapprenantComponent,
+        canActivate: [AuthGuard], 
+      },
+      {
+        path: 'evaluation',
+        component: EvaluationComponent,
         canActivate: [AuthGuard], 
       },
       { path: '**', redirectTo: '' },
