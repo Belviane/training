@@ -2,10 +2,13 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
-
+import { FormationsComponent } from './views/formations/formations.component';
+import { AboutComponent } from './views/about/about.component';
+import { ContactComponent } from './views/contact/contact.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 
 export const PUBLIC_ROUTES: Routes = [
-    // Route pour le login (sans layout)
   { 
     path: 'login', 
     component: LoginComponent // Pas de header/footer ici
@@ -16,7 +19,12 @@ export const PUBLIC_ROUTES: Routes = [
     component: PublicLayoutComponent, // Layout avec header/footer
     children: [
       { path: '', component: HomeComponent }, // http://localhost:4200/
-      // ... autres routes publiques (ex: 'about', 'contact')
+      { path: 'formations', component: FormationsComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'change-password', component: ChangePasswordComponent }
     ]
   }
 ];

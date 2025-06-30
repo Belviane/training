@@ -1,5 +1,4 @@
-
-<div class="layout-wrapper">
+<!-- <div class="layout-wrapper">
 
     <app-header></app-header>
     <app-sidebar></app-sidebar>
@@ -9,5 +8,20 @@
         <app-content></app-content>
         <app-footer></app-footer>
     </div>
-</div>
+</div> -->
 
+
+<div class="layout-wrapper">
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+    <app-sidebar
+    [isCollapsed]="isSidebarCollapsed" 
+  [isSidebarOpen]="isSidebarOpen"
+  (closeSidebar)="closeSidebar()"></app-sidebar>
+
+    <div class="main-content">
+        <div class="router-content"> <!-- Nouveau conteneur -->
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</div>

@@ -5,303 +5,93 @@
 -->
 <div *ngIf="isAdmin()">
   <div class="admin-dashboard">
-    
+
     <!-- Section Statistiques Utilisateurs -->
     <div class="stats-section">
       <h2><mat-icon>people</mat-icon> Statistiques Utilisateurs</h2>
-    </div>
-    <div class="add-learner-button">
-      <button mat-raised-button color="primary" (click)="openCompteModal()">
-        Ajouter Compte
-      </button>
-    </div>
-    <!-- Derniers comptes créés -->
-    <div class="recent-accounts">
-      <h2><mat-icon>list_alt</mat-icon> Derniers comptes créés</h2>
-      <div class="table-responsive">
-        <table class="accounts-table">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Date création</th>
-              <th>Statut</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let account of recentAccounts">
-              <td>{{account.name}}</td>
-              <td>{{account.email}}</td>
-              <td><span class="role-badge" [class]="account.role">{{account.role}}</span></td>
-              <td>{{account.createdAt | date:'dd/MM/yyyy'}}</td>
-              <td><span class="status-badge" [class]="account.status">{{account.status}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-    <!-- Métriques clés -->
-    <div class="metrics-section">
-      <h2><mat-icon>analytics</mat-icon> Métriques de Performance</h2>
-      <div class="metrics-grid">
-        <!-- Participation aux sessions -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>event_available</mat-icon>
-            <h3>Taux de participation</h3>
+      <!-- Cartes de statistiques utilisateur -->
+      <div class="stats-grid">
+        <div class="stat-card" *ngFor="let stat of userStats">
+          <div class="stat-icon" [ngClass]="stat.label.toLowerCase()">
+            <mat-icon>{{ stat.icon }}</mat-icon>
           </div>
-          <div class="metric-value">{{participationRate}}%</div>
-          <div class="progress-container">
-            <div class="progress-bar" [style.width]="participationRate + '%'"></div>
-          </div>
-          <div class="metric-details">
-            {{participantsCount}} participants / {{totalSeats}} places
-          </div>
-        </div>
-
-        <!-- Temps moyen sur plateforme -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>access_time</mat-icon>
-            <h3>Temps moyen</h3>
-          </div>
-          <div class="metric-value">{{averageTimeSpent}} min</div>
-          <div class="metric-details">
-            par utilisateur/jour
-          </div>
-          <div class="trend-indicator" [class.positive]="timeTrend === 'up'">
-            <mat-icon>{{timeTrend === 'up' ? 'trending_up' : 'trending_down'}}</mat-icon>
-            {{timeTrendValue}}%
-          </div>
-        </div>
-
-        <!-- Interaction avec contenu -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>touch_app</mat-icon>
-            <h3>Interactions</h3>
-          </div>
-          <div class="metric-value">{{contentInteractions}}</div>
-          <div class="metric-details">
-            interactions/mois
-          </div>
-          <div class="interaction-detail">
-            <span>Clics: {{clickCount}}</span>
-            <span>Quiz: {{quizCount}}</span>
-            <span>Commentaires: {{commentCount}}</span>
-          </div>
-        </div>
-
-        <!-- ROI -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>monetization_on</mat-icon>
-            <h3>ROI Formations</h3>
-          </div>
-          <div class="metric-value">{{roi}}%</div>
-          <div class="metric-details">
-            Retour sur investissement
-          </div>
-          <div class="roi-details">
-            Coût: {{trainingCost | currency}} | Bénéfice: {{trainingBenefit | currency}}
-          </div>
-        </div>
-
-        <!-- Utilisateurs actifs -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>group_work</mat-icon>
-            <h3>Utilisateurs Actifs</h3>
-          </div>
-          <div class="metric-value">{{monthlyActiveUsers}}</div>
-          <div class="metric-details">
-            utilisateurs/mois
-          </div>
-          <div class="chart-container">
-            <canvas #mauChart></canvas>
-          </div>
-        </div>
-
-        <!-- Amélioration compétences -->
-        <div class="metric-card">
-          <div class="metric-header">
-            <mat-icon>school</mat-icon>
-            <h3>Amélioration Compétences</h3>
-          </div>
-          <div class="metric-value">{{skillImprovement}}%</div>
-          <div class="progress-container">
-            <div class="progress-bar" [style.width]="skillImprovement + '%'"></div>
-          </div>
-          <div class="metric-details">
-            +{{skillImprovementValue}} pts vs début
+          <div class="stat-content">
+            <span class="stat-label">{{ stat.label }}</span>
+            <div class="stat-value">{{ stat.value }}</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  
-</div>
-
-<!-- 
-  =============================================
-  TABLEAU DE BORD FORMATEUR 
-  =============================================
--->
-<div *ngIf="isTrainer()" class="trainer-dashboard">
-  <!-- Section Bienvenue avec bouton d'ajout d'apprenant -->
-  <div class="welcome-card">
-    <div class="welcome-content">
-      <h2>Bonjour</h2>
-      <p>Voici votre activité aujourd'hui</p>
-    </div>
-    <div class="add-learner-button">
-      <button mat-raised-button color="primary" (click)="openAjouterModal()" type="button">
-        Ajouter Apprenant
-      </button>
-    </div>
-  </div>
-
-  <!-- Statistiques rapides sous forme de cartes -->
-  <div class="quick-stats">
-    <!-- Carte apprenants actifs -->
-    <div class="stat-card">
-      <mat-icon>group</mat-icon>
-      <div class="stat-info">
-        <span class="stat-value">24</span>
-        <span class="stat-label">Apprenants actifs</span>
-      </div>
-    </div>
-
-    <!-- Carte évaluations en attente -->
-    <div class="stat-card">
-      <mat-icon>assignment</mat-icon>
-      <div class="stat-info">
-        <span class="stat-value">5</span>
-        <span class="stat-label">Évaluations en attente</span>
-      </div>
-    </div>
-
-    <!-- Carte sessions aujourd'hui -->
-    <div class="stat-card">
-      <mat-icon>event_available</mat-icon>
-      <div class="stat-info">
-        <span class="stat-value">3</span>
-        <span class="stat-label">Sessions aujourd'hui</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Deux colonnes principales pour le contenu -->
-  <div class="main-content">
-    <!-- Colonne de gauche - Sessions et évaluations -->
-    <div class="left-column">
-      <!-- Liste des prochaines sessions -->
-      <div class="sessions-card">
-        <h3 class="section-title">
-          <mat-icon>event</mat-icon>
-          <span>Prochaines sessions</span>
-        </h3>
-        <div class="session-item" *ngFor="let session of upcomingSessions">
-          <div class="session-time">{{ session.time }}</div>
-          <div class="session-details">
-            <strong>{{ session.title }}</strong>
-            <span>{{ session.group }} - {{ session.location }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Liste des dernières évaluations -->
-      <div class="evaluations-card">
-        <h3 class="section-title">
-          <mat-icon>assignment_turned_in</mat-icon>
-          <span>Dernières évaluations</span>
-        </h3>
-        <div class="evaluation-item" *ngFor="let eval of recentEvaluations">
-          <div class="eval-icon"
-            [ngClass]="{'success': eval.status === 'completed', 'warning': eval.status === 'pending'}">
-            <mat-icon>{{ eval.status === 'completed' ? 'check_circle' : 'pending' }}</mat-icon>
-          </div>
-          <div class="eval-details">
-            <strong>{{ eval.learner }}</strong>
-            <span>{{ eval.test }} - {{ eval.date }}</span>
-          </div>
-          <div class="eval-grade" *ngIf="eval.grade">{{ eval.grade }}/20</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Colonne de droite - Activité récente -->
-    <div class="right-column">
-      <div class="activity-card">
-        <h3 class="section-title">
-          <mat-icon>timeline</mat-icon>
-          <span>Activité récente</span>
-        </h3>
-        <div class="activity-timeline">
-          <div class="timeline-item" *ngFor="let activity of recentActivities">
-            <div class="timeline-badge" [ngClass]="activity.type"></div>
-            <div class="timeline-content">
-              <p>{{ activity.description }}</p>
-              <small>{{ activity.time }}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
+
 
 <!-- 
   =============================================
   TABLEAU DE BORD SUPERVISEUR 
   =============================================
 -->
-<div *ngIf="isSupervisor()" class="form-container">
-  <h2>Ajouter une Formation</h2>
+<div *ngIf="isSupervisor()">
+  
+</div>
 
-  <!-- Formulaire d'ajout de formation -->
-  <form [formGroup]="formationForm" (ngSubmit)="onSubmit()">
-    <!-- Champ nom formation -->
-    <div>
-      <label>Nom Formation:</label>
-      <input formControlName="nom_formation" type="text">
-    </div>
 
-    <!-- Champ libellé formation -->
-    <div>
-      <label>Libellé Formation:</label>
-      <input formControlName="libelle_formation" type="text">
-    </div>
+<!-- 
+  =============================================
+  TABLEAU DE BORD FORMATEUR 
+  =============================================
+-->
+<div *ngIf="isTrainer()">
+  
+</div>
 
-    <!-- Champ date début -->
-    <div>
-      <label>Date Début:</label>
-      <input formControlName="date_debutf" type="date">
-    </div>
+<!-- 
+  =============================================
+  TABLEAU DE BORD APPRENANT 
+  =============================================
+-->
+<div *ngIf="isLearner()">
+  
+</div>
 
-    <!-- Champ date fin -->
-    <div>
-      <label>Date Fin:</label>
-      <input formControlName="date_finf" type="date">
-    </div>
 
-    <!-- Champ nombre de séances -->
-    <div>
-      <label>Nombre de Séances:</label>
-      <input formControlName="nombre_seancef" type="number" min="1">
-    </div>
+<!-- 
+  =============================================
+  TABLEAU DE BORD PARENT 
+  =============================================
+-->
+<div *ngIf="isParent()">
+  
+</div>
 
-    <!-- Boutons d'action -->
-    <div class="button-group">
-      <button type="submit" [disabled]="formationForm.invalid">Ajouter</button>
-      <button type="button" class="btn-secondary" (click)="openListeModal()">Voir Liste</button>
-    </div>
-  </form>
 
-  <!-- Messages de feedback -->
-  <div class="message success" *ngIf="successMessage">{{ successMessage }}</div>
-  <div class="message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+<!-- 
+  =============================================
+  TABLEAU DE BORD CAISSIER 
+  =============================================
+-->
+<div *ngIf="isCaissier()">
+  
+</div>
+
+
+<!-- 
+  =============================================
+  TABLEAU DE BORD AUDITEUR
+  =============================================
+-->
+<div *ngIf="isAuditeur()">
+  
+</div>
+
+
+<!-- 
+  =============================================
+  TABLEAU DE BORD VENDEUR 
+  =============================================
+-->
+<div *ngIf="isVendeur()">
+  
 </div>

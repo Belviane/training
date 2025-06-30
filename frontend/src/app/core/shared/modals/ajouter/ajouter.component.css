@@ -1,120 +1,73 @@
-/* ajouter.component.css */
-
-/* Style général du conteneur du modal */
-:host {
-    display: block;
-    padding: 24px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.form-container {
+  padding: 20px;
+  background-color: #FFFFFF; /* fond blanc */
+  color: #000000; /* texte noir */
+  border-radius: 8px;
 }
 
-/* Titre */
-h2 {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #222222;
-    font-size: 1.5rem;
-    font-weight: 400;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eeeeee;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-/* Champ de formulaire */
 mat-form-field {
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-/* Input */
-.mat-mdc-text-field-wrapper {
-    background-color: #f5f5f5 !important;
-    border-radius: 4px !important;
-}
-
-/* Label */
-.mat-mdc-form-field-label {
-    color: #555555 !important;
-}
-
-/* Input text */
-.mat-mdc-input-element {
-    color: #333333 !important;
-}
-
-/* Message d'erreur */
-.error-message {
-    color: #d32f2f;
-    margin-bottom: 1rem;
-    padding: 8px 12px;
-    background-color: #fde8e8;
-    border-radius: 4px;
-    font-size: 0.9rem;
-
-
-
-
-    color: #010101
-#222222
-#B6B6B6
-#EFEF57
-#E7ED7F
-#CCBC6E
-#AAA009
-#E0DB5A
-#F3EE3B
-#2D2D2B
-#B4A37F
-#9A9A9A
-#353535
-#EDEC38
-}
-
-/* Boutons */
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-/* Bouton Annuler */
-button[mat-button] {
-    color: #666666;
-    border: 1px solid #dddddd;
-}
-
-/* Bouton Inscrire */
-button[mat-raised-button] {
-    background-color: #3f51b5;
-    color: white;
-}
-
-/* Bouton Inscrire - état hover */
-button[mat-raised-button]:hover {
-    background-color: #303f9f;
-}
-
-/* Bouton désactivé */
-button[disabled] {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-
-/* Style pour le select */
-mat-select {
   width: 100%;
 }
 
-/* Style pour les options */
-.mat-option {
-  padding: 8px 16px;
+mat-form-field .mat-form-field-underline {
+  background-color: #EFEF57; /* jaune clair */
 }
 
-/* Style pour le panel des options */
-.mat-select-panel {
-  border-radius: 4px !important;
-  margin-top: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #B8860B; /* or foncé */
+}
+
+mat-label, mat-option {
+  color: #000000 !important; /* texte noir */
+}
+
+.mat-select-value {
+  color: #000000;
+}
+
+input.mat-input-element, 
+.mat-input-element, 
+.mat-select {
+  color: #000000;
+  background-color: transparent;
+}
+
+::placeholder {
+  color: #B6B6B6;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #B8860B;
+}
+
+mat-error {
+  color: #B8860B !important; /* erreurs en or foncé */
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Boutons */
+button[mat-button] {
+  color: #B8860B;
+}
+
+button[mat-raised-button] {
+  background-color: #B8860B; /* or */
+  color: #FFFFFF; /* texte blanc */
+}
+
+button[mat-raised-button]:hover {
+  background-color: #EFEF57; /* jaune clair au hover */
+  color: #000000; /* texte noir */
 }

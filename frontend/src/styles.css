@@ -1,14 +1,195 @@
-/* You can add global styles to this file, and also import other style files */
+/* styles.css */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
+:root {
+  --header-height: 50px;
+  --sidebar-width: 200px;
+  --primary-color: #D4ED30;
+  --secondary-color: #010101;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --medium-gray: #ccc;
+  --dark-gray: #666;
+  --white: #fff;
+  --black: #000;
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --toast-duration: 3000ms; /* Réduction du temps d'affichage à 3 secondes */
+}
 
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Animation plus douce pour le scroll */
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Styles pour les toasts - version moderne comme sur l'image */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  max-width: 350px;
+  z-index: 999999;
+  animation-duration: var(--toast-duration);
+}
+
+.toast {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 15px;
+  padding: 15px 20px 15px 50px;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: white;
+  opacity: 0;
+  font-family: var(--font-main);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.toast-success {
+  background-color: #4CAF50;
+  border-left: 5px solid #2E7D32;
+}
+
+.toast-error {
+  background-color: #F44336;
+  border-left: 5px solid #C62828;
+}
+
+.toast-info {
+  background-color: #2196F3;
+  border-left: 5px solid #1565C0;
+}
+
+.toast-warning {
+  background-color: #FF9800;
+  border-left: 5px solid #EF6C00;
+}
+
+.toast:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Material Icons';
+  font-size: 24px;
+}
+
+.toast-success:before {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.toast-error:before {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.toast-info:before {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.toast-warning:before {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.toast-message {
+  padding-left: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 100%;
+  animation: progressBar var(--toast-duration) linear forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 0.95; transform: translateY(0); }
+}
+
+@keyframes progressBar {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+/* Pour réduire la durée des toasts dans ngx-toastr */
+.toast {
+  animation-duration: var(--toast-duration);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  #toast-container {
+    width: 90%;
+    max-width: none;
+    left: 5%;
+    right: 5%;
+    top: 10px;
+  }
+  
+  .toast {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Autres styles globaux... */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Media Queries de base */
+@media (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+}

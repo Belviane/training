@@ -31,6 +31,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'login',
+        'login',
         'is_active',
         'verification_code',
         'email_verified',
@@ -47,6 +48,8 @@ class User extends Authenticatable
         //'mdp',
         'remember_token',
     ];
+
+    
 
 
     public function role(): BelongsTo

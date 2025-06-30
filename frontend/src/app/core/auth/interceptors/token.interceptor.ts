@@ -1,34 +1,25 @@
-import { Injectable } from "@angular/core";
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { inject } from "@angular/core";
+import { HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from "../services/auth.services";
-import { catchError } from 'rxjs/operators';
-import { throwError, Observable  } from 'rxjs';
-import { Router } from "@angular/router";
 
-@Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token');
-    let clonedRequest = request;
-
-    if (token) {
-      clonedRequest = request.clone({
-        headers: request.headers.set('Authorization', `Bearer ${token}`)
-      });
-    }
-
-    return next.handle(clonedRequest).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          // Token invalide ou expiré : logout + redirection login
-          this.authService.logout();
-          this.router.navigate(['/login']);
-        }
-        return throwError(() => error);
-      })
-    );
+  // Ne pas ajouter le token pour les routes sanctum
+  if (req.url.includes('/sanctum/csrf-cookie') || req.url.includes('/login')) {
+    return next(req); // Pas besoin de token
   }
-}
+  
+  if (token) {
+    const authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+    return next(authReq);
+  }
+  return next(req);
+};

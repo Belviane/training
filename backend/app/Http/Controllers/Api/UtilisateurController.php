@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-//use Illuminate\Routing\Controller;
-
-use App\Http\Controllers\Controller; 
+use Illuminate\Routing\Controller;
+use App\Mail\EnvoiIdentifiants;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,15 +40,27 @@ class UtilisateurController extends Controller
         }
     }
     // Liste utilisateurs hors administrateurs
-    public function index()
+    public function index(Request $request)
     {
         $this->checkAdminOrSuperviseur();
         $adminRoleId = DB::table('roles')->where('libelle', 'administrateur')->value('id');
 
         $perPage = $request->input('per_page', 10);
 
-        $query = DB::table('utilisateurs')
-            ->where('role_id', '!=', $adminRoleId);
+        $query = User::with([
+            'administrateur',
+            'superviseur',
+            'formateur',
+            'apprenant',
+            'parents',
+            'caissier',
+            'auditeur',
+            'vendeur'
+        ])->where('role_id', '!=', $adminRoleId);
+
+
+        // $query = DB::table('utilisateurs')
+        //     ->where('role_id', '!=', $adminRoleId);
 
         if ($request->filled('nom')) {
             $query->where('nom', 'like', '%' . $request->input('nom') . '%');
@@ -86,6 +97,10 @@ class UtilisateurController extends Controller
 
         // Génération login unique (exemple simple)
         $login = Str::slug($request->prenom . '.' . $request->nom);
+        // Assurez-vous que ce login est unique
+        while (User::where('login', $login)->exists()) {
+            $login = Str::slug($request->prenom . '.' . $request->nom) . rand(100, 999);
+        }
 
         // Génération mot de passe temporaire aléatoire
         $motDePasse = Str::random(10);
@@ -288,5 +303,3 @@ class UtilisateurController extends Controller
 
 
 }
-
-

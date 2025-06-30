@@ -11,14 +11,146 @@
 }
 
 /* 
+  ===========================================
+Styles pour les badges de rôle - Version CSS
+  ===========================================
+*/
+
+/* Vendeur */
+.stat-card .stat-icon.vendeur {
+  background: rgba(255, 215, 0, 0.1);
+  color: #FFD700;
+}
+.stat-card .stat-icon.vendeur mat-icon {
+  color: #FFD700;
+}
+.stat-card .stat-value.vendeur {
+  color: #FFD700;
+}
+.role-badge.vendeur {
+  background: #FFD700;
+  color: #2c3e50;
+}
+
+/* Superviseur */
+.stat-card .stat-icon.superviseur {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+.stat-card .stat-icon.superviseur mat-icon {
+  color: #4CAF50;
+}
+.stat-card .stat-value.superviseur {
+  color: #4CAF50;
+}
+.role-badge.superviseur {
+  background: #4CAF50;
+  color: white;
+}
+
+/* Formateur */
+.stat-card .stat-icon.formateur {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+.stat-card .stat-icon.formateur mat-icon {
+  color: #2196F3;
+}
+.stat-card .stat-value.formateur {
+  color: #2196F3;
+}
+.role-badge.formateur {
+  background: #2196F3;
+  color: white;
+}
+
+/* Apprenant */
+.stat-card .stat-icon.apprenant {
+  background: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+.stat-card .stat-icon.apprenant mat-icon {
+  color: #9C27B0;
+}
+.stat-card .stat-value.apprenant {
+  color: #9C27B0;
+}
+.role-badge.apprenant {
+  background: #9C27B0;
+  color: white;
+}
+
+/* Parent (même couleur que Apprenant) */
+.stat-card .stat-icon.parent {
+  background: rgba(156, 39, 176, 0.1);
+  color: #9C27B0;
+}
+.stat-card .stat-icon.parent mat-icon {
+  color: #9C27B0;
+}
+.stat-card .stat-value.parent {
+  color: #9C27B0;
+}
+.role-badge.parent {
+  background: #9C27B0;
+  color: white;
+}
+
+/* Caissier */
+.stat-card .stat-icon.caissier {
+  background: rgba(13, 148, 136, 0.1);
+  color: #0d9488;
+}
+.stat-card .stat-icon.caissier mat-icon {
+  color: #0d9488;
+}
+.stat-card .stat-value.caissier {
+  color: #0d9488;
+}
+.role-badge.caissier {
+  background: #0d9488;
+  color: white;
+}
+
+/* Auditeur */
+.stat-card .stat-icon.auditeur {
+  background: rgba(71, 85, 105, 0.1);
+  color: #475569;
+}
+.stat-card .stat-icon.auditeur mat-icon {
+  color: #475569;
+}
+.stat-card .stat-value.auditeur {
+  color: #475569;
+}
+.role-badge.auditeur {
+  background: #475569;
+  color: white;
+}
+
+/* Styles communs */
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.05);
+}
+
+/* 
   =============================================
   STYLES ADMINISTRATEUR 
   =============================================
 */
 .admin-dashboard {
   padding: 20px;
-  margin-left: 260px;
-  margin-top: 80px;
   min-height: calc(100vh - 160px);
   transition: margin 0.3s ease;
   background-color: #f8f9fa;
@@ -48,7 +180,7 @@
   color: #FFD700; /* Jaune or */
 }
 
-/* Section Statistiques Utilisateurs */
+/* Version alternative avec couleurs douces */
 .stats-section {
   background: white;
   border-radius: 10px;
@@ -60,37 +192,42 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  gap: 10px;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  padding: 15px;
+  padding: 10px;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  min-height: 80px;
+  border: 1px solid #f0f0f0;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .stat-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
-  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 20px;
+  transition: all 0.3s ease;
 }
 
 .stat-icon mat-icon {
-  font-size: 24px;
+  font-size: 28px !important;
+  width: 28px;
+  height: 28px;
+  font-weight: 500;
 }
 
 .stat-content {
@@ -98,23 +235,165 @@
 }
 
 .stat-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 500;
 }
 
 .stat-label {
-  font-size: 0.9rem;
-  color: #7f8c8d;
+  font-size: 0.90rem;
+  font-weight: 400;
+  color: #64748b;
+  display: block;
+}
+
+/* Couleurs douces avec icônes colorées */
+.stat-card .stat-icon.administrateurs {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.stat-card .stat-icon.administrateurs mat-icon {
+  color: #dc2626;
+}
+
+.stat-card .stat-value {
+  color: #dc2626;
+}
+
+.stat-card .stat-icon.superviseurs {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.stat-card .stat-icon.superviseurs mat-icon {
+  color: #d97706;
+}
+
+.stat-card:nth-child(2) .stat-value {
+  color: #d97706;
+}
+
+.stat-card .stat-icon.formateurs {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.stat-card .stat-icon.formateurs mat-icon {
+  color: #2563eb;
+}
+
+.stat-card:nth-child(3) .stat-value {
+  color: #2563eb;
+}
+
+.stat-card .stat-icon.apprenants {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.stat-card .stat-icon.apprenants mat-icon {
+  color: #16a34a;
+}
+
+.stat-card:nth-child(4) .stat-value {
+  color: #16a34a;
+}
+
+.stat-card .stat-icon.parents {
+  background: rgba(168, 85, 247, 0.1);
+  color: #9333ea;
+}
+
+.stat-card .stat-icon.parents mat-icon {
+  color: #9333ea;
+}
+
+.stat-card:nth-child(5) .stat-value {
+  color: #9333ea;
+}
+
+.stat-card .stat-icon.caissiers {
+  background: rgba(20, 184, 166, 0.1);
+  color: #0d9488;
+}
+
+.stat-card .stat-icon.caissiers mat-icon {
+  color: #0d9488;
+}
+
+.stat-card:nth-child(6) .stat-value {
+  color: #0d9488;
+}
+
+.stat-card .stat-icon.auditeurs {
+  background: rgba(100, 116, 139, 0.1);
+  color: #475569;
+}
+
+.stat-card .stat-icon.auditeurs mat-icon {
+  color: #475569;
+}
+
+.stat-card:nth-child(7) .stat-value {
+  color: #475569;
+}
+
+/* Animation au survol */
+.stat-card:hover .stat-icon {
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-card {
+    min-height: 70px;
+    padding: 15px;
+  }
+  
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+  }
+  
+  .stat-icon mat-icon {
+    font-size: 24px !important;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
 }
 
 /* Tableau des derniers comptes */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-count {
+  background: #FFD700;
+  color: #2c3e50;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Styles pour le tableau des comptes récents */
 .recent-accounts {
+  margin-top: 30px;
   background: white;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  margin-bottom: 30px;
 }
 
 .accounts-table {
@@ -136,33 +415,41 @@
   border-bottom: 1px solid #eee;
 }
 
+/* Badges pour les rôles */
 .role-badge {
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.8rem;
   font-weight: 500;
+  display: inline-block;
 }
 
-.role-badge.Admin {
-  background: #FFD700;
+.role-badge.administrateur {
+  background: #dc2626;
   color: #333;
 }
 
-.role-badge.Supervisor {
-  background: #4CAF50;
+.role-badge.superviseur {
+  background: #d97706;
   color: white;
 }
 
-.role-badge.Trainer {
+.role-badge.formateur {
   background: #2196F3;
   color: white;
 }
 
-.role-badge.Parent, .role-badge.Learner {
-  background: #9C27B0;
+.role-badge.apprenant {
+  background: #16a34a;
   color: white;
 }
 
+.role-badge.parent {
+  background: #9333ea;
+  color: white;
+}
+
+/* Badges pour les statuts */
 .status-badge {
   padding: 4px 8px;
   border-radius: 4px;
@@ -180,11 +467,6 @@
   color: white;
 }
 
-.status-badge.pending {
-  background: #FFC107;
-  color: #333;
-}
-
 /* Métriques de performance */
 .metrics-section {
   background: white;
@@ -197,7 +479,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  margin-top: 20px;
 }
 
 .metric-card {
@@ -260,7 +541,6 @@
   display: flex;
   align-items: center;
   font-size: 0.9rem;
-  margin-top: 10px;
 }
 
 .trend-indicator.positive {
@@ -280,7 +560,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .interaction-detail span {
@@ -292,14 +571,12 @@
 
 .roi-details {
   font-size: 0.8rem;
-  margin-top: 10px;
   padding-top: 10px;
   border-top: 1px dashed #eee;
 }
 
 .chart-container {
   height: 100px;
-  margin-top: 15px;
 }
 
 /* Responsive */
@@ -321,7 +598,6 @@
   .admin-dashboard {
     margin-left: 0;
     padding: 15px;
-    margin-top: 60px;
   }
   
   .stats-grid, .metrics-grid {
@@ -332,428 +608,13 @@
 /* 
   =============================================
   STYLES FORMATEUR 
-  (conservés tels quels car déjà bien structurés)
   =============================================
 */
-/* Base styles - respect de la charte graphique */
-.trainer-dashboard {
-  padding: 20px;
-  color: #222222;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: 260px;
-  /* Correspond à la largeur du sidebar */
-  margin-top: 60px;
-  /* Hauteur du header */
-  min-height: calc(100vh - 120px);
-  /* 100vh - header - footer */
-  transition: margin 0.3s ease;
-}
-
-.add-learner-button {
-  margin-bottom: 1.5rem;
-  text-align: right;
-}
-
-.add-learner-button button {
-  background-color: #E0DB5A;
-  /* Couleur btn-primary de votre charte */
-  border: 1px solid #E0DB5A;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(230, 212, 14, 0.4);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.add-learner-button button:hover {
-  background-color: #7c7a23;
-  /* Couleur btn-primary:hover */
-  border-color: #7c7a23;
-  box-shadow: 0 5px 10px rgba(230, 212, 14, 0.4);
-}
-
-.add-learner-button button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(230, 212, 14, 0.4);
-}
-
-
-/* Carte de bienvenue */
-.welcome-card {
-  background-color: #FFF8D6;
-  border-left: 4px solid #E0DB5A;
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.welcome-content h2 {
-  margin: 0;
-  color: #222222;
-  font-size: 1.5rem;
-}
-
-.welcome-content p {
-  margin: 5px 0 0;
-  color: #555555;
-}
-
-.date-display {
-  background-color: #FFFFFF;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-weight: 500;
-  color: #222222;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Statistiques rapides */
-.quick-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.stat-card {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.stat-card mat-icon {
-  color: #CCBC6E;
-  font-size: 36px;
-  margin-right: 15px;
-}
-
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #222222;
-}
-
-.stat-label {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-/* Contenu principal */
-.main-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.left-column,
-.right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Cartes de section */
-.sessions-card,
-.evaluations-card,
-.activity-card {
-  background: #FFFFFF;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #222222;
-}
-
-.section-title mat-icon {
-  color: #CCBC6E;
-  margin-right: 10px;
-}
-
-/* Sessions */
-.session-item {
-  display: flex;
-  padding: 12px 0;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.session-item:last-child {
-  border-bottom: none;
-}
-
-.session-time {
-  min-width: 100px;
-  font-weight: 500;
-  color: #222222;
-}
-
-.session-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.session-details strong {
-  color: #222222;
-}
-
-.session-details span {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-/* Évaluations */
-.evaluation-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.evaluation-item:last-child {
-  border-bottom: none;
-}
-
-.eval-icon {
-  margin-right: 15px;
-}
-
-.eval-icon.success mat-icon {
-  color: #4CAF50;
-}
-
-.eval-icon.warning mat-icon {
-  color: #FFC107;
-}
-
-.eval-details {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.eval-details strong {
-  color: #222222;
-}
-
-.eval-details span {
-  color: #555555;
-  font-size: 0.9rem;
-}
-
-.eval-grade {
-  font-weight: 600;
-  color: #222222;
-}
-
-/* Activité */
-.timeline-item {
-  display: flex;
-  margin-bottom: 15px;
-}
-
-.timeline-badge {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  margin-right: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeline-badge.evaluation {
-  background-color: #FFF3E0;
-}
-
-.timeline-badge.session {
-  background-color: #E8F5E9;
-}
-
-.timeline-badge.message {
-  background-color: #E3F2FD;
-}
-
-.timeline-badge.resource {
-  background-color: #F3E5F5;
-}
-
-.timeline-badge mat-icon {
-  font-size: 16px;
-  color: #555555;
-}
-
-.timeline-content {
-  flex-grow: 1;
-}
-
-.timeline-content p {
-  margin: 0;
-  color: #222222;
-}
-
-.timeline-content small {
-  color: #777777;
-  font-size: 0.8rem;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .trainer-dashboard {
-    margin-left: 80px;
-  }
-
-  .main-content {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .trainer-dashboard {
-    margin-left: 0;
-    padding: 15px;
-  }
-
-  .quick-stats {
-    grid-template-columns: 1fr;
-  }
-}
-
 
 
 
 /* 
   =============================================
   STYLES SUPERVISEUR 
-  (conservés tels quels car déjà bien structurés)
   =============================================
 */
-.form-container {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 25px;
-  border-radius: 10px;
-  background-color: #FFF8D6; /* même fond que welcome-card */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #E0DB5A; /* même style que welcome-card */
-  color: #222222;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.form-container h2 {
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-  color: #222222;
-  border-bottom: 1px solid #E0DB5A;
-  padding-bottom: 10px;
-}
-
-.form-container label {
-  display: block;
-  margin-top: 15px;
-  font-weight: 600;
-  color: #222222;
-}
-
-.form-container input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  border-radius: 6px;
-  border: 1px solid #CCBC6E;
-  background-color: #ffffff;
-  color: #222222;
-  font-size: 0.95rem;
-}
-
-.form-container input:focus {
-  outline: none;
-  border-color: #E0DB5A;
-  box-shadow: 0 0 5px rgba(224, 219, 90, 0.5);
-}
-
-.form-container button {
-  margin-top: 25px;
-  width: 100%;
-  padding: 12px;
-  background-color: #E0DB5A; /* même couleur que boutons primaires */
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(230, 212, 14, 0.4);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-container button:hover {
-  background-color: #7c7a23;
-  box-shadow: 0 5px 10px rgba(230, 212, 14, 0.4);
-}
-
-.form-container button:disabled {
-  background-color: #c5c278;
-  cursor: not-allowed;
-}
-
-.message {
-  margin-top: 20px;
-  padding: 12px;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.success {
-  background-color: #eaf4d4;
-  color: #4b743d;
-}
-
-.error {
-  background-color: #fae3e3;
-  color: #9d2b2b;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn-secondary {
-  padding: 12px;
-  background-color: #ffffff;
-  color: #222222;
-  border: 1px solid #E0DB5A;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background-color: #f5f2ce;
-}
-
-
-

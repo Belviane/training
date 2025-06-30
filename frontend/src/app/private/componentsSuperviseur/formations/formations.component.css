@@ -1,0 +1,41 @@
+.table-container {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.mat-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+}
+
+.mat-cell {
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .mat-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-table {
+    min-width: 400px;
+  }
+  .mat-header-cell, .mat-cell {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 320px) {
+  .mat-table {
+    min-width: 300px;
+  }
+  .mat-header-cell, .mat-cell {
+    padding: 3px;
+  }
+}

@@ -1,113 +1,485 @@
+/* ==========================================================
+  VARIABLES DE COULEURS
+  ========================================================== */
+:root {
+  --primary-black: #010101;
+  --dark-gray: #222222;
+  --medium-gray: #B6B6B6;
+  --primary-yellow: #EFEF57;
+  --light-yellow: #E7ED7F;
+  --gold: #CCBC6E;
+  --dark-yellow: #AAA009;
+  --bright-yellow: #E0DB5A;
+  --neon-yellow: #F3EE3B;
+  --dark-brown: #2D2D2B;
+  --light-brown: #B4A37F;
+  --light-gray: #9A9A9A;
+  --charcoal: #353535;
+  --yellow-accent: #EDEC38;
+}
+
+/* ==========================================================
+  RESET & BASE
+  ========================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  padding-top: 80px; /* Compensation pour le header fixe */
+}
+
+/* ==========================================================
+  HEADER PRINCIPAL
+  ========================================================== */
 .site-header {
   width: 100%;
-}
-
-#navbar {
-  background-color: #010101;
-  padding: 15px 0;
+  position: fixed;
   top: 0;
-  width: 100%;
+  left: 0;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(34, 34, 34, 0.08);
+  animation: fadeInUp 0.6s ease-out;
 }
 
+/* ==========================================================
+  NAVBAR
+  ========================================================== */
+#navbar {
+  background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(239, 239, 87, 0.1);
+  padding: 12px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navbar lors du scroll */
+#navbar.scrolled {
+  padding: 8px 0;
+  background: #000;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================
+  CONTAINER CENTRALISÉ
+  ========================================================== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
-.logo-link {
+/* ==========================================================
+  LOGO & TITRE
+  ========================================================== */
+.logo-section {
   display: flex;
   align-items: center;
-  gap: 10px;
-  text-decoration: none;
+  gap: 12px;
+  transition: transform 0.3s ease;
+  z-index: 1001;
 }
 
 .logo-img {
-  height: 100px;
-  width: 100px;           /* Ajoutez cette ligne pour forcer un format carré */
-  object-fit: cover;     /* Pour que le logo remplisse bien le cercle */
-  background: #222222;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-yellow);
+  transition: all 0.3s ease;
 }
+
+.logo-img:hover {
+  border-color: var(--neon-yellow);
+  box-shadow: 0 0 15px rgba(239, 239, 87, 0.3);
+}
+
+.logo-section:hover {
+  transform: translateY(-2px);
+}
+.logo-section:hover .logo-img {
+  transform: scale(1.05);
+}
+
 
 .site-title {
-  color: #EFEF57;
-  font-weight: bold;
-  font-size: 1.5rem;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 0 #222222;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
 }
 
+.site-name {
+  color: var(--primary-yellow);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.site-subtitle {
+  color: var(--gold);
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* Changement de couleur lors du scroll */
+#navbar.scrolled .site-name {
+  color: #ffffff;
+}
+
+#navbar.scrolled .site-subtitle {
+  color: #f0f0f0;
+}
+
+/* ==========================================================
+  MENU HAMBURGER (MOBILE)
+  ========================================================== */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1002;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--primary-black);
+  border-radius: 2px;
+  transition:  all 0.3s ease;
+  transform-origin: center;
+  margin: 3px 0;
+}
+
+/* Quand la navbar a scrollé (fond sombre) */
+#navbar.scrolled .menu-toggle span {
+  background: white; /* Blanc sur fond noir */
+}
+
+
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+
+
+/* ==========================================================
+  MENU PRINCIPAL (DESKTOP)
+  ========================================================== */
 .main-menu {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.main-menu a {
-  color: #222222;
-  text-decoration: none;
-  font-weight: 500;
-  padding-bottom: 4px;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.3s;
-}
 
-.main-menu a.active {
-  border-bottom-color: #EFEF57; /* Soulignement jaune */
-  font-weight: 700;
-  color: #010101;
+.main-menu li {
+  position: relative;
 }
 
 .main-menu li a {
-  color: #E7ED7F;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.08rem;
-  transition: color 0.2s;
-  padding: 6px 10px;
-  border-radius: 3px;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+/* Couleurs lors du scroll */
+#navbar.scrolled .main-menu li a {
+  color: #ffffff;
+}
+
+#navbar.scrolled .main-menu li a:hover,
+#navbar.scrolled .main-menu li a:focus {
+  color: var(--primary-yellow);
+}
+
+#navbar.scrolled .main-menu li a.active {
+  color: var(--primary-yellow);
+}
+
+/* Effet brillance sur hover */
+.main-menu li a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(242, 242, 11, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.main-menu li a:hover::before {
+  left: 100%;
 }
 
 .main-menu li a:hover,
 .main-menu li a:focus {
-  color: #AAA009;
-  background: #222222;
-  border-bottom-color: #EDEC38;
+  color: var(--primary-yellow);
+  background: rgba(239, 239, 87, 0.1);
+  transform: translateY(-2px);
 }
 
-.btn-login {
-  background-color: #EFEF57; /* Uniformisez ici */
-  color: #010101;
-  padding: 8px 20px;
-  border-radius: 4px;
-  font-weight: bold;
+.main-menu li a.active {
+  color: var(--primary-yellow);
+  background: rgba(241, 241, 3, 0.765);
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(251, 251, 57, 0.2);
+}
+
+.main-menu li a i {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* ==========================================================
+  ACTIONS HEADER (BOUTONS)
+  ========================================================== */
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Boutons génériques */
+.btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
   text-decoration: none;
-  box-shadow: 0 2px 6px rgba(204, 188, 110, 0.08);
-  transition: background 0.2s, color 0.2s;
-  border: 1px solid #EFEF57; /* Uniformisez ici aussi */
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
 }
 
-.btn-login:hover,
-.btn-login:focus {
-  background-color: #EDEC38; /* Vous pouvez garder ce hover plus clair si vous voulez un effet, ou mettre aussi #EFEF57 */
-  color: #2D2D2B;
-  border-color: #AAA009;
+/* Boutons lors du scroll */
+#navbar.scrolled .btn {
+  color: #fff;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-@media (max-width: 900px) {
-  .container {
-    flex-direction: column;
-    gap: 15px;
+#navbar.scrolled .btn-primary {
+  background: linear-gradient(135deg, #fff700 0%, #f3ee3b 100%);
+  color: #010101;
+  border-color: #fff700;
+}
+
+#navbar.scrolled .btn-outline {
+  color: #fff;
+  border-color: #fff;
+  background: transparent;
+}
+
+/* Effet brillance bouton */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(230, 219, 8, 0.854), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Bouton outline */
+.btn-outline {
+  color: var(--primary-yellow); /* ou var(--primary-yellow) si fond clair */
+  border-color: var(--primary-black); 
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: var(--primary-yellow);
+  color: var(--primary-black);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(228, 228, 4, 0.842);
+}
+
+/* Bouton principal */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--bright-yellow) 100%);
+  color: var(--primary-black);
+  border-color: var(--primary-yellow);
+  background-size: 200% auto;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--neon-yellow) 0%, var(--primary-yellow) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 239, 87, 0.879);
+}
+
+/* ==========================================================
+  MENU PRINCIPAL (RESPONSIVE) - REMPLACEZ LES DEUX BLOCS EXISTANTS
+  ========================================================== */
+.main-menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+  
+  .menu-toggle {
+    display: flex;
   }
+
+  /* Ajustement pour petit écran */
+  .menu-toggle span {
+    width: 22px;
+    margin: 3px 0;
+  }
+
   .main-menu {
-    gap: 18px;
+    position: fixed;
+    top: 70px;
+    /* Ajustez selon la hauteur de votre header */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 20px 15px;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    z-index: 999;
+    display: flex;
+    /* Important: doit être flex même quand caché */
   }
-  .logo-img {
-    height: 60px;
+
+  .main-menu.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .main-menu li {
+    width: 100%;
+    color: white;
+  }
+
+  .main-menu li a {
+    justify-content: center;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    background: rgba(234, 234, 221, 0.05);
+    border: 1px solid rgba(212, 212, 17, 0.906);
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Styles pour desktop */
+@media (min-width: 769px) {
+  .main-menu {
+    display: flex;
+    position: static;
+    background: transparent;
+    backdrop-filter: none;
+    height: auto;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+}
+/* ==========================================================
+  CORRECTION OVERFLOW QUAND MENU OUVERT
+  ========================================================== */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* ==========================================================
+  ACCESSIBILITÉ
+  ========================================================== */
+.menu-toggle:focus-visible,
+.main-menu li a:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--neon-yellow);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================
+  ANIMATIONS
+  ========================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

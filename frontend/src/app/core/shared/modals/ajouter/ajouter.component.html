@@ -1,40 +1,82 @@
-<h2>Ajouter un Apprenant à une formation</h2>
+<div class="form-container">
+  <h2 mat-dialog-title>{{ data.user ? 'Modifier' : 'Créer' }} un utilisateur</h2>
 
-<form [formGroup]="inscriptionForm" (ngSubmit)="submit()">
-    <!-- Sélection de la formation -->
-    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 1rem;">
-        <mat-label>Formation</mat-label>
-        <mat-select formControlName="formation_id" required>
-            <mat-option *ngIf="isLoadingFormations" disabled>Chargement des formations...</mat-option>
-            <mat-option *ngFor="let formation of formations" [value]="formation.id">
-                {{ formation.nom_formation }} - {{ formation.libelle_formation }}
-            </mat-option>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" mat-dialog-content>
+    <div class="form-grid">
+      <!-- Rôle -->
+      <mat-form-field appearance="outline">
+        <mat-label>Rôle</mat-label>
+        <mat-select formControlName="role_id" required>
+          <mat-option *ngFor="let role of rolesList" [value]="role.id">
+            {{ role.label }}
+          </mat-option>
         </mat-select>
-        <mat-error *ngIf="inscriptionForm.get('formation_id')?.hasError('required')">
-            La formation est obligatoire
+        <mat-error *ngIf="userForm.get('role_id')?.hasError('required')">
+          Ce champ est obligatoire
         </mat-error>
-    </mat-form-field>
+      </mat-form-field>
 
-    <!-- ID de l'apprenant -->
-    <mat-form-field appearance="fill" style="width: 100%;">
-        <mat-label>Identifiant Apprenant</mat-label>
-        <input matInput formControlName="apprenant_id" placeholder="Entrez l'ID de l'apprenant" type="number" />
-        <mat-error *ngIf="inscriptionForm.get('apprenant_id')?.hasError('required')">
-            Ce champ est obligatoire
+      <!-- Nom -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom" required />
+        <mat-error *ngIf="userForm.get('nom')?.hasError('required')">
+          Ce champ est obligatoire
         </mat-error>
-        <mat-error *ngIf="inscriptionForm.get('apprenant_id')?.hasError('min')">
-            L'ID doit être supérieur à 0
-        </mat-error>
-    </mat-form-field>
+      </mat-form-field>
 
-    <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
+      <!-- Prénom -->
+      <mat-form-field appearance="outline">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="prenom" required />
+        <mat-error *ngIf="userForm.get('prenom')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Genre -->
+      <mat-form-field appearance="outline">
+        <mat-label>Genre</mat-label>
+        <mat-select formControlName="genre" required>
+          <mat-option value="Masculin">Masculin</mat-option>
+          <mat-option value="Feminin">Féminin</mat-option>
+          <mat-option value="Autre">Autre</mat-option>
+        </mat-select>
+        <mat-error *ngIf="userForm.get('genre')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Date de naissance -->
+      <mat-form-field appearance="outline">
+        <mat-label>Date de naissance</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date_naissance" required />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="userForm.get('date_naissance')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required />
+        <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+        <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+          Email invalide
+        </mat-error>
+      </mat-form-field>
     </div>
 
-    <div class="actions">
-        <button mat-button type="button" (click)="close()">Annuler</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting || inscriptionForm.invalid">
-            {{ isSubmitting ? 'En cours...' : 'Inscrire' }}
-        </button>
+    <div mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Annuler</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid || isLoading">
+        <span *ngIf="!isLoading">{{ data.user ? 'Modifier' : 'Créer' }}</span>
+        <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+      </button>
     </div>
-</form>
+  </form>
+</div>

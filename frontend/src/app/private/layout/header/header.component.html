@@ -1,18 +1,85 @@
 <header class="main-header">
   <div class="header-left">
-    <img src="/assets/logo.png" class="header-logo" alt="BE I.T Logo"/>
-    <span class="current-date">{{ currentDate | date:' d MMMM y' }}</span>
+    <img src="/assets/logo.png" class="header-logo" alt="BE I.T Logo" />
+    <span class="current-date">
+      {{ currentDate | date:' d MMMM y' : 'fr' }}
+    </span>
   </div>
+
+  <button class="menu-toggle" (click)="onToggleSidebar()">
+    <mat-icon>menu</mat-icon>
+  </button>
 
   <div class="header-center">
     <h1 class="site-title">BE I.T CLASSROOM</h1>
   </div>
 
+  <div class="mode-system">
+    <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
+      <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
+    </button>
+
+    <mat-menu #themeMenu="matMenu">
+      @for (theme of themeService.getThemes(); track theme.name) {
+      <button mat-menu-item (click)="themeService.setTheme(theme.name)">
+        <mat-icon>{{ theme.icon }}</mat-icon>
+        <span>{{ theme.name | titlecase }}</span>
+      </button>
+      }
+    </mat-menu>
+  </div>
+
   <div class="header-right">
     <div class="notification-wrapper" (click)="toggleNotifications()">
+      <mat-icon fontIcon="notifications"></mat-icon>
+      <span class="badge" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
     </div>
 
-    <div class="profile-wrapper" (click)="openProfile()">
+    <div class="profile-wrapper" (click)="toggleProfileDropdown()">
+      <img src="assets/avatar.jpg" class="avatar" alt="Avatar de l'utilisateur" />
+      <div class="user-info" *ngIf="currentUser">
+        <span class="user-name">{{ currentUser.prenom }}</span>
+        <span class="user-role" *ngIf="currentUser?.role_id">{{ getRoleDisplayName(currentUser.role) }}</span>
+      </div>
+      <mat-icon fontIcon="arrow_drop_down"></mat-icon>
+
+      <div *ngIf="showProfileDropdown" class="profile-dropdown">
+        <div class="profile-dropdown-item" (click)="openProfileModal()">
+          <mat-icon fontIcon="person"></mat-icon>
+          <span>Mon profil</span>
+        </div>
+        <div class="profile-dropdown-item" (click)="logout()">
+          <mat-icon fontIcon="exit_to_app"></mat-icon>
+          <span>Déconnexion</span>
+        </div>
+      </div>
     </div>
   </div>
 </header>
+
+
+<div *ngIf="showProfileEditModal" class="profile-edit-modal-overlay" (click)="closeProfileModal()">
+  <div class="profile-edit-modal-content" (click)="$event.stopPropagation()">
+    <h3>Modifier mon profil</h3>
+    <form (ngSubmit)="updateProfile()">
+      <div class="form-group">
+        <label for="firstName">Nom</label>
+        <input type="text" id="firstName" name="firstName" [(ngModel)]="editableUser.nom" required />
+      </div>
+      <div class="form-group">
+        <label for="lastName">Prénom</label>
+        <input type="text" id="lastName" name="lastName" [(ngModel)]="editableUser.prenom" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="editableUser.email" required />
+      </div>
+      <div class="modal-actions">
+        <button type="submit" [disabled]="isLoadingProfileUpdate">
+          {{ isLoadingProfileUpdate ? 'Mise à jour...' : 'Enregistrer' }}
+        </button>
+        <button type="button" (click)="closeProfileModal()">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
