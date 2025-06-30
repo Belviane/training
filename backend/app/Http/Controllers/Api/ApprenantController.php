@@ -22,9 +22,20 @@ use Illuminate\Validation\Rule;
 
 class ApprenantController extends Controller
 {
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     // Lister tous les apprenants
     public function index(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
+        
 
         $query = Apprenant::with('utilisateur');
         if ($request->filled('is_active')) {
@@ -57,6 +68,7 @@ class ApprenantController extends Controller
     // Créer un apprenant
     public function store(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -190,6 +202,7 @@ class ApprenantController extends Controller
     //exporter la liste des apprenants en format pdf
     public function exportPDFApprenants()
     {
+        $this->checkAdminOrSuperviseur();
         $apprenants = Apprenant::with('utilisateur')->get();
 
         $html = '<h1>Liste des apprenants</h1>';

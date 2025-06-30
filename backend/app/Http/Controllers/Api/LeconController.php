@@ -1,12 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Lecon;
 use Illuminate\Http\Request;
 
 class LeconController extends Controller
 {
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     /**
      * Display a listing of the resource.
      */

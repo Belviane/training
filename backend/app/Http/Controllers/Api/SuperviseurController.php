@@ -25,10 +25,28 @@ use Illuminate\Validation\Rule;
 
 class SuperviseurController extends Controller
 {
+     private function checkAdministrateurOnly()
+    {
+        $user = auth()->user();
+        if ($user->role->libelle !== 'administrateur') {
+            abort(403, 'Accès non autorisé. Seuls les administrateurs sont permis.');
+        }
+    }
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
 
     //lister tous les superviseurs
     public function index(Request $request)
     {
+        $this->checkAdministrateurOnly();
+
         $query = Superviseur::with('utilisateur');
         if ($request->filled('is_active')) {
             $query->whereHas('utilisateur', function ($q) use ($request) {
@@ -69,6 +87,7 @@ class SuperviseurController extends Controller
     //ajouter un superviseur
     public function store(Request $request)
     {
+        $this->checkAdministrateurOnly();
          $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -117,16 +136,13 @@ class SuperviseurController extends Controller
     //afficher un superviseur specifique
     public function show( $id)
     {
+        $this->checkAdministrateurOnly();
         $superviseur = Superviseur::with('utilisateur')->findOrFail($id);
 
         return response()->json($superviseur);
     }
 
     
-    public function edit(superviseure $superviseure)
-    {
-        //
-    }
 
     //mettre a jour un superviseur
     public function update(Request $request, $id)
@@ -196,12 +212,14 @@ class SuperviseurController extends Controller
     //exporter la liste des superviseurs en format excel
     public function exportExcel()
     {
+        $this->checkAdministrateurOnly();
         return Excel::download(new SuperviseurExport, 'superviseurs.xlsx');
     }
 
     //exporter la liste des superviseurs en format pdf
     public function exportPDF()
     {
+        $this->checkAdministrateurOnly();
         //$superviseurs = Superviseur::with('utilisateurs')->get();
 
         $superviseurs = Superviseur::all();

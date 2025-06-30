@@ -23,10 +23,19 @@ use Illuminate\Validation\Rule;
 
 class ParenteController extends Controller
 {
-    
+   
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     //lister tous les parents
     public function index(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
 
         $query = Parents::with('utilisateur');
         if ($request->filled('is_active')) {
@@ -58,14 +67,11 @@ class ParenteController extends Controller
     }
 
   
-    public function create()
-    {
-        //
-    }
 
     //Ajouter un nouveau parent
     public function store(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -189,6 +195,7 @@ class ParenteController extends Controller
     //exporter la liste des parent aux format pdf
     public function exportPDFParents()
     {
+        $this->checkAdminOrSuperviseur();
         $parents = Parens::with('utilisateur')->get();
 
         $html = '<h1>Liste des parents</h1>';
