@@ -4,17 +4,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+//use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Inscription extends Model
 {
     use HasFactory;
-     protected $table = 'inscriptions';
 
-    protected $fillable = ['apprenant_id', 'formation_id', 'date_inscription'];
+    protected $table = 'inscriptions';
+
+    protected $fillable = [
+        'formation_id', 'apprenant_id', 'inscrit_par',
+        'date_inscription', 'statut', 'paiement_effectue'
+    ];
+
+
+
     public function apprenant()
     {
-        return $this->belongsTo(Utilisateur::class, 'apprenant_id');
+        return $this->belongsTo(Apprenant::class);
     }
+
+    public function inscritPar()
+    {
+        return $this->belongsTo(User::class, 'inscrit_par');
+    }
+    // public function apprenant()
+    // {
+    //     return $this->belongsTo(Utilisateur::class, 'apprenant_id');
+    // }
 
     public function formation()
     {

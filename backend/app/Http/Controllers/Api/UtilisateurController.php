@@ -24,9 +24,26 @@ use Illuminate\Support\Facades\Mail;
 
 class UtilisateurController extends Controller
 {
+    private function checkAdministrateurOnly()
+    {
+        $user = auth()->user();
+        if ($user->role->libelle !== 'administrateur') {
+            abort(403, 'Accès non autorisé. Seuls les administrateurs sont permis.');
+        }
+    }
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     // Liste utilisateurs hors administrateurs
     public function index()
     {
+        $this->checkAdminOrSuperviseur();
         $adminRoleId = DB::table('roles')->where('libelle', 'administrateur')->value('id');
 
         $perPage = $request->input('per_page', 10);
@@ -57,6 +74,7 @@ class UtilisateurController extends Controller
     // Création utilisateur avec envoi mail + génération identifiants + code vérif
     public function store(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -98,6 +116,7 @@ class UtilisateurController extends Controller
 
     public function show($id)
     {
+        $this->checkAdminOrSuperviseur();
         return User::findOrFail($id);
     }
 
@@ -166,12 +185,8 @@ class UtilisateurController extends Controller
 
     public function activer($id)
     {
-        $user = auth()->user();
-        if ($user->role->libelle !== 'administrateur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les administrateurs peuvent ajouter les séances.'
-            ], 403);
-        }
+        $this->checkAdministrateurOnly();
+        
         $utilisateur = User::findOrFail($id);
         $utilisateur->is_active = true;
         $utilisateur->save();
@@ -181,12 +196,8 @@ class UtilisateurController extends Controller
 
     public function desactiver($id)
     {
-        $user = auth()->user();
-        if ($user->role->libelle !== 'administrateur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les administrateurs peuvent ajouter les séances.'
-            ], 403);
-        }
+        $this->checkAdministrateurOnly();
+
         $utilisateur = User::findOrFail($id);
         $utilisateur->is_active = false;
         $utilisateur->save();
@@ -210,6 +221,7 @@ class UtilisateurController extends Controller
 
     public function rechercher(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $query = $request->input('query');
 
         if (!$query) {
@@ -251,7 +263,7 @@ class UtilisateurController extends Controller
     }
 
     // Vérifier code email
-   public function verifierEmailWeb($id, $code)
+    public function verifierEmailWeb($id, $code)
     {
         $user = User::findOrFail($id);
 
@@ -267,6 +279,11 @@ class UtilisateurController extends Controller
         }
 
         return redirect('http://localhost:4200/login?error=verification_failed');
+    }
+
+    public function formations()
+    {
+        return $this->belongsToMany(Formation::class, 'formation_formateur', 'formateur_id', 'formation_id');
     }
 
 

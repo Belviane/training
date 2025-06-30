@@ -17,18 +17,21 @@ use Carbon\Carbon;
 
 class SeanceController extends Controller
 {
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis de gerer cet aspect.');
+        }
+    }
 
 
 
 
     public function annulerSeance(Request $request, $id)
     {
-        $user = auth()->user();
-        if ($user->role->libelle !== 'superviseur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les superviseurs peuvent annuler les séances.'
-            ], 403);
-        }
+        $this->checkAdminOrSuperviseur();
 
         $seance = Seance::findOrFail($id);
         $seance->update(['statut' => 'Annulée']);
@@ -83,12 +86,7 @@ class SeanceController extends Controller
 
     public function obtenirFormateur($id)
     {
-        $user = auth()->user();
-        if ($user->role->libelle !== 'superviseur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les superviseurs peuvent avoir acces aux formateurs.'
-            ], 403);
-        }
+        $this->checkAdminOrSuperviseur();
 
         $formateur = Seance::findOrFail($id)->formateur;
         return response()->json($formateur);
@@ -122,13 +120,8 @@ class SeanceController extends Controller
     public function store(Request $request)
     {
 
-        $user = auth()->user();
-        if ($user->role->libelle !== 'superviseur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les superviseurs peuvent ajouter les séances.'
-            ], 403);
-        }
-            $validated = Validator::make($request->all(), [
+        $this->checkAdminOrSuperviseur();
+        $validated = Validator::make($request->all(), [
             'titre' => 'required|string',
             'description' => 'nullable|string',
             'date' => 'required|date',
@@ -166,12 +159,7 @@ class SeanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-        if ($user->role->libelle !== 'superviseur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les superviseurs peuvent modifier les séances.'
-            ], 403);
-        }
+        $this->checkAdminOrSuperviseur();
         $seance = Seance::findOrFail($id);
         $seance->update($request->all());
         return response()->json($seance);

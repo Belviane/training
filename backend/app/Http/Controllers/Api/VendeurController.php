@@ -19,11 +19,20 @@ use Illuminate\Validation\Rule;
 
 class VendeurController extends Controller
 {
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     //lister tous les vendeurs
     public function index(Request $request)
     {
     
-        
+        $this->checkAdminOrSuperviseur();
 
         $query = Vendeur::with('utilisateur');
         if ($request->filled('is_active')) {
@@ -55,15 +64,11 @@ class VendeurController extends Controller
         return response()->json($vendeurs);
     }
 
-   
-    public function create()
-    {
-        //
-    }
 
     //ajouter un nouveau vendeur
     public function store(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -107,16 +112,12 @@ class VendeurController extends Controller
     //afficher un vendeur specifique
     public function show( $id)
     {
+        $this->checkAdminOrSuperviseur();
         $vendeur = Vendeur::with('utilisateur')->findOrFail($id);
 
         return response()->json($vendeur);
     }
 
-  
-    public function edit(Vendeur $vendeur)
-    {
-        //
-    }
 
     //mettre a jour un vendeur
     public function update(Request $request, $id)
@@ -181,6 +182,7 @@ class VendeurController extends Controller
     //exporter la liste des vendeurs en format pdf
     public function exportPDFVendeurs()
     {
+        $this->checkAdminOrSuperviseur();
         $vendeurs = Vendeur::with('utilisateur')->get();
 
         $html = '<h1>Liste des vendeurs</h1>';

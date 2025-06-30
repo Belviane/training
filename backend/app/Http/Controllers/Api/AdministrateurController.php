@@ -58,11 +58,6 @@ class AdministrateurController extends Controller
         return response()->json($administrateurs);
     }
 
-   
-    public function create()
-    {
-        //
-    }
 
     //ajouter un admin
     public function store(Request $request)
@@ -213,11 +208,11 @@ class AdministrateurController extends Controller
 
     
 
-    // Sauvegarder dans storage/app/public/pdfs/
-    Storage::put('public/pdfs/administrateurs.pdf', $pdf->output());
+        // Sauvegarder dans storage/app/public/pdfs/
+        Storage::put('public/pdfs/administrateurs.pdf', $pdf->output());
 
-    // Retourne le PDF en téléchargement
-        return $pdf->download('administrateurs.pdf');
+        // Retourne le PDF en téléchargement
+            return $pdf->download('administrateurs.pdf');
     }
 
 }

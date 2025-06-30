@@ -16,29 +16,26 @@ use OpenApi\Annotations as OA;
 class InscriptionController extends Controller
 {
 
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
+
     public function inscrire(Request $request, $formationId)
     {
         $formation = Formation::findOrFail($formationId);
 
         if (!auth()->check()) {
             return response()->json([
-                'message' => 'Token manquant ou invalide',
-                'solution' => [
-                    '1. Vérifiez votre token dans Postman',
-                    '2. Regénérez un token via /login',
-                    '3. Vérifiez les headers de la requête'
-                ]
+                'message' => 'Token invalide ou manquant',
             ], 401);
         }
 
-        $user = auth()->user();
-
-        // verifcation des roles 
-        if ($user->role->libelle !== 'formateur' ||$user->role->libelle !== 'superviseur'||$user->role->libelle !== 'administrateur' ) {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les formateurs, superviseurs, administrateur peuvent inscrire un apprenant.'
-            ], 403);
-        }
+       $this->checkAdminOrSuperviseur();
 
         $request->validate([
             'apprenant_id' => 'required|exists:apprenants,id'
@@ -46,61 +43,150 @@ class InscriptionController extends Controller
 
         $apprenant = Apprenant::findOrFail($request->apprenant_id);
 
-        if ($formation->apprenants()->where('apprenant_id', $apprenant->id)->exists()) {
-            return response()->json(['message' => 'Cet apprenant est déjà inscrit'], 400);
+        // Vérification double inscription
+        if (Inscription::where('formation_id', $formation->id)
+            ->where('apprenant_id', $apprenant->id)->exists()) {
+            return response()->json(['message' => 'Cet apprenant est déjà inscrit.'], 400);
         }
 
-        $formation->apprenants()->attach($apprenant->id, [
-            'formateur_id' => $user->id,
+        // Création de l’inscription
+        $inscription = Inscription::create([
+            'formation_id' => $formation->id,
+            'apprenant_id' => $apprenant->id,
+            'inscrit_par' => $user->id,
             'date_inscription' => now(),
-            'statut' => 'accepte'
+            'statut' => 'en_attente',
+            'paiement_effectue' => false
         ]);
 
         return response()->json([
-            'message' => 'Inscription réussie',
-            'inscription' => [
-                'formation' => $formation->nom,
-                'apprenant' => $apprenant->utilisateur->nom,
-                'formateur' => $user->nom,
-                'date' => now()->toDateString()
-            ]
+            'message' => 'Inscription enregistrée avec succès.',
+            'inscription' => $inscription
         ], 201);
     }
 
+
     public function mesInscriptions()
     {
-        // Récupère toutes les inscriptions faites par ce formateur
-        $inscriptions = Formation::where('formateur_id', Auth::id())
-            ->with(['apprenants.utilisateur'])
+        $user = auth()->user();
+
+        // Vérifie si c’est bien un superviseur ou administrateur
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            return response()->json([
+                'message' => 'Accès refusé : seuls les superviseurs ou administrateurs peuvent voir leurs inscriptions.'
+            ], 403);
+        }
+
+        // Récupère les inscriptions faites par cet utilisateur
+        $inscriptions = \App\Models\Inscription::with([
+                'formation',
+                'apprenant.utilisateur'
+            ])
+            ->where('inscrit_par', $user->id)
             ->get()
-            ->map(function ($formation) {
-                return [
-                    'formation' => $formation->nom,
-                    'apprenants' => $formation->apprenants->map(function ($apprenant) {
-                        return [
-                            'id' => $apprenant->id,
-                            'nom' => $apprenant->utilisateur->nom,
-                            'prenom' => $apprenant->utilisateur->prenom,
-                            'matricule' => $apprenant->matricule,
-                            'date_inscription' => $apprenant->pivot->date_inscription
-                        ];
-                    })
-                ];
+            ->groupBy('formation.nom') // Groupe les inscriptions par nom de formation
+            ->map(function ($grouped) {
+                return $grouped->map(function ($inscription) {
+                    return [
+                        'id_apprenant' => $inscription->apprenant->id,
+                        'nom' => $inscription->apprenant->utilisateur->nom,
+                        'prenom' => $inscription->apprenant->utilisateur->prenom,
+                        'matricule' => $inscription->apprenant->matricule,
+                        'date_inscription' => $inscription->date_inscription,
+                        'statut' => $inscription->statut,
+                        'paiement' => $inscription->paiement_effectue ? 'payé' : 'non payé',
+                    ];
+                });
             });
 
         return response()->json($inscriptions);
     }
 
-    public function desinscrire($formationId, $apprenantId)
+    public function inscriptionsApprenant()
     {
-        $formation = Formation::findOrFail($formationId);
+        $user = auth()->user();
 
-        if ($formation->formateur_id !== Auth::id()) {
-            return response()->json(['message' => 'Action non autorisée'], 403);
+        if ($user->role->libelle !== 'apprenant') {
+            return response()->json(['message' => 'Accès refusé'], 403);
         }
 
-        $formation->apprenants()->detach($apprenantId);
+        $apprenant = $user->apprenant;
 
-        return response()->json(['message' => 'Désinscription réussie']);
+        $inscriptions = Inscription::with('formation')
+            ->where('apprenant_id', $apprenant->id)
+            ->get();
+
+        return response()->json($inscriptions);
     }
+
+    public function inscriptionsParent()
+    {
+        $user = auth()->user();
+
+        if ($user->role->libelle !== 'parent') {
+            return response()->json(['message' => 'Accès refusé'], 403);
+        }
+
+        $parent = $user->parent;
+
+        $inscriptions = Inscription::with(['formation', 'apprenant.utilisateur'])
+            ->whereIn('apprenant_id', $parent->enfants->pluck('id'))
+            ->get();
+
+        return response()->json($inscriptions);
+    }
+
+    public function inscriptionsFormateur()
+    {
+        $user = auth()->user();
+
+        if ($user->role->libelle !== 'formateur') {
+            return response()->json(['message' => 'Accès refusé'], 403);
+        }
+
+        $inscriptions = Inscription::with(['formation', 'apprenant.utilisateur'])
+            ->whereHas('formation', function ($query) use ($user) {
+                $query->where('formateur_id', $user->id);
+            })->get();
+
+        return response()->json($inscriptions);
+    }
+
+    public function recherche(Request $request)
+    {
+       $this->checkAdminOrSuperviseur();
+
+        $query = Inscription::with(['apprenant.utilisateur', 'formation']);
+
+        // 🔍 Filtre par nom ou prénom apprenant
+        if ($request->filled('nom_apprenant')) {
+            $query->whereHas('apprenant.utilisateur', function ($q) use ($request) {
+                $q->where('nom', 'like', '%' . $request->nom_apprenant . '%')
+                ->orWhere('prenom', 'like', '%' . $request->nom_apprenant . '%');
+            });
+        }
+
+        // 🔍 Filtre par formation
+        if ($request->filled('formation_id')) {
+            $query->where('formation_id', $request->formation_id);
+        }
+
+        // 🔍 Filtre par statut
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+
+        // 🔍 Filtre par paiement
+        if ($request->filled('paiement_effectue')) {
+            $query->where('paiement_effectue', $request->paiement_effectue);
+        }
+
+        // 📄 Pagination (10 inscriptions par page par défaut)
+        $inscriptions = $query->paginate(10);
+
+        return response()->json($inscriptions);
+    }
+
+
+
 }

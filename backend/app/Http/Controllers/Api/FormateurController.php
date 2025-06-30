@@ -17,17 +17,24 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnvoiIdentifiants;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
-
 
 class FormateurController extends Controller
 {
-    protected $fillable = ['utilisateur_id', 'specialite'];
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
+    //protected $fillable = ['utilisateur_id', 'specialite'];
 
 
     // Lister tous les formateurs
     public function index(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
 
         $query = Formateur::with('utilisateur');
         if ($request->filled('is_active')) {
@@ -61,13 +68,14 @@ class FormateurController extends Controller
     // Créer un nouveau formateur
     public function store(Request $request)
     {
-            //return response()->json(['debug' => 'ok']);
-            Log::info('Requête brute :', [
-                'nom' => $request->input('nom'),
-                'cv' => $request->file('cv'),
-            ]);
+        $this->checkAdminOrSuperviseur();
+        //return response()->json(['debug' => 'ok']);
+        Log::info('Requête brute :', [
+            'nom' => $request->input('nom'),
+            'cv' => $request->file('cv'),
+        ]);
             Log::info('Request Data:', $request->all());
-            $request->validate([
+        $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'genre' => 'required|string',
@@ -114,12 +122,6 @@ class FormateurController extends Controller
             'cv' => $cvPath,
         ]);
 
-        // $formateur = Formateur::create([
-        //     'utilisateur_id' => $user->id,
-        //     'matriculeAD' => $matricule,
-        //     'specialite' => $request->specialite,
-        //     'cv' => $cvPath, // ajout du chemin du fichier
-        // ]);
 
         Mail::to($user->email)->send(new EnvoiIdentifiants($user, $passwordPlain, $matricule));
 

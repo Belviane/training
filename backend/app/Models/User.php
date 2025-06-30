@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use HasFactory;
 
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -39,7 +40,6 @@ class User extends Authenticatable
     protected $casts = [
         'verrouille_jusqua' => 'datetime',
     ];
-
 
 
     protected $hidden = [
@@ -100,6 +100,4 @@ class User extends Authenticatable
     }
 
     
-
-
 }
