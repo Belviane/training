@@ -17,9 +17,25 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
+
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     public function register(Request $request)
     {
         $currentUser = $request->user(); // utilisateur connecté qui fait la requête
+
+
+        if (!$currentUser) {
+            return response()->json([
+                'message' => 'Utilisateur non authentifié.'
+            ], 401);
+        }
 
         $roleToCreate = $request->role_id;
 
@@ -255,36 +271,36 @@ class AuthController extends Controller
     }
 
    public function forgotPassword(Request $request)
-{
-    try {
-        $data = $request->all();
-        \Log::info('Request data:', $data);
+    {
+        try {
+            $data = $request->all();
+            \Log::info('Request data:', $data);
 
-        $request->validate([
-            'email' => 'required|email|exists:utilisateurs,email',
-        ]);
+            $request->validate([
+                'email' => 'required|email|exists:utilisateurs,email',
+            ]);
 
-        $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+            if (!$user) {
+                return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+            }
+
+            $code = rand(100000, 999999);
+            $user->verification_code = $code;
+            $user->save();
+
+            Mail::raw("Votre code de réinitialisation est : $code", function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Réinitialisation du mot de passe');
+            });
+
+            return response()->json(['message' => 'Un code de réinitialisation a été envoyé à votre adresse email.']);
+        } catch (\Exception $e) {
+            \Log::error('Erreur forgotPassword: ' . $e->getMessage());
+            return response()->json(['message' => 'Erreur serveur interne.'], 500);
         }
-
-        $code = rand(100000, 999999);
-        $user->verification_code = $code;
-        $user->save();
-
-        Mail::raw("Votre code de réinitialisation est : $code", function ($message) use ($user) {
-            $message->to($user->email)
-                ->subject('Réinitialisation du mot de passe');
-        });
-
-        return response()->json(['message' => 'Un code de réinitialisation a été envoyé à votre adresse email.']);
-    } catch (\Exception $e) {
-        \Log::error('Erreur forgotPassword: ' . $e->getMessage());
-        return response()->json(['message' => 'Erreur serveur interne.'], 500);
     }
-}
 
 
 

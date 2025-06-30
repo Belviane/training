@@ -40,6 +40,8 @@ use App\Http\Controllers\Api\VendeurController;
 
 use App\Http\Controllers\Api\AdministrateurController;
 
+use App\Http\Controllers\Api\ExamenController;
+
 // Routes publiques
 //Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -170,11 +172,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Formations
     Route::controller(FormationController::class)->group(function () {
+        Route::get('/mes-formations', 'mesFormations');
+        Route::get('/formations/pdf',  'exportPdf');
+        Route::get('/formations/search', 'search');
+        Route::post('/formations/{id}/assign-formateurs', 'assignFormateurs');
         Route::get('/formations/{id}', 'show');
         Route::get('/formations', 'index');
         Route::delete('/formations/{id}', 'destroy');
         Route::put('/formations/{id}', 'update');
         Route::post('/formations', 'store');
+       
     });
 
     //Classes
@@ -228,18 +235,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-
-
-
-    // Formateur peut inscrire un apprenant
-    Route::post('/formations/{formation}/inscrire', [InscriptionController::class, 'inscrire']);
-
-    // Formateur peut voir ses inscriptions
-    Route::get('/formateur/inscriptions', [InscriptionController::class, 'mesInscriptions']);
-
+    Route::controller(InscriptionController::class)->group(function () {
+        Route::get('/inscriptions/recherche',  'recherche');
+        Route::get('/mes-inscriptions', 'mesInscriptions');
+        Route::get('/mes-enfants/inscriptions', 'inscriptionsParent');
+        Route::get('/mes-formations',  'inscriptionsApprenant');
+        Route::post('/formations/{id}/inscrire', 'inscrire');
+    });
     // Profil utilisateur
     Route::get('/profil', [ProfilController::class, 'afficherProfil']);
     Route::put('/profil', [ProfilController::class, 'modifierProfil']);
+
+    Route::post('modules/{module}/examens', [ExamenController::class, 'storeForModule']);
 
 
 

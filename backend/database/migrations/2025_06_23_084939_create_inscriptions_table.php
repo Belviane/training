@@ -15,16 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('formation_id')->constrained()->onDelete('cascade');
             $table->foreignId('apprenant_id')->constrained()->onDelete('cascade');
-            $table->foreignId('formateur_id')->constrained('formateurs')->onDelete('cascade');
             $table->date('date_inscription')->default(now());
             $table->enum('statut', ['en_attente', 'accepte', 'refuse'])->default('en_attente');
 
-            $table->
-    $table->foreignId('apprenant_id')->constrained()->onDelete('cascade');
-    $table->foreignId('inscrit_par')->constrained('users')->onDelete('cascade'); // superviseur/admin
-    $table->date('date_inscription')->default(now());
-    $table->enum('statut', ['en_attente', 'accepte', 'refuse'])->default('en_attente');
-    $table->boolean('paiement_effectue')->default(false);
+    
+            $table->foreignId('inscrit_par')->constrained('utilisateurs')->onDelete('cascade'); // superviseur/admin
+            $table->boolean('paiement_effectue')->default(false);
             $table->timestamps();
 
 

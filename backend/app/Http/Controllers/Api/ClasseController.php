@@ -16,6 +16,14 @@ use Carbon\Carbon;
 
 class ClasseController extends Controller
 {
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
 
 
     public function verifierDisponibilite(Request $request, $id)
@@ -50,26 +58,12 @@ class ClasseController extends Controller
         return response()->json(Classe::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   
     public function store(Request $request)
     {
 
-        $user = auth()->user();
-        if ($user->role->libelle !== 'superviseur') {
-            return response()->json([
-                'message' => 'Accès interdit : seuls les superviseurs peuvent gérer les classes.'
-            ], 403);
-        }
+       $this->checkAdminOrSuperviseur();
         
         $validated = $request->validate([
             'nom' => 'required|string',
@@ -83,27 +77,18 @@ class ClasseController extends Controller
         return response()->json($classe, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(Classe $classe)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Classe $classe)
-    {
-        //
-    }
+    
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, $id)
     {
+        $this->checkAdminOrSuperviseur();
         $classe = Classe::findOrFail($id);
         $classe->update($request->only(['nom', 'capacite', 'localisation', 'description']));
         return response()->json($classe);

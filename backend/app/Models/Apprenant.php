@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Apprenant extends Model
 {
@@ -33,10 +34,18 @@ class Apprenant extends Model
                     ->withTimestamps();
     }
 
-   public function formations() {
+    public function formations() {
         return $this->belongsToMany(Formation::class, 'inscriptions', 'apprenant_id', 'formation_id')
                ->withPivot(['formateur_id', 'date_inscription', 'statut'])
                ->withTimestamps();
+    }
+
+    public function inscriptions() {
+        return $this->hasMany(Inscription::class);
+    }
+
+    public function parent() {
+        return $this->belongsTo(Parents::class, 'parent_id');
     }
 }
 

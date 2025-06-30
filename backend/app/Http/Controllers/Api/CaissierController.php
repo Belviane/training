@@ -19,9 +19,18 @@ use Illuminate\Validation\Rule;
 
 class CaissierController extends Controller
 {
+    private function checkAdminOrSuperviseur()
+    {
+        $user = auth()->user();
+        if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+            // On renvoie directement une réponse et on arrête l'exécution
+            abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+        }
+    }
     //lister tous les caissier
     public function index(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
 
         $query = Caissier::with('utilisateur');
         if ($request->filled('is_active')) {
@@ -52,15 +61,12 @@ class CaissierController extends Controller
         return response()->json($caissiers);
     }
 
-  
-    public function create()
-    {
-        //
-    }
+
 
     //ajouter un caissier
     public function store(Request $request)
     {
+        $this->checkAdminOrSuperviseur();
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -114,11 +120,6 @@ class CaissierController extends Controller
         return response()->json($caissier);
     }
 
-
-    public function edit(Caissier $caissier)
-    {
-        //
-    }
 
     //mettre a jour un caissier
     public function update(Request $request, $id)
@@ -184,6 +185,7 @@ class CaissierController extends Controller
     //exporter la liste des caissiers au format pdf
     public function exportPDFCaissiers()
     {
+        $this->checkAdminOrSuperviseur();
         $caissiers = Caissier::with('utilisateur')->get();
 
         $html = '<h1>Liste des caissiers</h1>';

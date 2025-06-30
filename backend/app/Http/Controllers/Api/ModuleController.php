@@ -1,12 +1,22 @@
 <?php
+namespace App\Http\Controllers\Api;
 
-namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
 
 use App\Models\Module;
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
+
+    // private function checkAdminOrSuperviseur()
+    // {
+    //     $user = auth()->user();
+    //     if (!in_array($user->role->libelle, ['superviseur', 'administrateur'])) {
+    //         // On renvoie directement une réponse et on arrête l'exécution
+    //         abort(403, 'Accès non autorisé. Seuls les administrateurs ou superviseurs sont permis.');
+    //     }
+    // }
     /**
      * Display a listing of the resource.
      */
