@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Interface pour typer les données reçues dans la boîte de dialogue
 interface UserDialogData {
   user?: any; // Utilisateur optionnel (pour modification)
+  allowedRoles?: Array<{ id: number; label: string }>; // Liste des rôles autorisés
 }
 
 @Component({
@@ -46,12 +47,12 @@ export class AjouterComponent implements OnInit {
   hidePassword = true;
 
   // Indique si une requête HTTP est en cours
-  isLoading = false;
+  isLoading = false; // Initialisez comme tableau vide
 
   // Liste des rôles disponibles
   rolesList = [
     //{ id: 1, label: 'Administrateur' },
-    { id: 2, label: 'Superviseur' },
+    //{ id: 2, label: 'Superviseur' },
     { id: 3, label: 'Formateur' },
     { id: 4, label: 'Apprenant' },
     { id: 5, label: 'Parent' },
@@ -59,6 +60,8 @@ export class AjouterComponent implements OnInit {
     { id: 7, label: 'Auditeur' },
     { id: 8, label: 'Vendeur' }
   ];
+
+  
 
   /**
    * Constructeur : injection des dépendances nécessaires
@@ -87,10 +90,23 @@ export class AjouterComponent implements OnInit {
    * Si un utilisateur est passé en paramètre, on pré-remplit le formulaire
    */
   ngOnInit(): void {
+    // Debug: Affichez les données reçues
+    console.log('Données reçues dans le modal:', this.data);
+
+    // Récupérer les rôles autorisés depuis les données
+    // if (this.data && Array.isArray(this.data.allowedRoles)) {
+    //     this.rolesList = this.data.allowedRoles;
+    // } else {
+    //     console.warn('Aucun rôle autorisé fourni ou format incorrect');
+    //     this.rolesList = [];
+    // }
+
+    // console.log('Rôles disponibles:', this.rolesList); // Debug
+  
     if (this.data?.user) {
-      this.patchFormValues();
+        this.patchFormValues();
     }
-  }
+}
 
   /**
    * Remplit le formulaire avec les valeurs de l'utilisateur à modifier
@@ -118,6 +134,17 @@ export class AjouterComponent implements OnInit {
    */
   onSubmit(): void {
     if (this.userForm.invalid) return;
+
+    // Vérification supplémentaire que le rôle sélectionné est autorisé
+    // 
+    
+    // Vérification optionnelle - juste pour s'assurer qu'un rôle valide est sélectionné
+    const selectedRoleId = this.userForm.get('role_id')?.value;
+    if (!selectedRoleId) {
+      this.snackBar.open('Veuillez sélectionner un rôle', 'Fermer', { duration: 3000 });
+      return;
+    }
+
 
     this.isLoading = true;
     const formData = this.prepareFormData();

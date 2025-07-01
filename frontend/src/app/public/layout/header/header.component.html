@@ -10,7 +10,7 @@
       </div>
 
       <!-- Menu principal -->
-      <ul class="main-menu" [class.open]="menuOpen">
+      <ul #mainMenu class="main-menu" [class.open]="menuOpen">
         <li>
           <a routerLink="/" 
              [class.active]="activeLink === 'accueil'" 
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Menu hamburger pour mobile -->
-      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Menu" aria-expanded="false" [attr.aria-expanded]="menuOpen">
+      <button #menuToggle class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen" aria-label="Menu" aria-expanded="false" [attr.aria-expanded]="menuOpen">
         <span></span>
         <span></span>
         <span></span>

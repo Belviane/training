@@ -1,0 +1,249 @@
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h1 class="form-title">
+                <mat-icon>school</mat-icon>
+                {{ isEditMode ? 'Modifier' : 'Créer' }} une Formation
+            </h1>
+        </div>
+
+        <form [formGroup]="formationForm" (ngSubmit)="onSubmit()" class="form-content">
+            <!-- Informations Générales -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <mat-icon>info</mat-icon>
+                    Informations Générales
+                </h2>
+
+                <div class="grid-2">
+                    <mat-form-field>
+                        <mat-label>Nom de la Formation *</mat-label>
+                        <input matInput formControlName="nom_formation">
+                        @if (formationForm.get('nom_formation')?.errors) {
+                        <mat-error>{{ getFieldError('nom_formation') }}</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Libellé *</mat-label>
+                        <input matInput formControlName="libelle_formation">
+                        @if (formationForm.get('libelle_formation')?.errors) {
+                        <mat-error>{{ getFieldError('libelle_formation') }}</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="grid-2">
+                    <mat-form-field>
+                        <mat-label>Date de début *</mat-label>
+                        <input matInput [matDatepicker]="pickerDebut" formControlName="date_debutf">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDebut></mat-datepicker>
+                        @if (formationForm.get('date_debutf')?.errors) {
+                        <mat-error>{{ getFieldError('date_debutf') }}</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Date de fin *</mat-label>
+                        <input matInput [matDatepicker]="pickerFin" formControlName="date_finf">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFin></mat-datepicker>
+                        @if (formationForm.get('date_finf')?.errors) {
+                        <mat-error>{{ getFieldError('date_finf') }}</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="grid-2">
+                    <mat-form-field>
+                        <mat-label>Nombre de séances *</mat-label>
+                        <input matInput type="number" formControlName="nombre_seancef">
+                        @if (formationForm.get('nombre_seancef')?.errors) {
+                        <mat-error>{{ getFieldError('nombre_seancef') }}</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Volume horaire (heures) *</mat-label>
+                        <input matInput type="number" step="0.5" formControlName="volume_horaire">
+                        @if (formationForm.get('volume_horaire')?.errors) {
+                        <mat-error>{{ getFieldError('volume_horaire') }}</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field>
+                    <mat-label>Statut *</mat-label>
+                    <mat-select formControlName="statut">
+                        <mat-option value="brouillon">Brouillon</mat-option>
+                        <mat-option value="active">Active</mat-option>
+                        <mat-option value="terminee">Terminée</mat-option>
+                        <mat-option value="suspendue">Suspendue</mat-option>
+                    </mat-select>
+                    @if (formationForm.get('statut')?.errors) {
+                    <mat-error>{{ getFieldError('statut') }}</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <!-- Tarification -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <mat-icon>attach_money</mat-icon>
+                    Tarification
+                </h2>
+
+                <div class="grid-2">
+                    <mat-form-field>
+                        <mat-label>Prix (FCFA) *</mat-label>
+                        <input matInput type="number" formControlName="prix">
+                        @if (formationForm.get('prix')?.errors) {
+                        <mat-error>{{ getFieldError('prix') }}</mat-error>
+                        }
+                    </mat-form-field>
+
+                    <div class="certification-container">
+                        <mat-checkbox formControlName="certifiante">Formation certifiante</mat-checkbox>
+
+                        @if (formationForm.get('certifiante')?.value) {
+                        <mat-form-field class="mt-2">
+                            <mat-label>Prix certification (FCFA) *</mat-label>
+                            <input matInput type="number" formControlName="prix_certification">
+                            @if (formationForm.get('prix_certification')?.errors) {
+                            <mat-error>{{ getFieldError('prix_certification') }}</mat-error>
+                            }
+                        </mat-form-field>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Objectifs -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <mat-icon>flag</mat-icon>
+                    Objectifs
+                </h2>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Objectifs de la formation *</mat-label>
+                    <textarea matInput formControlName="objectif" rows="4"></textarea>
+                    @if (formationForm.get('objectif')?.errors) {
+                    <mat-error>{{ getFieldError('objectif') }}</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <!-- Modules -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <mat-icon>list_alt</mat-icon>
+                    Modules
+                    <button mat-mini-fab color="primary" (click)="addModule()" type="button">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </h2>
+
+                @for (module of modules.controls; let moduleIndex = $index; track moduleIndex) {
+                <div class="module-card">
+                    <div class="module-header">
+                        <h3>Module {{ moduleIndex + 1 }}</h3>
+                        <button mat-icon-button color="warn" (click)="removeModule(moduleIndex)" type="button">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="module-content">
+                        <mat-form-field class="w-full">
+                            <mat-label>Nom du module *</mat-label>
+                            <input matInput [formControl]="$any(module.get('nom'))">
+                            @if (module.get('nom')?.errors) {
+                            <mat-error>{{ getFieldError('nom', moduleIndex) }}</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput [formControl]="$any(module.get('description'))" rows="2"></textarea>
+                        </mat-form-field>
+
+                        <div class="lecons-header">
+                            <h4>Leçons</h4>
+                            <button mat-mini-fab color="primary" (click)="addLecon(moduleIndex)" type="button">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+
+                        @for (lecon of getLecons(moduleIndex).controls; let leconIndex = $index; track leconIndex) {
+                        <div class="lecon-card">
+                            <div class="lecon-header">
+                                <h5>Leçon {{ leconIndex + 1 }}</h5>
+                                <button mat-icon-button color="warn" (click)="removeLecon(moduleIndex, leconIndex)"
+                                    type="button">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="grid-3">
+                                <mat-form-field>
+                                    <mat-label>Titre *</mat-label>
+                                    <input matInput [formControl]="$any(lecon.get('titre'))">
+                                    @if (lecon.get('titre')?.errors) {
+                                    <mat-error>{{ getFieldError('titre', moduleIndex, leconIndex) }}</mat-error>
+                                    }
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <mat-label>Durée (min) *</mat-label>
+                                    <input matInput type="number" [formControl]="$any(lecon.get('duree_estimee'))">
+                                    @if (lecon.get('duree_estimee')?.errors) {
+                                    <mat-error>{{ getFieldError('duree_estimee', moduleIndex, leconIndex) }}</mat-error>
+                                    }
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <mat-label>Ordre *</mat-label>
+                                    <input matInput type="number" [formControl]="$any(lecon.get('ordre'))">
+                                    @if (lecon.get('ordre')?.errors) {
+                                    <mat-error>{{ getFieldError('ordre', moduleIndex, leconIndex) }}</mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+
+                            <mat-form-field class="w-full">
+                                <mat-label>Contenu *</mat-label>
+                                <textarea matInput [formControl]="$any(lecon.get('contenu'))" rows="3"></textarea>
+                                @if (lecon.get('contenu')?.errors) {
+                                <mat-error>{{ getFieldError('contenu', moduleIndex, leconIndex) }}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+
+            <!-- Boutons adaptés pour une page -->
+            <div class="form-actions">
+                <button mat-button type="button" (click)="cancel()" [disabled]="submitStatus === 'loading'">
+                    Annuler
+                </button>
+
+                @if (submitStatus === 'loading') {
+                <button mat-raised-button color="primary" type="button" disabled>
+                    <mat-spinner diameter="20"></mat-spinner>
+                </button>
+                }
+
+                @if (submitStatus !== 'loading') {
+                <button mat-raised-button color="primary" type="submit" [disabled]="formationForm.invalid">
+                    <mat-icon>save</mat-icon>
+                    {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+                </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>

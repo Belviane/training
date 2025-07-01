@@ -28,4 +28,6 @@ export class ProfileService {
     };
     return this.http.put<{ message: string } >(LaravelApi.profil, payload);
   }
+
+  
 }

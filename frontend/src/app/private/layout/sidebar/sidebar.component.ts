@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, OnInit, Output , signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router'; // Importation du Router pour la navigation
 import { AuthService } from '../../../core/auth/services/auth.services' // Service d'authentification
@@ -25,10 +25,16 @@ interface MenuItem {
 export class SidebarComponent implements OnInit {
   [x: string]: any;
 
-  isMobile = false;
-  
-  @Input() isCollapsed = false;
+  // Ajoutez ces Inputs à votre classe existante
+  @Input() isCollapsed: boolean = false;
+  @Input() isMobile = false;
+  @Input() showSidebar = false;
   @Output() closeSidebar = new EventEmitter<void>();
+
+  // isMobile = false;
+
+  // @Input() isCollapsed = false;
+  // @Output() closeSidebar = new EventEmitter<void>();
 
   onCloseSidebar() {
     this.closeSidebar.emit();
@@ -76,7 +82,7 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Suivi global',
       icon: 'analytics',
-      route: '',
+      route: '/app/suiviglobal',
       roles: ['superviseur'],
       exact: false,
       children: [
@@ -103,7 +109,7 @@ export class SidebarComponent implements OnInit {
         }
       ]
     },
-    { label: 'Évaluer formateurs', icon: 'star_rate', route: '/evaluation-formateurs', roles: ['superviseur'], exact: false },
+    { label: 'Évaluer formateurs', icon: 'star_rate', route: '/app/evaluer', roles: ['superviseur'], exact: false },
 
     // administrateur
     { label: 'Comptes', icon: 'account_circle', route: '/app/compte', roles: ['administrateur'], exact: false },
@@ -114,8 +120,8 @@ export class SidebarComponent implements OnInit {
   filteredSidebarItems: MenuItem[] = [];
 
   constructor(
-    private authService: AuthService, 
-    private router: Router, 
+    private authService: AuthService,
+    private router: Router,
     private http: HttpClient) { }
 
   ngOnInit() {

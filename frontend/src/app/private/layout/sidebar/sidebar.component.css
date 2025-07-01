@@ -1,7 +1,7 @@
 /* Conteneur principal - Version claire élégante */
 .sidebar {
   width: 250px;
-  height: calc(100vh);
+  height: 100vh;
   background-color: #FFFFFF; /* Fond blanc */
   color: #222222; /* Texte noir */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

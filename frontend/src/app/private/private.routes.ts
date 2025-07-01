@@ -9,6 +9,13 @@ import { ListecompteComponent } from './componentsSuperviseur/listecompte/listec
 import { FormationsComponent } from './componentsSuperviseur/formations/formations.component';
 import { SuiviapprenantComponent } from './componentsFormateur/suiviapprenant/suiviapprenant.component';
 import { EvaluationComponent } from './componentsApprenant/evaluation/evaluation.component';
+import { EvaluerformateurComponent } from './componentsSuperviseur/evaluerformateur/evaluerformateur.component';
+import { SuiviglobalComponent } from './componentsSuperviseur/suiviglobal/suiviglobal.component';
+import { PaiementsComponent } from './componentsSuperviseur/paiements/paiements.component';
+import { ClasseComponent } from './componentsSuperviseur/classe/classe.component';
+import { SeanceComponent } from './componentsSuperviseur/seance/seance.component';
+import { GestionseanceComponent } from './componentsSuperviseur/gestionseance/gestionseance.component';
+import { NouvelleformationComponent } from './componentsSuperviseur/nouvelleformation/nouvelleformation.component';
 
 export const PRIVATE_ROUTES: Routes = [
   {
@@ -16,43 +23,76 @@ export const PRIVATE_ROUTES: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', 
+      {
+        path: '',
         component: ContentComponent,
         canActivate: [AuthGuard],
       },
       {
         path: 'compte',
         component: CompteComponent,
-        canActivate: [AuthGuard], // si tu as une protection
+        canActivate: [AuthGuard],
       },
       {
         path: 'ajouter',
-        component: AjouterComponent, // Remplacez par le composant approprié pour ajouter un utilisateur
-        canActivate: [AuthGuard], // si tu as une protection
+        component: AjouterComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'listesuperviseur',
         component: ListecompteComponent,
-        canActivate: [AuthGuard], 
+        canActivate: [AuthGuard],
       },
       {
         path: 'formations',
-        component: FormationsComponent,
-        canActivate: [AuthGuard], 
+        canActivate: [AuthGuard],
+        children: [
+          { path: '', component: FormationsComponent },
+          { path: 'nouvelle', component: NouvelleformationComponent },
+          { path: 'editer/:id', component: NouvelleformationComponent },
+        ]
       },
-      
       {
         path: 'apprenants',
         component: SuiviapprenantComponent,
-        canActivate: [AuthGuard], 
+        canActivate: [AuthGuard],
       },
       {
         path: 'evaluation',
         component: EvaluationComponent,
-        canActivate: [AuthGuard], 
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'evaluer',
+        component: EvaluerformateurComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'suiviglobal',
+        component: SuiviglobalComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'paiements',
+        component: PaiementsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'classe',
+        component: ClasseComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'seance',
+        component: SeanceComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'gestionseance',
+        component: GestionseanceComponent,
+        canActivate: [AuthGuard],
       },
       { path: '**', redirectTo: '' },
-
     ]
   },
   {
@@ -60,5 +100,4 @@ export const PRIVATE_ROUTES: Routes = [
     component: NotFoundComponent,
     canActivate: [AuthGuard],
   },
-
 ];

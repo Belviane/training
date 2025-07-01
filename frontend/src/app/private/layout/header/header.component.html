@@ -1,6 +1,5 @@
 <header class="main-header">
   <div class="header-left">
-    <img src="/assets/logo.png" class="header-logo" alt="BE I.T Logo" />
     <span class="current-date">
       {{ currentDate | date:' d MMMM y' : 'fr' }}
     </span>
@@ -14,7 +13,7 @@
     <h1 class="site-title">BE I.T CLASSROOM</h1>
   </div>
 
-  <div class="mode-system">
+  <!-- <div class="mode-system">
     <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
       <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
     </button>
@@ -27,7 +26,7 @@
       </button>
       }
     </mat-menu>
-  </div>
+  </div> -->
 
   <div class="header-right">
     <div class="notification-wrapper" (click)="toggleNotifications()">

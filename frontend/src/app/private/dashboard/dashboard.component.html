@@ -1,27 +1,20 @@
-<!-- <div class="layout-wrapper">
-
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
-    <router-outlet></router-outlet>
-    <div class="vertical-overlay"></div>
-    <div class="main-content">
-        <app-content></app-content>
-        <app-footer></app-footer>
-    </div>
-</div> -->
-
-
 <div class="layout-wrapper">
     <app-sidebar
         [isCollapsed]="sidebarCollapsed()"
-        (toggleSidebar)="toggleSidebar()"
+        [isMobile]="isMobile()"
+        [showSidebar]="showSidebar()"
+        (closeSidebar)="closeSidebarOnMobile()"
         class="layout-sidebar"
     ></app-sidebar>
 
+    <div class="sidebar-overlay" 
+         [class.visible]="showSidebar() && isMobile()"
+         (click)="closeSidebarOnMobile()"></div>
+
     <app-header (toggleSidebar)="toggleSidebar()" ></app-header>
 
-    <div class="main-content">
-        <div class="router-content"> <!-- Nouveau conteneur -->
+    <div class="main-content" [class.sidebar-open]="showSidebar() && isMobile()">
+        <div class="router-content">
             <router-outlet></router-outlet>
         </div>
         <app-footer></app-footer>

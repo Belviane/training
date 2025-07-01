@@ -80,7 +80,20 @@ export class HeaderComponent implements OnInit {
   onAvatarSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.avatarFile = input.files[0];
+      const file = input.files[0];
+
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (file.size > maxSize) {
+        this.toastr.error('La taille de l\'image est trop grande. Veuillez sélectionner une image de moins de 2MB.', 'Erreur');
+        return;
+      }
+
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+        this.toastr.error('Seules les images JPEG, PNG et GIF sont autorisées.', 'Erreur');
+        return;
+      }
+
+      this.avatarFile = file;
 
       // Prévisualisation de l'image sélectionnée
       const reader = new FileReader();
@@ -165,6 +178,7 @@ export class HeaderComponent implements OnInit {
           // Or, better, re-fetch the full user profile after a successful update:
           // this.loadUserProfile();
         }
+        
 
         this.toastr.success('Profil mis à jour avec succès !', 'Succès');
         this.closeProfileModal();

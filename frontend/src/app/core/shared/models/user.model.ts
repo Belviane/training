@@ -168,3 +168,5 @@
 
     // ... autres méthodes spécifiques aux rôles
   }
+
+  

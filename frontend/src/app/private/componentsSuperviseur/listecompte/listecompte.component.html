@@ -1,8 +1,164 @@
-<div class="header-container">
-  <h1>Liste des comptes</h1>
-  <button mat-raised-button color="primary" (click)="openAddModal()">
+<div class="compte-container">
+  <!-- Header avec bouton Ajouter -->
+  <div class="header-container">
+    <h1>
+      <mat-icon>people</mat-icon>Liste des comptes
+    </h1>
+     <!-- Version temporaire pour test -->
+  <button mat-raised-button color="primary" (click)="openAddModal()"
+          class="add-user-button">
     <mat-icon>person_add</mat-icon>
-    Ajouter
+    Ajouter Utilisateur
   </button>
-</div>
 
+    <!-- <button *ngIf="canAddUser()" 
+          mat-raised-button 
+          color="primary" 
+          (click)="openAddModal()"
+          class="add-user-button">
+    <mat-icon>person_add</mat-icon>
+    Ajouter Utilisateur
+  </button> -->
+  </div>
+
+  <!-- États de chargement -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Chargement des utilisateurs...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <mat-icon>error</mat-icon> {{ errorMessage }}
+  </div>
+
+  <!-- Onglets -->
+  <mat-tab-group>
+    <!-- Onglet Tous les utilisateurs -->
+    <mat-tab label="Tous les utilisateurs">
+      <div class="table-container">
+        <table mat-table [dataSource]="adminUsers.concat(supervisorUsers, otherUsers)" class="mat-elevation-z8">
+          <!-- Colonne Matricule -->
+          <ng-container matColumnDef="matricule">
+            <th mat-header-cell *matHeaderCellDef>Matricule</th>
+            <td mat-cell *matCellDef="let user">
+              <strong>{{ getMatricule(user) }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Colonne Nom -->
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let user">{{ user.nom }}</td>
+          </ng-container>
+
+          <!-- Colonne Prénom -->
+          <ng-container matColumnDef="prenom">
+            <th mat-header-cell *matHeaderCellDef>Prénom</th>
+            <td mat-cell *matCellDef="let user">{{ user.prenom }}</td>
+          </ng-container>
+
+          <!-- Colonne Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user" class="email-cell">{{ user.email }}</td>
+          </ng-container>
+
+          <!-- Colonne Rôle -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Rôle</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="role-badge" [ngClass]="getRoleClass(user.role_id)">
+                {{ getRoleName(user.role_id) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Colonne Statut -->
+          <ng-container matColumnDef="statut">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="status-badge" [class.active]="user.is_active" [class.inactive]="!user.is_active">
+                {{ user.is_active ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Colonne Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let user" class="actions">
+              <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Modifier">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button 
+                [disabled]="user.isLoading"
+                [color]="user.is_active ? 'warn' : 'primary'"
+                (click)="toggleUserStatus(user)" 
+                matTooltip="{{user.is_active ? 'Désactiver' : 'Activer'}}">
+                <mat-icon *ngIf="!user.isLoading">
+                  {{user.is_active ? 'toggle_off' : 'toggle_on'}}
+                </mat-icon>
+                <mat-spinner *ngIf="user.isLoading" diameter="24"></mat-spinner>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <!-- Onglet Administrateurs/Superviseurs -->
+    <mat-tab label="Administrateurs/Superviseurs">
+      <div class="table-container">
+        <table mat-table [dataSource]="adminUsers.concat(supervisorUsers)" class="mat-elevation-z8">
+          <!-- Mêmes colonnes que ci-dessus -->
+          <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+            <th mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</th>
+            <td mat-cell *matCellDef="let user">
+              <ng-container [ngSwitch]="col">
+                <span *ngSwitchCase="'matricule'">{{ getMatricule(user) }}</span>
+                <span *ngSwitchCase="'role'">
+                  <span class="role-badge" [ngClass]="getRoleClass(user.role_id)">
+                    {{ getRoleName(user.role_id) }}
+                  </span>
+                </span>
+                <span *ngSwitchCase="'statut'">
+                  <span class="status-badge" [class.active]="user.is_active">
+                    {{ user.is_active ? 'Actif' : 'Inactif' }}
+                  </span>
+                </span>
+                <span *ngSwitchCase="'actions'">
+                  <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Modifier">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </span>
+                <span *ngSwitchDefault>{{ user[col] }}</span>
+              </ng-container>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <!-- Onglet Autres utilisateurs (visible seulement pour les superviseurs) -->
+    <mat-tab *ngIf="currentUser?.role?.libelle === 'superviseur'" label="Autres utilisateurs">
+      <div class="table-container">
+        <table mat-table [dataSource]="otherUsers" class="mat-elevation-z8">
+          <!-- Mêmes colonnes que ci-dessus -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Message si vide -->
+  <div *ngIf="!isLoading && adminUsers.length + supervisorUsers.length + otherUsers.length === 0" class="no-users">
+    <mat-icon>people_outline</mat-icon>
+    <p>Aucun utilisateur trouvé</p>
+  </div>
+</div>

@@ -22,23 +22,24 @@ import { map, shareReplay } from 'rxjs/operators';
 export class DashboardComponent implements OnInit {
   
   sidebarCollapsed = signal(false);
+  isMobile = signal(false);
+  showSidebar = signal(false); // Pour contrôler l'affichage sur mobile
 
-
-  responsiveService = inject(ResponsiveService);
-
-  themeSelectorMode = computed(() => {
-    if (this.responsiveService.largeWidth()) {
-      return 'side';
-    }
-    return 'over';
-  });
-
+  private breakpointObserver = inject(BreakpointObserver);
 
   constructor(
     private router: Router, 
     private authService: AuthService,
-    private breakpointObserver: BreakpointObserver,) {
-     }
+    private responsiveService: ResponsiveService
+  ) {
+    this.breakpointObserver.observe([Breakpoints.Handset])
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
+        if (!result.matches) {
+          this.showSidebar.set(true); // Toujours afficher sur desktop
+        }
+      });
+  }
 
   ngOnInit(): void {
     console.log('connecté ?', this.authService.isAuthenticated());
@@ -46,6 +47,16 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleSidebar(): void {
-    this.sidebarCollapsed.update(collapsed => !collapsed);
+    if (this.isMobile()) {
+      this.showSidebar.update(show => !show);
+    } else {
+      this.sidebarCollapsed.update(collapsed => !collapsed);
+    }
+  }
+
+  closeSidebarOnMobile(): void {
+    if (this.isMobile()) {
+      this.showSidebar.set(false);
+    }
   }
 }

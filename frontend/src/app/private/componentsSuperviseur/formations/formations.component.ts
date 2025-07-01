@@ -1,78 +1,123 @@
-import { Component, OnInit, ViewChild, signal, computed, inject } from '@angular/core';
-import { LaravelApi } from '@app/core/api/laravel.api';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild, signal, computed, inject, TemplateRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatIcon } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators,  FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { TemplateRef } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { HttpClient } from '@angular/common/http';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+
+// Angular Material imports
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule, MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { 
-  Calendar, 
-  Clock, 
-  Award, 
-  DollarSign, 
-  Target, 
-  BookOpen, 
-  Save, 
-  AlertCircle, 
-  CheckCircle,
-  LucideAngularModule
-} from 'lucide-angular';
-import { Formation, FormationFormData, FormErrors, SubmitStatus } from '../../../core/shared/models/formation.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+// Lucide icons
+import { LucideAngularModule } from 'lucide-angular';
+
+// API configuration
+import { LaravelApi } from '@app/core/api/laravel.api';
+import { lastValueFrom } from 'rxjs';
+
+import { Formation, Module, Lecon, SubmitStatus, ApiFormationResponse } from '../../../core/shared/models/formation.model';
+
+import { FormControl } from '@angular/forms';
+import { Toast } from 'ngx-toastr';
+import { ClasseComponent } from '../classe/classe.component';
+import { SeanceComponent } from '../seance/seance.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-formations',
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule,
-    MatDialogModule, MatPaginator, 
-    MatPaginatorModule, 
-    MatTableModule, MatIcon, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatDatepickerModule, 
-    MatNativeDateModule],
+  standalone: true,
+  imports: [
+    RouterModule,
+    // Angular modules
+    CommonModule,
+    ReactiveFormsModule,
+
+    // Material modules
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './formations.component.html',
   styleUrl: './formations.component.css'
 })
-export class FormationsComponent implements OnInit {
-    private fb = inject(FormBuilder);
-    
-    submitStatus = signal<SubmitStatus>('idle');
-    
-    formationForm: FormGroup;
 
-  formations = new MatTableDataSource<any>();
-  displayedColumns = ['nom', 'libelle', 'dateDebut', 'dateFin', 'nombreSeance'];
+
+export class FormationsComponent implements OnInit, AfterViewInit {
+  @ViewChild('formationModal') formationModal!: TemplateRef<any>;
+
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar); 
+
+  formations = new MatTableDataSource<Formation>();
+  displayedColumns = ['nom', 'dates', 'seances', 'statut', 'actions'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild('addFormationModal') addFormationModal!: TemplateRef<any>;
 
-  constructor(private dialog: MatDialog, private http: HttpClient) { 
-    this.formationForm = this.fb.group({
-      nom_formation: ['', [Validators.required]],
-      libelle_formation: ['', [Validators.required]],
-      date_debutf: ['', [Validators.required]],
-      date_finf: ['', [Validators.required]],
-      nombre_seancef: ['', [Validators.required, Validators.min(1)]],
-      volume_horaire: ['', [Validators.required, Validators.min(0.5)]],
-      certifiante: [false],
-      prix_certification: ['0'],
-      prix: ['', [Validators.required, Validators.min(0)]],
-      statut: ['brouillon'],
-      objectif: ['', [Validators.required]]
-    });
+  
 
-     // Add custom validator for date range
+  // Signals
+  isLoading = signal(false);
+  submitStatus = signal<SubmitStatus>('idle');
+  isEditMode = signal(false);
+  currentFormationId = signal<number | null>(null);
+
+  // Form
+  formationForm = this.fb.group({
+    nom_formation: ['', [Validators.required, Validators.maxLength(100)]],
+    libelle_formation: ['', [Validators.required, Validators.maxLength(255)]],
+    date_debutf: ['', [Validators.required]],
+    date_finf: ['', [Validators.required]],
+    nombre_seancef: ['', [Validators.required, Validators.min(1)]],
+    volume_horaire: ['', [Validators.required, Validators.min(0.5)]],
+    certifiante: [false],
+    prix_certification: ['0'],
+    prix: ['', [Validators.required, Validators.min(0)]],
+    statut: ['brouillon', [Validators.required]],
+    objectif: ['', [Validators.required]],
+    modules: this.fb.array([])
+  });
+
+  get modules() {
+    return this.formationForm.get('modules') as FormArray;
+  }
+
+  getFormControl(control: AbstractControl | null): FormControl {
+    if (!(control instanceof FormControl)) {
+      throw new Error('Control is not a FormControl');
+    }
+    return control;
+  }
+
+  constructor() {
     this.formationForm.addValidators(this.dateRangeValidator.bind(this));
 
-    // Add conditional validator for certification price
     this.formationForm.get('certifiante')?.valueChanges.subscribe(certifiante => {
       const prixCertificationControl = this.formationForm.get('prix_certification');
       if (certifiante) {
@@ -85,79 +130,157 @@ export class FormationsComponent implements OnInit {
     });
   }
 
-  isCertifiante = computed(() => this.formationForm.get('certifiante')?.value || false);
-
-  dateRangeValidator(control: import('@angular/forms').AbstractControl) {
-    const form = control as FormGroup;
-    const startDate = form.get('date_debutf')?.value;
-    const endDate = form.get('date_finf')?.value;
-    
-    if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
-      return { dateRange: true };
-    }
-    return null;
+  ngOnInit(): void {
+    this.loadFormations();
   }
 
-  getFieldError(fieldName: string): string | null {
-    const control = this.formationForm.get(fieldName);
-    if (control?.invalid && (control?.dirty || control?.touched)) {
-      if (control.errors?.['required']) {
-        return this.getRequiredMessage(fieldName);
+  ngAfterViewInit(): void {
+    this.formations.paginator = this.paginator;
+  }
+
+  async loadFormations(): Promise<void> {
+    this.isLoading.set(true);
+    try {
+      const response = await lastValueFrom(
+        this.http.get<{ data: Formation[] }>(LaravelApi.formations)
+      );
+      this.formations.data = response.data; // Prenez les données depuis la propriété 'data'
+    } catch (error) {
+      this.showError('Erreur lors du chargement des formations');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async searchFormations(searchTerm: string): Promise<void> {
+    if (searchTerm.length < 2) {
+      this.loadFormations();
+      return;
+    }
+
+    this.isLoading.set(true);
+    try {
+      const response = await lastValueFrom(
+        this.http.get<ApiFormationResponse>(
+          `${LaravelApi.searchFormations}?query=${searchTerm}`
+        )
+      );
+      this.formations.data = response.data;
+    } catch (error) {
+      this.showError('Erreur lors de la recherche');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  private async loadClasses(): Promise<void> {
+    try {
+      // Implémentez la logique de chargement des classes ici
+      // Exemple:
+      // const classes = await lastValueFrom(this.http.get<any[]>(LaravelApi.classes));
+      // this.classes = classes;
+    } catch (error) {
+      this.showError('Erreur lors du chargement des classes');
+    }
+  }
+
+  private async loadSeances(): Promise<void> {
+    try {
+      // Implémentez la logique de chargement des séances ici
+      // Exemple:
+      // const seances = await lastValueFrom(this.http.get<any[]>(LaravelApi.seances));
+      // this.seances = seances;
+    } catch (error) {
+      this.showError('Erreur lors du chargement des séances');
+    }
+  }
+
+  openAddModalFormation(): void {
+    this.isEditMode.set(false);
+    this.currentFormationId.set(null);
+    this.formationForm.reset({
+      certifiante: false,
+      prix_certification: '0',
+      statut: 'brouillon',
+      nombre_seancef: '1',
+      volume_horaire: '1',
+      prix: '0',
+      modules: []
+    });
+    this.openFormModal();
+  }
+
+  openEditModal(formation: Formation): void {
+    this.isEditMode.set(true);
+    this.currentFormationId.set(formation.id || null);
+
+    // Patch main form values
+    this.formationForm.patchValue({
+      nom_formation: formation.nom_formation,
+      libelle_formation: formation.libelle_formation,
+      date_debutf: formation.date_debutf,
+      date_finf: formation.date_finf,
+      nombre_seancef: formation.nombre_seancef.toString(),
+      volume_horaire: formation.volume_horaire.toString(),
+      certifiante: formation.certifiante,
+      prix_certification: formation.prix_certification.toString(),
+      prix: formation.prix.toString(),
+      statut: formation.statut,
+      objectif: formation.objectif
+    });
+
+    // Clear existing modules
+    this.modules.clear();
+
+    // Add modules from the formation
+    if (formation.modules && formation.modules.length > 0) {
+      formation.modules.forEach(module => {
+        this.addModule(module);
+      });
+    }
+
+    this.openFormModal();
+  }
+
+  openAddModalClass(): void {
+    const dialogRef = this.dialog.open(ClasseComponent, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Rafraîchir la liste des classes
+        this.loadClasses();
       }
-      if (control.errors?.['min']) {
-        return this.getMinMessage(fieldName, control.errors['min'].min);
+    });
+  }
+
+  openAddModalSeance(): void {
+    const dialogRef = this.dialog.open(SeanceComponent, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Rafraîchir la liste des séances
+        this.loadSeances();
       }
-    }
-     // Check for date range error
-    if (fieldName === 'date_finf' && this.formationForm.errors?.['dateRange']) {
-      return 'La date de fin doit être postérieure à la date de début';
-    }
-
-    return null;
+    });
   }
 
-   private getRequiredMessage(fieldName: string): string {
-    const messages: { [key: string]: string } = {
-      nom_formation: 'Le nom de la formation est requis',
-      libelle_formation: 'Le libellé de la formation est requis',
-      date_debutf: 'La date de début est requise',
-      date_finf: 'La date de fin est requise',
-      nombre_seancef: 'Le nombre de séances est requis',
-      volume_horaire: 'Le volume horaire est requis',
-      prix: 'Le prix est requis',
-      prix_certification: 'Le prix de certification est requis',
-      objectif: 'L\'objectif de la formation est requis'
-    };
-    return messages[fieldName] || 'Ce champ est requis';
+  openFormModal(): void {
+    this.dialog.open(this.formationModal, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true
+    });
   }
 
-  private getMinMessage(fieldName: string, min: number): string {
-    const messages: { [key: string]: string } = {
-      nombre_seancef: `Le nombre de séances doit être supérieur à ${min - 1}`,
-      volume_horaire: `Le volume horaire doit être supérieur à ${min - 0.5}`,
-      prix: 'Le prix doit être un nombre positif',
-      prix_certification: 'Le prix de certification doit être un nombre positif'
-    };
-    return messages[fieldName] || `La valeur doit être supérieure à ${min}`;
-  }
-
-  getInputClass(fieldName: string): string {
-    const baseClass = 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200';
-    const errorClass = 'border-red-300 focus:border-red-500 focus:ring-red-500';
-    const normalClass = 'border-gray-300 focus:border-blue-500';
-    
-    return `${baseClass} ${this.getFieldError(fieldName) ? errorClass : normalClass}`;
-  }
-
-  getSubmitButtonClass(): string {
-    const baseClass = 'flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-all duration-200 text-white';
-    const loadingClass = 'bg-gray-400 cursor-not-allowed';
-    const normalClass = 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
-    
-    return `${baseClass} ${this.submitStatus() === 'loading' ? loadingClass : normalClass}`;
-  }
-
-  async onSubmit() {
+  async onSubmit(): Promise<void> {
     if (this.formationForm.invalid) {
       this.formationForm.markAllAsTouched();
       return;
@@ -166,71 +289,223 @@ export class FormationsComponent implements OnInit {
     this.submitStatus.set('loading');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       const formValue = this.formationForm.value;
-      const formation: Formation = {
-        ...formValue,
-        nombre_seancef: parseInt(formValue.nombre_seancef),
-        volume_horaire: parseFloat(formValue.volume_horaire),
-        prix_certification: parseFloat(formValue.prix_certification),
-        prix: parseFloat(formValue.prix)
+
+      // Formattez correctement les dates
+      const formatDate = (date: any) => {
+        if (date instanceof Date) {
+          return date.toISOString().split('T')[0];
+        }
+        return date; // Si c'est déjà une string au bon format
       };
 
-      console.log('Formation créée:', formation);
+      const formationData = {
+        nom_formation: formValue.nom_formation,
+        libelle_formation: formValue.libelle_formation,
+        date_debutf: formatDate(formValue.date_debutf),
+        date_finf: formatDate(formValue.date_finf),
+        nombre_seancef: Number(formValue.nombre_seancef),
+        volume_horaire: Number(formValue.volume_horaire),
+        certifiante: Boolean(formValue.certifiante),
+        prix_certification: Number(formValue.prix_certification),
+        prix: Number(formValue.prix),
+        statut: formValue.statut,
+        objectif: formValue.objectif,
+        modules: formValue.modules?.map((module: any) => ({
+          nom: module.nom,
+          description: module.description || '', // Valeur par défaut si undefined
+          lecons: module.lecons?.map((lecon: any) => ({
+            titre: lecon.titre,
+            contenu: lecon.contenu,
+            duree_estimee: Number(lecon.duree_estimee),
+            ordre: Number(lecon.ordre)
+          })) || [] // Tableau vide si pas de leçons
+        })) || [] // Tableau vide si pas de modules
+      };
+
+      // Debug: Afficher les données avant envoi
+      console.log('Données envoyées:', formationData);
+
+      if (this.isEditMode() && this.currentFormationId()) {
+        await lastValueFrom(
+          this.http.put(
+            LaravelApi.updateFormation(this.currentFormationId()!),
+            formationData
+          )
+        );
+        this.showSuccess('Formation mise à jour avec succès');
+      } else {
+        const response = await lastValueFrom(
+          this.http.post(LaravelApi.formations, formationData)
+        );
+        console.log('Réponse API:', response); // Debug
+        this.showSuccess('Formation créée avec succès');
+      }
+
       this.submitStatus.set('success');
-
-      // Reset form after success
-      setTimeout(() => {
-        this.submitStatus.set('idle');
-        this.formationForm.reset({
-          certifiante: false,
-          prix_certification: '0',
-          statut: 'brouillon'
-        });
-      }, 2000);
-
-    } catch (error) {
+      this.closeModal();
+      this.loadFormations();
+    } catch (error: any) {
+      console.error('Erreur détaillée:', error); // Debug
       this.submitStatus.set('error');
-      setTimeout(() => this.submitStatus.set('idle'), 3000);
+
+      let errorMessage = 'Erreur';
+      if (error.error?.message) {
+        errorMessage += `: ${error.error.message}`;
+      } else if (error.statusText) {
+        errorMessage += `: ${error.statusText}`;
+      }
+
+      this.showError(errorMessage);
     }
   }
 
-  ngOnInit(): void {
-    this.getFormations();
+  async deleteFormation(id: number): Promise<void> {
+    const confirm = window.confirm('Êtes-vous sûr de vouloir supprimer cette formation ?');
+    if (!confirm) return;
+
+    try {
+      await lastValueFrom(this.http.delete(LaravelApi.deleteFormation(id)));
+      this.showSuccess('Formation supprimée avec succès');
+      this.loadFormations();
+    } catch (error) {
+      this.showError('Erreur lors de la suppression de la formation');
+    }
   }
 
-  // formationForm = new FormGroup({
-  //   nom: new FormControl('', Validators.required),
-  //   libelle: new FormControl('', Validators.required),
-  //   dateDebut: new FormControl('', Validators.required),
-  //   dateFin: new FormControl('', Validators.required),
-  //   nombreSeance: new FormControl('', Validators.required)
-  // });
+  async exportToPdf(): Promise<void> {
+    try {
+      const blob = await lastValueFrom(
+        this.http.get(LaravelApi.exportPdfFormations, { responseType: 'blob' })
+      );
 
-  getFormations(): void {
-    this.http.get(LaravelApi.formations).subscribe(response => {
-      console.log('Données reçues :', response);
-      this.formations.data = (response as any);
-      this.formations.paginator = this.paginator;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'formations.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+
+      this.showSuccess('Export PDF généré avec succès');
+    } catch (error) {
+      this.showError('Erreur lors de la génération du PDF');
+    }
+  }
+
+  // Module Management
+  addModule(module?: Module): void {
+    const moduleGroup = this.fb.group({
+      nom: [module?.nom || '', Validators.required],
+      description: [module?.description || ''],
+      lecons: this.fb.array([])
     });
+
+    if (module?.lecons) {
+      module.lecons.forEach(lecon => {
+        this.addLeconToModule(moduleGroup, lecon);
+      });
+    }
+
+    this.modules.push(moduleGroup);
   }
 
-  openAddModal(): void {
-    const dialogRef = this.dialog.open(this.addFormationModal, {
-      width: '6000px',
-      height:'6000px',
-      disableClose: true
-    });
+  removeModule(index: number): void {
+    this.modules.removeAt(index);
   }
 
+  addLecon(moduleIndex: number, lecon?: Lecon): void {
+    const module = this.modules.at(moduleIndex) as FormGroup;
+    const lecons = module.get('lecons') as FormArray;
+
+    lecons.push(this.fb.group({
+      titre: [lecon?.titre || '', Validators.required],
+      contenu: [lecon?.contenu || '', Validators.required],
+      duree_estimee: [lecon?.duree_estimee || 30, [Validators.required, Validators.min(5)]],
+      ordre: [lecon?.ordre || (lecons.length + 1), [Validators.required, Validators.min(1)]]
+    }));
+  }
+
+  private addLeconToModule(moduleGroup: FormGroup, lecon: Lecon): void {
+    const lecons = moduleGroup.get('lecons') as FormArray;
+    lecons.push(this.fb.group({
+      titre: [lecon.titre, Validators.required],
+      contenu: [lecon.contenu, Validators.required],
+      duree_estimee: [lecon.duree_estimee, [Validators.required, Validators.min(5)]],
+      ordre: [lecon.ordre, [Validators.required, Validators.min(1)]]
+    }));
+  }
+
+  removeLecon(moduleIndex: number, leconIndex: number): void {
+    const module = this.modules.at(moduleIndex) as FormGroup;
+    const lecons = module.get('lecons') as FormArray;
+    lecons.removeAt(leconIndex);
+  }
+
+  getLecons(moduleIndex: number): FormArray {
+    const module = this.modules.at(moduleIndex) as FormGroup;
+    return module.get('lecons') as FormArray;
+  }
+
+  // Helpers
   closeModal(): void {
     this.dialog.closeAll();
+    this.submitStatus.set('idle');
   }
 
-  addFormation():void {
-    
+  dateRangeValidator(control: import('@angular/forms').AbstractControl) {
+    const form = control as FormGroup;
+    const startDate = form.get('date_debutf')?.value;
+    const endDate = form.get('date_finf')?.value;
+
+    if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
+      return { dateRange: true };
+    }
+    return null;
   }
 
+  getFieldError(fieldName: string, moduleIndex?: number, leconIndex?: number): string | null {
+    let control: any;
+
+    if (moduleIndex !== undefined && leconIndex !== undefined) {
+      // Leçon error
+      const leconGroup = this.getLecons(moduleIndex).at(leconIndex) as FormGroup;
+      control = leconGroup.get(fieldName);
+    } else if (moduleIndex !== undefined) {
+      // Module error
+      const moduleGroup = this.modules.at(moduleIndex) as FormGroup;
+      control = moduleGroup.get(fieldName);
+    } else {
+      // Main form error
+      control = this.formationForm.get(fieldName);
+    }
+
+    if (control?.invalid && (control?.dirty || control?.touched)) {
+      if (control.errors?.['required']) {
+        return 'Ce champ est requis';
+      }
+      if (control.errors?.['min']) {
+        return `La valeur minimale est ${control.errors['min'].min}`;
+      }
+    }
+    if (fieldName === 'date_finf' && this.formationForm.errors?.['dateRange']) {
+      return 'La date de fin doit être postérieure à la date de début';
+    }
+    return null;
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
+    });
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
 }

@@ -1,89 +1,86 @@
 <div class="header-container">
-    <h2>Liste des formations</h2>
-    <button mat-raised-button color="primary" (click)="openAddModal()">
-        <mat-icon>add</mat-icon>
-        Nouvelle formation
-    </button>
+    <h2>Gestion des Formations</h2>
+
+    <div class="actions-container">
+        <mat-form-field class="search-field">
+            <mat-label>Rechercher</mat-label>
+            <input matInput (input)="searchFormations($any($event.target).value)">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="buttons-container">
+            <button mat-raised-button color="primary" routerLink="/app/formations/nouvelle">
+                <mat-icon>add</mat-icon>
+                Nouvelle formation
+            </button>
+            <button mat-raised-button color="primary" (click)="openAddModalClass()">
+                <mat-icon>add</mat-icon>
+                Nouvelle classe
+            </button>
+            <button mat-raised-button color="primary" (click)="openAddModalSeance()">
+                <mat-icon>add</mat-icon>
+                Nouvelle seance
+            </button>
+            <button mat-raised-button color="accent" (click)="exportToPdf()">
+                <mat-icon>picture_as_pdf</mat-icon>
+                Exporter PDF
+            </button>
+        </div>
+    </div>
 </div>
 
-<div class="table-container">
-    <h2>Liste des formations</h2>
-    <table mat-table [dataSource]="formations" class="mat-elevation-z8">
-        <ng-container matColumnDef="nom">
-            <th mat-header-cell *matHeaderCellDef> Nom </th>
-            <td mat-cell *matCellDef="let element"> {{ element.nom }} </td>
-        </ng-container>
-        <ng-container matColumnDef="libelle">
-            <th mat-header-cell *matHeaderCellDef> Libellé </th>
-            <td mat-cell *matCellDef="let element"> {{ element.libelle }} </td>
-        </ng-container>
-        <ng-container matColumnDef="dateDebut">
-            <th mat-header-cell *matHeaderCellDef> Date de début </th>
-            <td mat-cell *matCellDef="let element"> {{ element.dateDebut | date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="dateFin">
-            <th mat-header-cell *matHeaderCellDef> Date de fin </th>
-            <td mat-cell *matCellDef="let element"> {{ element.dateFin | date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="nombreSeance">
-            <th mat-header-cell *matHeaderCellDef> Nombre de séances </th>
-            <td mat-cell *matCellDef="let element"> {{ element.nombreSeance }} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-</div>
-
-
-<!-- Formulaire modal -->
-<ng-template #addFormationModal>
-  <div class="form-container">
-    <div class="form-card">
-      <!-- Header -->
-      <div class="form-header">
-        <h1 class="form-title">
-          <lucide-icon name="book-open"></lucide-icon>
-          Création d'une Formation
-        </h1>
-      </div>
-
-      <form [formGroup]="formationForm" (ngSubmit)="onSubmit()" class="form-content">
-        <!-- Basic Information Section -->
-        <div class="form-section">
-          <h2 class="section-title">
-            <lucide-icon name="book-open"></lucide-icon>
-            Informations Générales
-          </h2>
-          
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="nom_formation" class="form-label">Nom de la Formation *</label>
-              <input type="text" id="nom_formation" formControlName="nom_formation" class="form-input" />
-              @if (getFieldError('nom_formation')) {
-                <p class="error-message">
-                  <lucide-icon name="alert-circle"></lucide-icon>
-                  {{ getFieldError('nom_formation') }}
-                </p>
-              }
-            </div>
-
-            <div class="form-group">
-              <label for="statut" class="form-label">Statut</label>
-              <select id="statut" formControlName="statut" class="form-select">
-                <option value="brouillon">Brouillon</option>
-                <option value="active">Active</option>
-                <option value="terminee">Terminée</option>
-                <option value="suspendue">Suspendue</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- ... -->
+<div class="cards-container">
+    @if (isLoading()) {
+    <div class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    } @else {
+    @for (formation of formations.data; track formation.id) {
+    <div class="formation-card">
+        <div class="card-header">
+            <h3>{{ formation.nom_formation }}</h3>
+            <div class="card-subtitle">{{ formation.libelle_formation }}</div>
         </div>
 
-        <!-- ... -->
-      </form>
+        <div class="card-content">
+            <div class="card-detail">
+                <mat-icon>event</mat-icon>
+                {{ formation.date_debutf | date:'dd/MM/yyyy' }} - {{ formation.date_finf | date:'dd/MM/yyyy' }}
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>schedule</mat-icon>
+                {{ formation.volume_horaire }} heures
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>library_books</mat-icon>
+                {{ formation.nombre_seancef }} séances • {{ formation.modules?.length || 0 }} modules
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>attach_money</mat-icon>
+                {{ formation.prix | currency:'FCFA': 'symbol':'1.0-0' }}
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <span class="status-badge" [class]="'status-' + formation.statut">
+                {{ formation.statut | titlecase }}
+            </span>
+
+            <div class="card-actions">
+                <button mat-icon-button color="primary" [routerLink]="['/app/formations/editer', formation.id]">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteFormation(formation.id!)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-</ng-template>
+    }
+    }
+</div>
+
+<mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
