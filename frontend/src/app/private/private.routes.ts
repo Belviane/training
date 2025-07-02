@@ -10,7 +10,6 @@ import { FormationsComponent } from './componentsSuperviseur/formations/formatio
 import { SuiviapprenantComponent } from './componentsFormateur/suiviapprenant/suiviapprenant.component';
 import { EvaluationComponent } from './componentsApprenant/evaluation/evaluation.component';
 import { EvaluerformateurComponent } from './componentsSuperviseur/evaluerformateur/evaluerformateur.component';
-import { SuiviglobalComponent } from './componentsSuperviseur/suiviglobal/suiviglobal.component';
 import { PaiementsComponent } from './componentsSuperviseur/paiements/paiements.component';
 import { ClasseComponent } from './componentsSuperviseur/classe/classe.component';
 import { SeanceComponent } from './componentsSuperviseur/seance/seance.component';
@@ -65,11 +64,6 @@ export const PRIVATE_ROUTES: Routes = [
       {
         path: 'evaluer',
         component: EvaluerformateurComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'suiviglobal',
-        component: SuiviglobalComponent,
         canActivate: [AuthGuard],
       },
       {

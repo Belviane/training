@@ -1,57 +1,44 @@
-/* Conteneur principal - Version claire élégante */
+/* Sidebar container */
 .sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: #FFFFFF; /* Fond blanc */
-  color: #222222; /* Texte noir */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
-  overflow-y: hidden;
   position: fixed;
-  top: 0;
+  top: 64px; /* Sous le header */
   left: 0;
-  z-index: 1000;
-  padding-top: 80px;
+  width: 250px;
+  height: calc(100vh - 64px); /* Hauteur totale moins le header */
+  background-color: #FFFFFF;
+  color: #222222;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  z-index: 998; /* Sous le header mais au-dessus du contenu */
   border-right: 1px solid #EEEEEE;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar.sidebar-open {
   transform: translateX(0);
-  transition: transform 0.3s ease, width 0.3s ease;
 }
 
-.sidebar.collapsed {
-  width: 80px;
+/* Navigation */
+.sidebar-nav {
+  width: 100%;
+  height: 100%;
 }
 
-.sidebar.collapsed .menu-label {
-  display: none;
-}
-
-.sidebar.collapsed a {
-  justify-content: center;
-  padding: 14px 0;
-}
-
-.sidebar.collapsed mat-icon {
-  margin-right: 0;
-}
-
-/* Liste des éléments */
-.sidebar ul {
+.sidebar-nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  flex-grow: 1;
 }
 
-/* Élément de menu */
-.sidebar li {
+.sidebar-nav li {
   margin: 0;
   position: relative;
 }
 
-/* Lien du menu */
-.sidebar a {
+/* Menu links */
+.sidebar-nav a {
   display: flex;
   align-items: center;
   padding: 14px 24px;
@@ -61,180 +48,148 @@
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 4px solid transparent;
+  cursor: pointer;
 }
 
-/* Icônes en gris neutre */
-.sidebar mat-icon {
+.sidebar-nav mat-icon {
   margin-right: 16px;
-  color: #666666; /* Gris moyen */
+  color: #666666;
   font-size: 24px;
   transition: all 0.3s ease;
 }
 
-/* Effet au survol */
-.sidebar a:hover {
-  background-color: #FFFBE6; /* Jaune très pâle */
+/* Hover effects */
+.sidebar-nav a:hover {
+  background-color: #FFFBE6;
   color: #222222;
 }
 
-.sidebar a:hover mat-icon {
-  color: #FFD700; /* Jaune or au survol */
+.sidebar-nav a:hover mat-icon {
+  color: #FFD700;
   transform: scale(1.05);
 }
 
-/* État actif */
-.sidebar a.active {
-  background-color: #FFF8D6; /* Jaune pâle */
-  border-left-color: #FFD700; /* Jaune or */
+/* Active state */
+.sidebar-nav a.active {
+  background-color: #FFF8D6;
+  border-left-color: #FFD700;
   font-weight: 600;
 }
 
-.sidebar a.active mat-icon {
-  color: #FFD700; /* Jaune or pour l'état actif */
+.sidebar-nav a.active mat-icon {
+  color: #FFD700;
 }
 
-/* Indicateur visuel pour l'état actif */
-.sidebar li::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 0;
-  background-color: #FFD700; /* Jaune or */
-  transition: height 0.3s ease;
-}
-
-.sidebar li:hover::after,
-.sidebar li.active::after {
-  height: 60%;
-}
-
-/* Sous-menu */
-.submenu ul {
-  padding-left: 40px;
-  background-color: #F9F9F9; /* Gris très clair */
-}
-
-.submenu ul li a {
-  padding: 12px 24px 12px 20px;
-  font-size: 0.9rem;
-  color: #555555; /* Gris moyen */
-  border-left: 3px solid #EEEEEE;
-}
-
+/* Submenu */
 .submenu {
   padding-left: 20px;
-  background-color: #f0f0f0;
+  background-color: #F9F9F9;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.expanded {
+  max-height: 500px; /* Adjust based on your content */
+}
+
+.submenu ul {
+  padding-left: 20px;
 }
 
 .submenu li {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 
-.submenu li:last-child {
-  border-bottom: none;
+.submenu a {
+  padding: 10px 24px 10px 20px;
+  font-size: 0.9rem;
+  color: #555555;
+  border-left: 3px solid #EEEEEE;
 }
 
-.submenu ul li a:hover,
-.submenu ul li a.active {
+.submenu a:hover,
+.submenu a.active {
   color: #222222;
-  background-color: #FFF0A0; /* Jaune plus prononcé */
-  border-left-color: #FFD700; /* Jaune or */
+  background-color: #FFF0A0;
+  border-left-color: #FFD700;
 }
 
-.submenu ul li a mat-icon {
-  font-size: 20px; /* Taille légèrement réduite pour les sous-menus */
-}
-
-/* Scrollbar élégante */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: #F5F5F5;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background-color: #FFD700; /* Jaune or */
-  border-radius: 3px;
-}
-
-
-/* Masquer complètement sur mobile */
-@media (max-width: 992px) {
-  .sidebar {
-    transform: translateX(-100%);
-    width: 260px;
-  }
-  
-  .sidebar.open {
-    transform: translateX(0);
-  }
-  
-  .sidebar.collapsed {
-    transform: translateX(0);
-    width: 80px;
-  }
-  
-  .sidebar.collapsed.open {
-    width: 260px;
-  }
-  
-  .sidebar.collapsed.open .menu-label {
-    display: inline;
-  }
-  
-  .sidebar.collapsed.open a {
-    justify-content: flex-start;
-    padding: 14px 24px;
-  }
-  
-  .sidebar.collapsed.open mat-icon {
-    margin-right: 16px;
-  }
-}
-
-/* Ajout d'un overlay pour mobile */
+/* Overlay */
 .sidebar-overlay {
   position: fixed;
-  top: 0;
+  top: 64px; /* Sous le header */
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 64px);
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 997; /* Sous la sidebar mais au-dessus du contenu */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.sidebar-overlay.visible {
+.sidebar-overlay.overlay-visible {
   opacity: 1;
   visibility: visible;
 }
 
+/* Responsive */
 @media (min-width: 993px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+  
   .sidebar-overlay {
     display: none;
   }
 }
 
-/* Téléphones très petits */
-@media (max-width: 576px) {
+/* Mobile styles */
+@media (max-width: 992px) {
+  .sidebar {
+    z-index: 1000; /* Assurez-vous qu'il est au-dessus du contenu */
+    width: 80%; /* Prend plus d'espace sur mobile */
+  }
+  
+  .sidebar-overlay {
+    z-index: 999; /* Juste en dessous de la sidebar */
+  }
+  
+  .main-content {
+    position: relative;
+    z-index: 1; /* En dessous de l'overlay */
+  }
+
+  .sidebar-nav a {
+    padding: 16px 24px; /* Plus grand pour le tactile */
+  }
+  
+  .submenu a {
+    padding: 14px 24px 14px 20px;
+  }
+}
+
+/* Desktop - Comportement différent */
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0); /* Toujours visible */
+  }
+
+  /* Quand la sidebar est fermée en desktop */
+  .sidebar:not(.sidebar-open) {
+    transform: translateX(-100%);
+  }
+}
+
+/* Mobile - Overlay */
+@media (max-width: 1023px) {
   .sidebar {
     transform: translateX(-100%);
-    width: 260px;
+    z-index: 1000;
   }
-  
-  .sidebar.open {
+
+  .sidebar.sidebar-open {
     transform: translateX(0);
-  }
-  
-  .sidebar-header {
-    justify-content: space-between;
   }
 }

@@ -1,146 +1,69 @@
-/* Reset et styles de base */
-:host {
-  display: block;
-  width: 100%;
-  overflow-x: hidden;
-  --header-height: 64px;
-  --sidebar-width: 240px;
-  --primary-color: #3f51b5;
-  --secondary-color: #f5f7fa;
-  --text-color: #2c3e50;
-  --border-radius: 8px;
-  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+/* Mise en page principale de l'application */
+.app-layout {
+  min-height: 100vh; /* Hauteur minimale : 100% de la fenêtre */
+  display: flex;
+  flex-direction: column; /* Disposition verticale */
 }
 
-/* Layout principal */
-.layout-wrapper {
-  display: grid;
-  grid-template-areas:
-    "sidebar header"
-    "sidebar main";
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
-}
-
-/* En-tête */
-app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  height: var(--header-height);
-}
-
-/* Sidebar */
-.layout-sidebar {
-  position: fixed;
-  top: var(--header-height);
-  left: 0;
-  bottom: 0;
-  width: var(--sidebar-width);
-  background: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 90;
-  overflow-y: auto;
-  transition: transform 0.3s ease, width 0.3s ease;
-  transform: translateX(-100%);
-}
-
-.layout-sidebar.collapsed {
-  width: 80px;
-}
-
-.layout-sidebar.open {
-  transform: translateX(0);
-}
-
-/* Overlay pour mobile */
-.sidebar-overlay {
-  position: fixed;
-  top: var(--header-height);
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 89;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.sidebar-overlay.visible {
-  opacity: 1;
-  visibility: visible;
+/* Corps de l'application */
+.app-body {
+  flex: 1;
+  display: flex;
+  margin-top: 64px; /* Hauteur du header */
 }
 
 /* Contenu principal */
 .main-content {
-  margin-top: var(--header-height);
-  padding: 24px;
-  min-height: calc(100vh - var(--header-height));
-  transition: margin-left 0.3s ease;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px); /* Hauteur moins le header */
+  background: var(--gray-50); /* Couleur de fond */
+  transition: margin-left 0.3s ease; /* Animation du décalage */
 }
 
-.main-content.sidebar-open {
-  margin-left: var(--sidebar-width);
+/* Wrapper du contenu */
+.content-wrapper {
+  flex: 1;
+  padding: 20px; /* Espacement intérieur */
 }
 
-.router-content {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 24px;
-  box-shadow: var(--box-shadow);
-  min-height: calc(100% - 48px);
-}
-
-/* Responsive Design */
-@media (min-width: 992px) {
-  .layout-sidebar {
-    transform: translateX(0);
-  }
-  
+/* Desktop - Sidebar toujours visible */
+@media (min-width: 993px) {
   .main-content {
-    margin-left: var(--sidebar-width);
+    margin-left: 250px; /* Décalage pour la sidebar */
+    width: calc(100% - 250px); /* Largeur ajustée */
   }
   
-  .sidebar-overlay {
-    display: none;
+  .sidebar {
+    transform: translateX(0) !important; /* Sidebar visible */
   }
 }
 
-@media (max-width: 1200px) {
+/* Mobile - Sidebar cachée par défaut */
+@media (max-width: 992px) {
   .main-content {
-    padding: 20px;
-  }
-  
-  .router-content {
-    padding: 20px;
+    margin-left: 0; /* Pas de décalage */
   }
 }
 
-@media (max-width: 768px) {
-  :root {
-    --header-height: 56px;
-  }
-  
+/* Desktop - Gestion de la sidebar */
+@media (min-width: 1024px) {
   .main-content {
-    padding: 16px;
+    margin-left: 250px; /* Largeur sidebar */
+    transition: margin-left 0.3s ease;
   }
-  
-  .router-content {
-    padding: 16px;
+
+  /* Quand la sidebar est fermée en desktop */
+  .main-content:not(.sidebar-open) {
+    margin-left: 0;
   }
 }
 
-@media (max-width: 576px) {
+/* Mobile - Gestion différente */
+@media (max-width: 1023px) {
   .main-content {
-    padding: 12px;
-  }
-  
-  .router-content {
-    padding: 12px;
+    margin-left: 0 !important;
+    width: 100%;
   }
 }

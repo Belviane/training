@@ -1,32 +1,12 @@
 <header class="main-header">
   <div class="header-left">
-    <span class="current-date">
-      {{ currentDate | date:' d MMMM y' : 'fr' }}
-    </span>
-
-    <button class="menu-toggle" (click)="toggleSidebar.emit()">
+    <button class="menu-toggle" (click)="toggleSidebar()">
       <i class="material-icons">menu</i>
     </button>
+    <div class="header-title">
+      <h1 class="site-title">BE I.T CLASSROOM</h1>
+    </div>
   </div>
-
-  <div class="header-center">
-    <h1 class="site-title">BE I.T CLASSROOM</h1>
-  </div>
-
-  <!-- <div class="mode-system">
-    <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
-      <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
-    </button>
-
-    <mat-menu #themeMenu="matMenu">
-      @for (theme of themeService.getThemes(); track theme.name) {
-      <button mat-menu-item (click)="themeService.setTheme(theme.name)">
-        <mat-icon>{{ theme.icon }}</mat-icon>
-        <span>{{ theme.name | titlecase }}</span>
-      </button>
-      }
-    </mat-menu>
-  </div> -->
 
   <div class="header-right">
     <div class="notification-wrapper" (click)="toggleNotifications()">
@@ -89,7 +69,7 @@
         <label for="login">Nom d'utilisateur</label>
         <input type="texte" id="login" name="login" [(ngModel)]="editableUser.login" required />
       </div>
-      
+
       <div class="modal-actions">
         <button type="submit" [disabled]="isLoadingProfileUpdate">
           {{ isLoadingProfileUpdate ? 'Mise à jour...' : 'Enregistrer' }}

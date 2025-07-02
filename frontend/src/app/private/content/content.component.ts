@@ -9,6 +9,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { LaravelApi } from '@app/core/api/laravel.api';
 import { CompteComponent } from '../compte/compte.component';
+import { Observable } from 'rxjs';
+
+//Service pour les statistiques
+import { ClasseService } from 'src/app/services/classe.service';
+import { ApprenantService } from 'src/app/services/apprenant.service';
+import { FormateurService } from 'src/app/services/formateur.service';
 
 /**
  * ContentComponent
@@ -21,6 +27,11 @@ import { CompteComponent } from '../compte/compte.component';
   styleUrl: './content.component.css'
 })
 export class ContentComponent implements OnInit {
+   nbClasses = 0;
+  nbApprenants = 0;
+  nbFormateurs = 0;
+  nbreussite = 0;
+
 
   // --- Statistiques utilisateurs par rôle ---
   userStats = [
@@ -69,6 +80,10 @@ export class ContentComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private http: HttpClient,
+
+    private classeService: ClasseService,
+    private apprenantService: ApprenantService,
+    private formateurService: FormateurService,
     
   ) {
   }
@@ -82,6 +97,22 @@ export class ContentComponent implements OnInit {
 
     this.loadUserStats();
 
+    this.loadDashboardStats();
+
+  }
+
+  loadDashboardStats(): void {
+    this.classeService.getClasses().subscribe(classes => {
+      this.nbClasses = classes.length;
+    });
+
+    this.apprenantService.getApprenantCount().subscribe(count => {
+      this.nbApprenants = count;
+    });
+
+    this.formateurService.getFormateurCount().subscribe(count => {
+      this.nbFormateurs = count;
+    });
   }
 
   /**

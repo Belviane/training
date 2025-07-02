@@ -1,22 +1,35 @@
-<div class="layout-wrapper">
-    <app-sidebar
-        [isCollapsed]="sidebarCollapsed()"
-        [isMobile]="isMobile()"
-        [showSidebar]="showSidebar()"
-        (closeSidebar)="closeSidebarOnMobile()"
-        class="layout-sidebar"
-    ></app-sidebar>
+<!--
+    Composant principal du tableau de bord privé.
 
-    <div class="sidebar-overlay" 
-         [class.visible]="showSidebar() && isMobile()"
-         (click)="closeSidebarOnMobile()"></div>
+    Structure :
+    - <app-header> : En-tête de l'application avec gestion de l'ouverture/fermeture de la barre latérale via l'événement (sidebarToggle).
+    - <app-sidebar> : Barre latérale affichée ou masquée selon la propriété [isOpen], avec gestion de la fermeture via l'événement (sidebarClose).
+    - <main class="main-content"> : Contenu principal du tableau de bord, incluant :
+        - <router-outlet> : Point d'injection pour le routage des composants enfants.
+        - <app-footer> : Pied de page de l'application.
 
-    <app-header (toggleSidebar)="toggleSidebar()" ></app-header>
+    Styles :
+    - La classe 'sidebar-open' est appliquée dynamiquement au contenu principal lorsque la barre latérale est ouverte.
 
-    <div class="main-content" [class.sidebar-open]="showSidebar() && isMobile()">
-        <div class="router-content">
-            <router-outlet></router-outlet>
-        </div>
-        <app-footer></app-footer>
+    Objectif :
+    Fournir une structure de mise en page cohérente pour les pages privées du tableau de bord, facilitant la navigation et l'intégration des différents composants de l'application.
+-->
+<div class="app-layout">
+    <!-- Header avec bouton de toggle pour la sidebar -->
+    <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+
+    <div class="app-body">
+        <!-- Sidebar avec gestion d'état ouverte/fermée -->
+        <app-sidebar [isOpen]="sidebarOpen" (sidebarClose)="closeSidebar()"></app-sidebar>
+
+        <!-- Contenu principal qui s'ajuste selon l'état de la sidebar -->
+        <main class="main-content" [class.sidebar-open]="sidebarOpen">
+            <div class="content-wrapper">
+                <!-- Point d'injection des vues router -->
+                <router-outlet></router-outlet>
+            </div>
+            <!-- Pied de page -->
+            <app-footer></app-footer>
+        </main>
     </div>
 </div>

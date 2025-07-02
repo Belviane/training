@@ -1,35 +1,36 @@
-<div class="sidebar-overlay" 
-  [class.visible]="isMobile && showSidebar"
-  (click)="closeSidebar.emit()"></div>
+<aside class="sidebar" [class.sidebar-open]="isOpen">
+  <nav class="sidebar-nav">
+    <ul>
+      <li *ngFor="let item of filteredSidebarItems">
+        <div *ngIf="item.children">
+          <a (click)="toggleExpansion(item)">
+            <mat-icon>{{item.icon}}</mat-icon>
+            <span class="menu-label">{{item.label}}</span>
+            <mat-icon class="dropdown-icon">
+              {{ isExpanded(item) ? 'arrow_drop_up' : 'arrow_drop_down' }}
+            </mat-icon>
+          </a>
+          <div class="submenu" [class.expanded]="isExpanded(item)">
+            <ul>
+              <li *ngFor="let submenu of item.children">
+                <a (click)="navigateAndClose(submenu.route)" 
+                   [class.active]="isRouteActive(submenu.route, submenu.exact)">
+                  <mat-icon>{{submenu.icon}}</mat-icon>
+                  <span class="menu-label">{{submenu.label}}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-<nav class="sidebar" [class.open]="showSidebar" [class.collapsed]="isCollapsed && !isMobile" >
-  <ul>
-    <li *ngFor="let item of filteredSidebarItems">
-      <div *ngIf="item.children">
-        <a (click)="toggleExpansion(item)">
-          <mat-icon>{{item.icon}}</mat-icon>
-          <span class="menu-label">{{item.label}}</span>
-          <mat-icon style="margin-left: auto;">{{ isExpanded(item) ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
-        </a>
-        <ul *ngIf="isExpanded(item)" class="submenu">
-          <li *ngFor="let submenu of item.children">
-            <a [routerLink]="submenu.route" 
-                [routerLinkActive]="'active'"
-                [routerLinkActiveOptions]="{exact: submenu.exact}">
-              <mat-icon>{{submenu.icon}}</mat-icon>
-              <span class="menu-label">{{submenu.label}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div *ngIf="!item.children">
-        <a [routerLink]="item.route" 
-            [routerLinkActive]="'active'"
-            [routerLinkActiveOptions]="{exact: item.exact}">
-          <mat-icon>{{item.icon}}</mat-icon>
-          <span class="menu-label">{{item.label}}</span>
-        </a>
-      </div>
-    </li>
-  </ul>
-</nav>
+        <div *ngIf="!item.children">
+          <a (click)="navigateAndClose(item.route)" 
+             [class.active]="isRouteActive(item.route, item.exact)">
+            <mat-icon>{{item.icon}}</mat-icon>
+            <span class="menu-label">{{item.label}}</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</aside>

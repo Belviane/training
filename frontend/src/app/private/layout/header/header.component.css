@@ -4,15 +4,11 @@ body {
 
 .main-header {
   height: 64px;
-  justify-content: space-between;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
-  /* Fond blanc */
   color: #222222;
-  /* Texte noir */
   padding: 0.8rem 2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -21,75 +17,39 @@ body {
   width: 100%;
   top: 0;
   z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-/* Ajout des styles pour le bouton de toggle du sidebar */
 .menu-toggle {
   background: none;
   border: none;
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-md);
+  padding: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  color: var(--gray-600);
+  transition: all 0.2s ease;
+  color: #666666;
 }
 
 .menu-toggle:hover {
-  background-color: var(--gray-100);
-  color: var(--gray-900);
-}
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-}
-
-.breadcrumb-item {
-  color: var(--gray-700);
-  font-weight: 500;
+  background-color: #f0f0f0;
+  color: #000000;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-}
-
-.header-logo {
-  height: 32px;
-  transition: transform 0.3s ease;
-}
-
-.header-logo:hover {
-  transform: scale(1.05);
-}
-
-.header-spacer {
-  width: 1px;
-  height: 24px;
-  background: #dddddd;
-}
-
-.current-date {
-  font-size: 0.95rem;
-  color: #555555;
-  font-weight: 400;
-}
-
-.avatar-preview {
-  max-width: 100%;
-  max-height: 200px; /* Ajustez la hauteur maximale selon vos besoins */
-  object-fit: contain;
-  margin: 10px 0;
+  gap: 0.8rem;
 }
 
 .site-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #222222;
   margin: 0;
   position: relative;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-weight: 550;
 }
 
 .site-title::after {
@@ -101,7 +61,6 @@ body {
   width: 60px;
   height: 3px;
   background: #ffd700;
-  /* Jaune or */
   border-radius: 3px;
 }
 
@@ -111,25 +70,21 @@ body {
   gap: 2rem;
 }
 
-/* Notifications */
 .notification-wrapper {
   position: relative;
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;
-  transition: all 0.3s ease;
   display: flex;
-  /* S'assurer que l'icône est centrée */
   align-items: center;
   justify-content: center;
   width: 40px;
-  /* Taille fixe pour le cercle */
   height: 40px;
+  transition: all 0.3s ease;
 }
 
 .notification-wrapper:hover {
   background-color: #fffbe6;
-  /* Jaune très clair */
 }
 
 .notification-wrapper mat-icon {
@@ -140,7 +95,6 @@ body {
 
 .notification-wrapper:hover mat-icon {
   color: #ffd700;
-  /* Jaune or */
   transform: scale(1.1);
 }
 
@@ -149,7 +103,6 @@ body {
   top: -2px;
   right: -2px;
   background: #ffd700;
-  /* Jaune or */
   color: #222222;
   border-radius: 50%;
   padding: 3px 6px;
@@ -158,41 +111,9 @@ body {
   box-shadow: 0 0 0 2px #ffffff;
 }
 
-.notifications-dropdown {
-  position: absolute;
-  right: 0;
-  top: 48px;
-  background: #ffffff;
-  color: #222222;
-  min-width: 300px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
-  z-index: 110;
-  border: 1px solid #eeeeee;
-}
-
-.notification-item {
-  padding: 0.9rem 1.3rem;
-  border-bottom: 1px solid #f5f5f5;
-  transition: background-color 0.2s ease;
-}
-
-.notification-item:hover {
-  background-color: #fffbe6;
-  /* Jaune très clair */
-}
-
-.notification-item.unread {
-  background-color: #fff8d6;
-  /* Jaune pâle */
-  color: #222222;
-  font-weight: 500;
-}
-
 /* Profil */
 .profile-wrapper {
   position: relative;
-  /* Très important pour le positionnement du dropdown */
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -204,7 +125,6 @@ body {
 
 .profile-wrapper:hover {
   background-color: #fffbe6;
-  /* Jaune très clair */
 }
 
 .avatar {
@@ -216,18 +136,16 @@ body {
   transition: all 0.3s ease;
 }
 
-.avatar-icon {
-  font-size: 36px;
-  /* Taille de l'icône par défaut */
-  color: #555555;
-  transition: all 0.3s ease;
+.profile-wrapper:hover .avatar {
+  border-color: #ffd700;
+  transform: scale(1.05);
 }
 
-.profile-wrapper:hover .avatar,
-.profile-wrapper:hover .avatar-icon {
-  border-color: #ffd700;
-  /* Jaune or */
-  transform: scale(1.05);
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
 }
 
 .user-name {
@@ -237,17 +155,21 @@ body {
   transition: color 0.3s ease;
 }
 
-.profile-wrapper:hover .user-name {
-  color: #ffd700;
-  /* Jaune or */
+.user-role {
+  font-size: 0.8rem;
+  color: #777777;
+  font-weight: 400;
 }
 
-/* Menu déroulant profil */
+.profile-wrapper:hover .user-info .user-name,
+.profile-wrapper:hover .user-info .user-role {
+  color: #ffd700;
+}
+
 .profile-dropdown {
   position: absolute;
   right: 0;
   top: 48px;
-  /* Ajustez selon la hauteur de votre header */
   background: #ffffff;
   color: #222222;
   min-width: 200px;
@@ -256,7 +178,6 @@ body {
   z-index: 110;
   border: 1px solid #eeeeee;
   animation: fadeIn 0.2s ease-out forwards;
-  /* Animation d'apparition */
 }
 
 .profile-dropdown-item {
@@ -267,18 +188,14 @@ body {
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  /* Indiquer que c'est cliquable */
 }
 
 .profile-dropdown-item:last-child {
   border-bottom: none;
-  /* Pas de bordure pour le dernier élément */
 }
 
 .profile-dropdown-item:hover {
   background-color: #fffbe6;
-  /* Jaune très clair */
-  color: #222222;
 }
 
 .profile-dropdown-item mat-icon {
@@ -286,7 +203,7 @@ body {
   font-size: 20px;
 }
 
-/* Styles pour le Modal d'édition de profil */
+/* Modal de modification du profil */
 .profile-edit-modal-overlay {
   position: fixed;
   top: 0;
@@ -294,22 +211,19 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  /* Fond semi-transparent */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1050;
-  /* Au-dessus du dropdown et du header */
   animation: fadeInOverlay 0.2s ease-out forwards;
 }
 
 .profile-edit-modal-content {
   display: flex;
   flex-direction: column;
-  height: 80vh; /* Ajustez la hauteur selon vos besoins */
+  height: 80vh;
   overflow-y: auto;
   align-items: center;
-  padding: 20px;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -318,15 +232,6 @@ body {
   max-width: 450px;
   color: #222222;
   animation: fadeInScale 0.3s ease-out forwards;
-}
-
-.profile-edit-modal-content form {
-  width: 100%;
-}
-
-.modal-actions {
-  margin-top: 20px;
-  text-align: right;
 }
 
 .profile-edit-modal-content h3 {
@@ -338,6 +243,7 @@ body {
 
 .profile-edit-modal-content .form-group {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .profile-edit-modal-content .form-group label {
@@ -363,14 +269,21 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
-.profile-edit-modal-content .modal-actions {
+.avatar-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  margin: 10px 0;
+}
+
+.modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 2rem;
 }
 
-.profile-edit-modal-content .modal-actions button {
+.modal-actions button {
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
@@ -379,75 +292,30 @@ body {
   transition: all 0.3s ease;
 }
 
-.profile-edit-modal-content .modal-actions button[type='submit'] {
+.modal-actions button[type='submit'] {
   background: linear-gradient(to right, #edec38, #efef57);
   color: #000;
 }
 
-.profile-edit-modal-content .modal-actions button[type='submit']:hover {
+.modal-actions button[type='submit']:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
 
-.profile-edit-modal-content .modal-actions button[type='submit']:disabled {
+.modal-actions button[type='submit']:disabled {
   background: #ccc;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.profile-edit-modal-content .modal-actions button[type='button'] {
+.modal-actions button[type='button'] {
   background-color: #e0e0e0;
   color: #333;
 }
 
-.profile-edit-modal-content .modal-actions button[type='button']:hover {
+.modal-actions button[type='button']:hover {
   background-color: #d0d0d0;
   transform: translateY(-1px);
-}
-
-/* Ajoutez ces styles pour organiser le nom et le rôle */
-.user-info {
-  display: flex;
-  flex-direction: column;
-  /* Pour empiler le nom et le rôle */
-  align-items: flex-end;
-  /* Aligner le texte à droite */
-  line-height: 1.2;
-  /* Réduire l'espacement entre les lignes */
-}
-
-.user-name {
-  font-size: 0.95rem;
-  color: #222222;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.user-role {
-  font-size: 0.8rem;
-  /* Taille plus petite pour le rôle */
-  color: #777777;
-  /* Couleur plus discrète */
-  font-weight: 400;
-}
-
-/* Ajustez si nécessaire les hover pour user-info */
-.profile-wrapper:hover .user-info .user-name {
-  color: #ffd700;
-  /* Jaune or */
-}
-
-.profile-wrapper:hover .user-info .user-role {
-  color: #ffd700;
-  /* Jaune or */
-}
-
-/* Mettez à jour les media queries si user-info disparaît */
-@media (max-width: 992px) {
-  .user-info {
-    display: none;
-    /* Cache le nom et le rôle sur les petites écrans */
-  }
 }
 
 /* Animations */
@@ -456,7 +324,6 @@ body {
     opacity: 0;
     transform: translateY(-10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -467,7 +334,6 @@ body {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -478,32 +344,23 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
-
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* Media Queries existantes, assurez-vous qu'elles n'interfèrent pas */
+/* Responsive */
 @media (max-width: 992px) {
   .menu-toggle {
     display: block;
-  }
-
-  .header-logo {
-    height: 28px;
   }
 
   .site-title {
     font-size: 1.2rem;
   }
 
-  .current-date {
-    display: none;
-  }
-
-  .user-name {
+  .user-info {
     display: none;
   }
 
@@ -513,27 +370,15 @@ body {
 
   .profile-wrapper mat-icon {
     font-size: 28px;
-    /* Ajuster la taille de l'icône de profil */
   }
 
   .avatar {
     width: 32px;
     height: 32px;
   }
-}
 
-/* Ajustements pour le mode mobile */
-@media (max-width: 992px) {
   .header-left {
     gap: 0.5rem;
-  }
-
-  .header-logo {
-    height: 26px;
-  }
-
-  .current-date {
-    display: none;
   }
 }
 
@@ -565,13 +410,5 @@ body {
 @media (max-width: 576px) {
   .site-title {
     font-size: 1rem;
-  }
-
-  .header-logo {
-    height: 24px;
-  }
-
-  .mode-system {
-    display: none;
   }
 }
