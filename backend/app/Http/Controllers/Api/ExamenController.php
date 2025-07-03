@@ -36,9 +36,17 @@ class ExamenController extends Controller
 {
 
     
-    public function index()
+    public function indexForModule(Module $module)
     {
-        //
+        $this->authorizeRoles(['administrateur', 'superviseur', 'formateur', 'apprenant']);
+
+        // On récupère uniquement les examens 'publiés' ou 'archivés' pour la liste générale.
+        $examens = $module->examens()
+                        ->whereIn('statut', ['publié', 'archivé'])
+                        ->latest()
+                        ->get();
+
+        return response()->json($examens);
     }
 
 
@@ -191,20 +199,79 @@ class ExamenController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Examen $examen)
-    {
-        //
-    }
+  
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Examen $examen)
+ public function update(Request $request, Examen $examen)
     {
-        //
+        $this->authorizeRoles(['administrateur', 'superviseur', 'formateur']);
+
+        $validatedData = $request->validate([
+            'titre' => 'required|string|max:255',
+            'type' => ['required', Rule::in(['test', 'evaluation'])],
+            'description' => 'nullable|string',
+            'statut' => ['required', Rule::in(['brouillon', 'publié'])],
+            'note_sur' => 'required|integer|min:1',
+            'questions' => 'required|array|min:1',
+            'questions.*.id' => 'nullable|integer|exists:questions,id',
+            'questions.*.enonce' => 'required|string',
+            'questions.*.type' => ['required', Rule::in(['choix_unique', 'choix_multiple', 'texte_libre'])],
+            'questions.*.points' => 'required|integer|min:1',
+            'questions.*.options' => 'required_if:questions.*.type,choix_unique,choix_multiple|array|min:2',
+            'questions.*.options.*.id' => 'nullable|integer|exists:options,id',
+            'questions.*.options.*.texte_option' => 'required|string',
+            'questions.*.options.*.est_correcte' => 'required|boolean',
+        ]);
+
+        try {
+            DB::transaction(function () use ($validatedData, $examen) {
+                $examen->update([
+                    'titre' => $validatedData['titre'],
+                    'type' => $validatedData['type'],
+                    'description' => $validatedData['description'],
+                    'statut' => $validatedData['statut'],
+                    'note_sur' => $validatedData['note_sur'],
+                ]);
+
+                $incomingQuestionIds = [];
+                foreach ($validatedData['questions'] as $questionData) {
+                    $question = $examen->questions()->updateOrCreate(
+                        ['id' => $questionData['id'] ?? null],
+                        [
+                            'enonce' => $questionData['enonce'],
+                            'type' => $questionData['type'],
+                            'points' => $questionData['points']
+                        ]
+                    );
+                    $incomingQuestionIds[] = $question->id;
+
+                    if (isset($questionData['options'])) {
+                        $incomingOptionIds = [];
+                        foreach ($questionData['options'] as $optionData) {
+                            $option = $question->options()->updateOrCreate(
+                                ['id' => $optionData['id'] ?? null],
+                                [
+                                    'texte_option' => $optionData['texte_option'],
+                                    'est_correcte' => $optionData['est_correcte']
+                                ]
+                            );
+                            $incomingOptionIds[] = $option->id;
+                        }
+                        // Supprime les options qui n'étaient pas dans la requête
+                        $question->options()->whereNotIn('id', $incomingOptionIds)->delete();
+                    }
+                }
+                // Supprime les questions qui n'étaient pas dans la requête
+                $examen->questions()->whereNotIn('id', $incomingQuestionIds)->delete();
+            });
+
+            return response()->json([
+                'message' => 'Examen mis à jour avec succès.',
+                'data' => $examen->fresh()->load('questions.options') // Recharger pour avoir les données fraîches
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur lors de la mise à jour.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
