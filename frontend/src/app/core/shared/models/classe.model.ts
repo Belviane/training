@@ -6,8 +6,15 @@ export interface Classe {
   localisation: string;
   description: string;
   formation_id: number;
-  formation?: { // Optionnel pour afficher les détails
-    id: number;
-    nom_formation: string;
-  };
+  // formation?: { 
+  //   id: number;
+  //   nom_formation: string;
+  // };
+
+  formation?: Formation;
+}
+
+export interface Formation {
+  id: number;
+  nom_formation: string; // Notez le nom exact de la propriété
 }

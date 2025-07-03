@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         let errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
 
-        if (err.message.includes('vérifier votre email')) {
+        if (err.message.includes('vérifier vos identifiants')) {
           errorMessage = err.message;
         } else if (err.error?.message) {
           errorMessage = err.error.message;

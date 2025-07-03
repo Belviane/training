@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Vérifier {{ data.type }}</h2>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="dateControl">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="dateControl.hasError('required')">Date obligatoire</mat-error>
+    </mat-form-field>
+
+    <div *ngIf="data.type === 'disponibilite'" class="time-fields">
+        <mat-form-field appearance="fill">
+            <mat-label>Heure de début</mat-label>
+            <input matInput type="time" [formControl]="startTimeControl">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Heure de fin</mat-label>
+            <input matInput type="time" [formControl]="endTimeControl">
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="!dateControl.valid">
+        Vérifier
+    </button>
+</div>

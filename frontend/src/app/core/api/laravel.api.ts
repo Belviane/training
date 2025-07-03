@@ -39,6 +39,7 @@ export const LaravelApi = {
   vendeurs: `${BASE_URL}/vendeurs`, // Liste des vendeurs
 
   // === Formations ===
+  getFormation: (id: number) => `${BASE_URL}/formations/${id}`,
   formations: `${BASE_URL}/formations`, // Liste des formations
   mesFormations: `${BASE_URL}/mes-formations`, // Formations de l'utilisateur connecté
   assignFormateurs: (id: number) => `${BASE_URL}/formations/${id}/assign-formateurs`, // Assigner des formateurs à une formation
@@ -50,7 +51,6 @@ export const LaravelApi = {
   classes: `${BASE_URL}/classes`, // Liste des classes
   verifierDisponibiliteClasse: (id: number) => `${BASE_URL}/classes/${id}/verifier-disponibilite`, // Vérifier disponibilité d'une classe
   capaciteRestanteClasse: (id: number) => `${BASE_URL}/classes/${id}/capacite-restante`, // Capacité restante d'une classe
-  verifierDisponibilite: (id: number) => `${BASE_URL}/classes/${id}/verifier-disponibilite`, // Vérifier disponibilité (doublon possible)
 
   // === Séances ===
   seances: `${BASE_URL}/seances`, // Liste des séances

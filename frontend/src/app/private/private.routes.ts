@@ -15,6 +15,8 @@ import { ClasseComponent } from './componentsSuperviseur/classe/classe.component
 import { SeanceComponent } from './componentsSuperviseur/seance/seance.component';
 import { GestionseanceComponent } from './componentsSuperviseur/gestionseance/gestionseance.component';
 import { NouvelleformationComponent } from './componentsSuperviseur/nouvelleformation/nouvelleformation.component';
+import { NouvelleclasseComponent } from './componentsSuperviseur/nouvelleclasse/nouvelleclasse.component';
+import { NouvelleseanceComponent } from './componentsSuperviseur/nouvelleseance/nouvelleseance.component';
 
 export const PRIVATE_ROUTES: Routes = [
   {
@@ -73,13 +75,21 @@ export const PRIVATE_ROUTES: Routes = [
       },
       {
         path: 'classe',
-        component: ClasseComponent,
         canActivate: [AuthGuard],
+        children: [
+          { path: '', component: ClasseComponent },
+          { path: 'nouvelle', component: NouvelleclasseComponent },
+          { path: 'editer/:id', component: NouvelleclasseComponent },
+        ]
       },
       {
         path: 'seance',
-        component: SeanceComponent,
         canActivate: [AuthGuard],
+        children: [
+          { path: '', component: SeanceComponent },
+          { path: 'nouvelle', component: NouvelleseanceComponent },
+          { path: 'editer/:id', component: NouvelleseanceComponent },
+        ]
       },
       {
         path: 'gestionseance',

@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Assigner des formateurs</h2>
+<mat-dialog-content>
+    <mat-selection-list [multiple]="true" [(ngModel)]="selectedFormateurs">
+        <mat-list-option *ngFor="let formateur of formateurs" [value]="formateur.id">
+            {{ formateur.prenom }} {{ formateur.nom }} ({{ formateur.email }})
+        </mat-list-option>
+    </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="onAssign()">Assigner</button>
+</mat-dialog-actions>

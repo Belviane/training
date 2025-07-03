@@ -1,43 +1,28 @@
-<h2 mat-dialog-title>Ajouter une nouvelle classe</h2>
-<mat-dialog-content>
-  <form [formGroup]="classeForm">
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Nom</mat-label>
-      <input matInput formControlName="nom" required>
-    </mat-form-field>
+<div class="classe-container">
+  <div class="header">
+    <h1>Liste des Classes</h1>
+    <button mat-raised-button color="primary"  (click)="openDialog()">
+      <mat-icon>add</mat-icon>Nouvelle classe</button>
+  </div>
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Capacité</mat-label>
-      <input matInput type="number" formControlName="capacite" required>
-    </mat-form-field>
+  <div class="classe-card" *ngFor="let classe of classes">
+    <h2>{{ classe.nom }} <span class="capacite">({{ classe.capacite }} places)</span></h2>
+    <p><strong>Localisation :</strong> {{ classe.localisation }}</p>
+    <p><strong>Description :</strong> {{ classe.description }}</p>
+    <p><strong>Formation :</strong> {{ classe.formation.nom }}</p>
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Localisation</mat-label>
-      <input matInput formControlName="localisation" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Formation</mat-label>
-      <mat-select formControlName="formation_id" required>
-        <mat-option *ngIf="isLoading" disabled>
-          <mat-spinner diameter="20"></mat-spinner>
-        </mat-option>
-        <mat-option *ngFor="let formation of formations" [value]="formation.id">
-          {{ formation.nom_formation }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="classeForm.get('formation_id')?.hasError('required')">
-        La formation est obligatoire
-      </mat-error>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Annuler</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!classeForm.valid">Enregistrer</button>
-</mat-dialog-actions>
+    <div class="card-actions">
+    <button mat-icon-button color="primary" 
+            (click)="openDisponibiliteDialog(classe.id!)"
+            matTooltip="Vérifier disponibilité">
+      <mat-icon>event_available</mat-icon>
+    </button>
+    
+    <button mat-icon-button color="accent" 
+            (click)="openCapaciteDialog(classe.id!)"
+            matTooltip="Voir capacité restante">
+      <mat-icon>airline_seat_recline_normal</mat-icon>
+    </button>
+  </div>
+  </div>
+</div>

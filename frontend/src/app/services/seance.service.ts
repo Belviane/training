@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { Seance } from '../core/shared/models/seance.model';
 import { LaravelApi } from '@app/core/api/laravel.api';
 
@@ -8,13 +8,22 @@ import { LaravelApi } from '@app/core/api/laravel.api';
   providedIn: 'root'
 })
 export class SeanceService {
-  private apiUrl = `${LaravelApi}/seances`;
+  private apiUrl = LaravelApi.seances;
 
   constructor(private http: HttpClient) { }
 
   // CRUD de base
-  createSeance(seance: Seance): Observable<Seance> {
-    return this.http.post<Seance>(this.apiUrl, seance);
+  createSeance(seance: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, seance).pipe(
+      catchError(err => {
+        console.error('Erreur détaillée:', {
+          status: err.status,
+          error: err.error,
+          message: err.message
+        });
+        throw err; // Renvoyez l'erreur pour le composant
+      })
+    );
   }
 
   getSeances(): Observable<Seance[]> {

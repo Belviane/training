@@ -1,72 +1,65 @@
-<h2 mat-dialog-title>Ajouter une nouvelle séance</h2>
-<mat-dialog-content>
-  <form [formGroup]="seanceForm">
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Titre</mat-label>
-      <input matInput formControlName="titre" required>
-    </mat-form-field>
+<!-- seance.component.html -->
+<!-- <div class="seance-container">
+  <h1>Séances</h1>
+  <ul>
+    <li *ngFor="let seance of seances">
+      {{ seance.titre }} ({{ seance.date | date }})
+    </li>
+  </ul>
+  <button mat-raised-button color="primary" (click)="openDialog()">Ajouter une séance</button>
+</div> -->
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
+<div class="seance-container">
+  <div class="header">
+    <h1>Gestion des Séances</h1>
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      <mat-icon>add</mat-icon> Nouvelle séance
+    </button>
+  </div>
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date" required>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <div class="seance-grid">
+    <div *ngFor="let seance of seances" class="seance-card" [class]="'status-' + seance.statut.toLowerCase()">
+      <div class="seance-header">
+        <h3>{{ seance.titre }}</h3>
+        <span class="seance-status">{{ seance.statut }}</span>
+      </div>
+      
+      <div class="seance-content">
+        <p><mat-icon>event</mat-icon> {{ seance.date | date:'mediumDate' }}</p>
+        <p><mat-icon>schedule</mat-icon> {{ seance.heure_debut }} - {{ seance.heure_fin }}</p>
+        <p><mat-icon>person</mat-icon> {{ seance.formateur?.prenom }} {{ seance.formateur?.nom }}</p>
+        <p><mat-icon>school</mat-icon> {{ seance.formation?.nom_formation }}</p>
+        <p><mat-icon>meeting_room</mat-icon> {{ seance.classe?.nom }} ({{ seance.classe?.localisation }})</p>
+        <p><mat-icon>category</mat-icon> {{ seance.type_seance }}</p>
+      </div>
 
-    <div class="flex gap-4">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Heure de début</mat-label>
-        <input matInput type="time" formControlName="heure_debut" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Heure de fin</mat-label>
-        <input matInput type="time" formControlName="heure_fin" required>
-      </mat-form-field>
+      <div class="seance-actions">
+        <button mat-icon-button color="primary" (click)="editSeance(seance.id)" matTooltip="Modifier la séance">
+          <mat-icon>edit</mat-icon>
+        </button>
+        
+        <button mat-icon-button color="warn" (click)="annulerSeance(seance.id)" *ngIf="seance.statut !== 'Annulée'" matTooltip="Annuler la séance">
+          <mat-icon>cancel</mat-icon>
+        </button>
+        
+        <button mat-icon-button color="accent" (click)="demarrerSeance(seance.id)" 
+                *ngIf="seance.statut === 'Planifiée'" matTooltip="Démarrer la séance">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        
+        <button mat-icon-button color="primary" (click)="terminerSeance(seance.id)" 
+                *ngIf="seance.statut === 'Confirmée'" matTooltip="Terminer la séance">
+          <mat-icon>stop</mat-icon>
+        </button>
+        
+        <button mat-icon-button (click)="notifierSeance(seance.id)" matTooltip="Notifier les participants">
+          <mat-icon>notifications</mat-icon>
+        </button>
+        
+        <button mat-icon-button (click)="downloadFeuillePresence(seance.id)" matTooltip="Télécharger la feuille de présence">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+      </div>
     </div>
-
-    <div class="flex gap-4">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>ID Formateur</mat-label>
-        <input matInput type="number" formControlName="formateur_id" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>ID Formation</mat-label>
-        <input matInput type="number" formControlName="formation_id" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>ID Classe</mat-label>
-        <input matInput type="number" formControlName="classe_id" required>
-      </mat-form-field>
-    </div>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Type de séance</mat-label>
-      <mat-select formControlName="type_seance" required>
-        <mat-option value="Théorie">Théorie</mat-option>
-        <mat-option value="Pratique">Pratique</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Statut</mat-label>
-      <mat-select formControlName="statut">
-        <mat-option value="Planifiée">Planifiée</mat-option>
-        <mat-option value="Confirmée">Confirmée</mat-option>
-        <mat-option value="Terminée">Terminée</mat-option>
-        <mat-option value="Annulée">Annulée</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Annuler</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!seanceForm.valid">Enregistrer</button>
-</mat-dialog-actions>
+  </div>
+</div>

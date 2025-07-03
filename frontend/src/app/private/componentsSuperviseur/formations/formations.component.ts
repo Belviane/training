@@ -27,14 +27,13 @@ import { LucideAngularModule } from 'lucide-angular';
 // API configuration
 import { LaravelApi } from '@app/core/api/laravel.api';
 import { lastValueFrom } from 'rxjs';
-
 import { Formation, Module, Lecon, SubmitStatus, ApiFormationResponse } from '../../../core/shared/models/formation.model';
-
 import { FormControl } from '@angular/forms';
 import { Toast } from 'ngx-toastr';
 import { ClasseComponent } from '../classe/classe.component';
 import { SeanceComponent } from '../seance/seance.component';
 import { RouterModule } from '@angular/router';
+import { AssignformateursdialogComponent } from './assignformateursdialog/assignformateursdialog.component';
 
 @Component({
   selector: 'app-formations',
@@ -74,13 +73,11 @@ export class FormationsComponent implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar); 
+  private snackBar = inject(MatSnackBar);
 
   formations = new MatTableDataSource<Formation>();
   displayedColumns = ['nom', 'dates', 'seances', 'statut', 'actions'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  
 
   // Signals
   isLoading = signal(false);
@@ -507,5 +504,31 @@ export class FormationsComponent implements OnInit, AfterViewInit {
       duration: 3000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  // Dans votre composant
+  async openAssignFormateursDialog(formationId: number): Promise<void> {
+    const dialogRef = this.dialog.open(AssignformateursdialogComponent, {
+      width: '600px',
+      data: { formationId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadFormations(); // Recharger les formations après assignation
+      }
+    });
+  }
+
+  async removeFormateur(formationId: number, formateurId: number): Promise<void> {
+    try {
+      await lastValueFrom(
+        this.http.delete(`${LaravelApi.assignFormateurs(formationId)}/${formateurId}`)
+      );
+      this.showSuccess('Formateur retiré avec succès');
+      this.loadFormations();
+    } catch (error) {
+      this.showError('Erreur lors du retrait du formateur');
+    }
   }
 }

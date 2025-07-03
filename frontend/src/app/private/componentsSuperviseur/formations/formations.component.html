@@ -1,3 +1,29 @@
+<!--
+    Composant Angular pour la gestion des formations (formations.component.html)
+
+    - En-tête :
+        - Affiche le titre "Gestion des Formations".
+        - Barre d'actions comprenant :
+            - Champ de recherche pour filtrer les formations (liaison à la méthode searchFormations).
+            - Boutons pour ajouter une nouvelle formation, une nouvelle classe, ou une nouvelle séance (navigation via routerLink).
+            - Bouton pour exporter la liste des formations au format PDF (appel de la méthode exportToPdf).
+
+    - Affichage des cartes de formation :
+        - Si les données sont en cours de chargement (isLoading()), affiche un spinner de chargement.
+        - Sinon, parcourt la liste des formations (formations.data) et affiche pour chaque formation :
+            - Nom et libellé de la formation.
+            - Dates de début et de fin, volume horaire, nombre de séances et de modules, prix.
+            - Statut de la formation sous forme de badge coloré.
+            - Actions disponibles : édition (routerLink vers la page d’édition) et suppression (appel de deleteFormation).
+
+    - Pagination :
+        - Utilisation du composant mat-paginator pour la navigation entre les pages de résultats, avec options de taille de page et boutons premier/dernier.
+
+    Remarques :
+        - Utilisation des composants Angular Material pour l’UI (mat-form-field, mat-icon, mat-spinner, mat-paginator, etc.).
+        - Syntaxe Angular 17 avec les blocs @if et @for pour le rendu conditionnel et itératif.
+        - Les classes CSS personnalisées sont utilisées pour la mise en forme (header-container, cards-container, formation-card, etc.).
+-->
 <div class="header-container">
     <h2>Gestion des Formations</h2>
 
@@ -12,14 +38,6 @@
             <button mat-raised-button color="primary" routerLink="/app/formations/nouvelle">
                 <mat-icon>add</mat-icon>
                 Nouvelle formation
-            </button>
-            <button mat-raised-button color="primary" (click)="openAddModalClass()">
-                <mat-icon>add</mat-icon>
-                Nouvelle classe
-            </button>
-            <button mat-raised-button color="primary" (click)="openAddModalSeance()">
-                <mat-icon>add</mat-icon>
-                Nouvelle seance
             </button>
             <button mat-raised-button color="accent" (click)="exportToPdf()">
                 <mat-icon>picture_as_pdf</mat-icon>
@@ -75,6 +93,30 @@
                 </button>
                 <button mat-icon-button color="warn" (click)="deleteFormation(formation.id!)">
                     <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+            <!-- Section assignation formateurs -->
+            <div class="formateurs-section">
+                <h4>Formateurs assignés</h4>
+                @if (formation.formateurs && formation.formateurs.length > 0) {
+                <div class="formateurs-list">
+                    @for (formateur of formation.formateurs; track formateur.id) {
+                    <span class="formateur-badge">
+                        {{ formateur.prenom }} {{ formateur.nom }}
+                        <button mat-icon-button (click)="removeFormateur(formation.id!, formateur.id)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </span>
+                    }
+                </div>
+                } @else {
+                <p>Aucun formateur assigné</p>
+                }
+
+                <button mat-stroked-button color="primary" (click)="openAssignFormateursDialog(formation.id!)">
+                    <mat-icon>group_add</mat-icon>
+                    Assigner des formateurs
                 </button>
             </div>
         </div>

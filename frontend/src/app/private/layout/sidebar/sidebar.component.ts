@@ -72,7 +72,21 @@ export class SidebarComponent implements OnInit {
           icon: 'school',
           route: '/app/formations',
           roles: ['superviseur'],
-          exact: true
+          exact: true,
+        },
+        {
+          label: 'Classes',
+          icon: 'class',
+          route: '/app/classe',
+          roles: ['superviseur'],
+          exact: true,
+        },
+        {
+          label: 'Seances',
+          icon: 'event',
+          route: '/app/seance',
+          roles: ['superviseur'],
+          exact: true,
         },
         {
           label: 'Paiements',
@@ -103,7 +117,11 @@ export class SidebarComponent implements OnInit {
 
   }
 
-  ngOnInit() { }
+  ngOnInit(): void {
+    if (this.userRole === 'superviseur') {
+      this.expandedMenus.push('Suivi global');
+    }
+  }
 
   filterMenuItems() {
     if (this.userRole) {
@@ -153,6 +171,15 @@ export class SidebarComponent implements OnInit {
       return currentUrl.startsWith(route) ||
         this.router.isActive(route, { paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored' });
     }
-  }
+  } 
+
+  //   isRouteActive(route: string, exact: boolean): boolean {
+  //   if (exact) {
+  //     return this.router.isActive(route, { paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored' });
+  //   } else {
+  //     const currentUrl = this.router.url;
+  //     return currentUrl.startsWith(route);
+  //   }
+  // }
 
 }

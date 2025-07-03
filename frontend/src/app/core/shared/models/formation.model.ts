@@ -1,3 +1,5 @@
+
+
 // formation.model.ts
 export interface Lecon {
   id?: number;
@@ -30,6 +32,8 @@ export interface Formation {
   created_at?: string;
   updated_at?: string;
   modules?: Module[];
+
+  formateurs?: Formateur[];
 }
 
 export interface ApiFormationResponse {
@@ -51,5 +55,13 @@ export interface ApiFormationResponse {
   to: number;
   total: number;
 }
+
+interface Formateur {
+  id: number;
+  prenom: string;
+  nom: string;
+  email: string;
+}
+    
 
 export type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';

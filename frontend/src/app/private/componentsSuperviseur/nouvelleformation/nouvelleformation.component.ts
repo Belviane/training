@@ -92,6 +92,7 @@ export class NouvelleformationComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log('ID de la formation :', id);
     this.formationId = id ? +id : null; // Convertit en number
     this.isEditMode = !!this.formationId;
 

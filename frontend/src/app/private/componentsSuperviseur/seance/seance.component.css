@@ -1,0 +1,140 @@
+.seance-container {
+  padding: 20px;
+  max-width: 900px;
+  overflow-x: hidden; /* Empêche le défilement horizontal */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.seance-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.seance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.seance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.seance-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-planifiée {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-confirmée {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-terminée {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-annulée {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.seance-content {
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.seance-content p {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 0.9em;
+  word-break: break-word;
+}
+
+.seance-content mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.seance-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* Ajoutez ceci à votre fichier CSS */
+.mat-tooltip {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+/* Pour un affichage plus rapide sur mobile */
+@media (hover: hover) {
+  .mat-tooltip {
+    transition-delay: 0.5s;
+  }
+}
+
+/* Responsive amélioré */
+@media (max-width: 768px) {
+  .seance-container {
+    padding: 15px;
+  }
+  
+  .seance-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .seance-card {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .seance-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}

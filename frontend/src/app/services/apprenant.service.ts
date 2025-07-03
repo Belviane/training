@@ -10,11 +10,26 @@ import { LaravelApi } from '@app/core/api/laravel.api';
 export class ApprenantService {
   private apiUrl = LaravelApi.apprenants;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Liste complète des apprenants
   getApprenants(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(response => {
+        if (response && Array.isArray(response.data)) {
+          return response.data;
+        } else if (Array.isArray(response)) {
+          return response;
+        } else {
+          console.warn('Format de réponse inattendu pour les apprenants', response);
+          return [];
+        }
+      }),
+      catchError(err => {
+        console.error('Erreur API apprenants:', err);
+        return of([]);
+      })
+    );
   }
 
   // Obtenir un apprenant par ID
@@ -40,7 +55,14 @@ export class ApprenantService {
   // Pour dashboard
   getApprenantCount(): Observable<number> {
     return this.http.get<any[]>(this.apiUrl).pipe(
-      map(data => data.length),
+      map(data => {
+        if (Array.isArray(data)) {
+          return data.length;
+        } else {
+          console.error('Les données reçues ne sont pas un tableau');
+          return 0;
+        }
+      }),
       catchError(err => {
         console.error('Erreur récupération apprenants :', err);
         return of(0);

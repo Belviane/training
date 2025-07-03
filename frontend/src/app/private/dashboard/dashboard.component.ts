@@ -75,7 +75,6 @@ export class DashboardComponent implements OnInit {
     console.log('Utilisateur connecté :', this.authService.isAuthenticated());
     console.log('Détails utilisateur :', this.authService.getCurrentUser());
 
-    // Logs de debug
     console.log('État authentification:', this.authService.isAuthenticated());
   }
 }

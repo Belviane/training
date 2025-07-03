@@ -41,7 +41,7 @@
 .sidebar-nav a {
   display: flex;
   align-items: center;
-  padding: 14px 24px;
+  padding: 10px 20px;
   color: #222222;
   text-decoration: none;
   font-size: 1rem;
@@ -54,7 +54,7 @@
 .sidebar-nav mat-icon {
   margin-right: 16px;
   color: #666666;
-  font-size: 24px;
+  font-size: 20px;
   transition: all 0.3s ease;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .submenu li {
-  padding: 10px 0;
+  padding: 6px 0;
 }
 
 .submenu a {
@@ -114,6 +114,20 @@
   background-color: #FFF0A0;
   border-left-color: #FFD700;
 }
+
+/* Forcing submenu under 'Formations' to always show, with indentation */
+.submenu.always-expanded {
+  max-height: none !important;
+  padding-left: 30px; /* décale un peu vers la droite */
+  background-color: #f5f5f5; /* optionnel, pour distinguer */
+}
+
+/* Optional: un petit style pour les enfants sous Formations */
+.submenu.always-expanded a {
+  font-size: 0.95rem;
+  color: #444;
+}
+
 
 /* Overlay */
 .sidebar-overlay {

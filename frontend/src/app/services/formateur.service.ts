@@ -10,11 +10,27 @@ import { LaravelApi } from '@app/core/api/laravel.api';
 export class FormateurService {
   private apiUrl = LaravelApi.formateurs;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Liste complète des formateurs
   getFormateurs(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(response => {
+        // Si pagination, accédez à response.data
+        const formateurs = response.data || response || [];
+        return formateurs.map((formateur: any) => ({
+          id: formateur.id,
+          nom: formateur.utilisateur?.nom || 'Inconnu',
+          prenom: formateur.utilisateur?.prenom || '',
+          specialite: formateur.specialite,
+          // Ajoutez d'autres champs si nécessaire
+        }));
+      }),
+      catchError(err => {
+        console.error('Erreur API formateurs:', err);
+        return of([]);
+      })
+    );
   }
 
   // Obtenir un formateur par ID
@@ -40,9 +56,16 @@ export class FormateurService {
   // Pour dashboard
   getFormateurCount(): Observable<number> {
     return this.http.get<any[]>(this.apiUrl).pipe(
-      map(data => data.length),
+      map(data => {
+        if (Array.isArray(data)) {
+          return data.length;
+        } else {
+          console.error('Les données reçues ne sont pas un tableau');
+          return 0;
+        }
+      }),
       catchError(err => {
-        console.error('Erreur récupération formateurs :', err);
+        console.error('Erreur récupération formateur :', err);
         return of(0);
       })
     );

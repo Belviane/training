@@ -25,7 +25,7 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .actions-container {
     flex-direction: row;
     align-items: center;
@@ -271,20 +271,58 @@
   .form-content {
     padding: 1rem;
   }
-  
+
   .form-section {
     padding: 1rem;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .form-actions button {
     width: 100%;
   }
-  
+
   .grid-3 {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* formations.component.css */
+.formateurs-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.formateurs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.formateur-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.9em;
+}
+
+.formateur-badge button {
+  margin-left: 4px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.formateur-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }

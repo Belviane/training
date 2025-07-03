@@ -133,45 +133,38 @@ export class AjouterComponent implements OnInit {
    * - Affiche une notification de succès ou d'erreur
    */
   onSubmit(): void {
-    if (this.userForm.invalid) return;
+  if (this.userForm.invalid) return;
 
-    // Vérification supplémentaire que le rôle sélectionné est autorisé
-    // 
-    
-    // Vérification optionnelle - juste pour s'assurer qu'un rôle valide est sélectionné
-    const selectedRoleId = this.userForm.get('role_id')?.value;
-    if (!selectedRoleId) {
-      this.snackBar.open('Veuillez sélectionner un rôle', 'Fermer', { duration: 3000 });
-      return;
-    }
+  this.isLoading = true;
+  const formData = this.prepareFormData();
 
-
-    this.isLoading = true;
-    const formData = this.prepareFormData();
-
-    // Choix de la requête selon création ou modification
-    const apiCall = this.http.post(LaravelApi.register, formData);
-
-    apiCall.subscribe({
-      next: () => {
-        this.snackBar.open(
-          `Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`,
-          'Fermer',
-          { duration: 3000 }
-        );
-        this.dialogRef.close('success');
-      },
-      error: (err) => {
-        console.error('Erreur:', err);
-        this.snackBar.open(
-          err.error?.message || 'Une erreur est survenue',
-          'Fermer',
-          { duration: 3000, panelClass: ['snackbar-error'] }
-        );
-        this.isLoading = false;
-      }
-    });
+  let apiCall;
+  if (this.data?.user) {
+    apiCall = this.http.put(LaravelApi.updateUtilisateur(this.data.user.id), formData);
+  } else {
+    apiCall = this.http.post(LaravelApi.register, formData);
   }
+
+  apiCall.subscribe({
+    next: () => {
+      this.snackBar.open(
+        `Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`,
+        'Fermer',
+        { duration: 3000 }
+      );
+      this.dialogRef.close('success');
+    },
+    error: (err) => {
+      console.error('Erreur:', err);
+      this.snackBar.open(
+        err.error?.message || 'Une erreur est survenue',
+        'Fermer',
+        { duration: 3000, panelClass: ['snackbar-error'] }
+      );
+      this.isLoading = false;
+    }
+  });
+}
 
   /**
    * Prépare les données du formulaire avant envoi à l'API

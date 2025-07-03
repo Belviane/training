@@ -106,12 +106,12 @@ export class ContentComponent implements OnInit {
       this.nbClasses = classes.length;
     });
 
-    this.apprenantService.getApprenantCount().subscribe(count => {
-      this.nbApprenants = count;
+    this.apprenantService.getApprenants().subscribe(count => {
+      this.nbApprenants = ApprenantService.length;
     });
 
-    this.formateurService.getFormateurCount().subscribe(count => {
-      this.nbFormateurs = count;
+    this.formateurService.getFormateurs().subscribe(count => {
+      this.nbFormateurs = FormateurService.length;
     });
   }
 
