@@ -271,36 +271,42 @@ class AuthController extends Controller
     }
 
    public function forgotPassword(Request $request)
-    {
-        try {
-            $data = $request->all();
-            \Log::info('Request data:', $data);
+{
+    try {
+        $data = $request->all();
+        \Log::info('Request data:', ['data' => $data]);
 
-            $request->validate([
-                'email' => 'required|email|exists:utilisateurs,email',
-            ]);
+        $request->validate([
+            'email' => 'required|email|exists:utilisateurs,email',
+        ]);
 
-            $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-            if (!$user) {
-                return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
-            }
+        // Pas besoin de ce test, la validation `exists` l'a déjà fait :
+        // if (!$user) ...
 
-            $code = rand(100000, 999999);
-            $user->verification_code = $code;
-            $user->save();
+        $code = rand(100000, 999999);
+        $user->verification_code = $code;
+        $user->save();
 
-            Mail::raw("Votre code de réinitialisation est : $code", function ($message) use ($user) {
-                $message->to($user->email)
+        Mail::raw("Votre code de réinitialisation est : $code", function ($message) use ($user) {
+            $message->to($user->email)
                     ->subject('Réinitialisation du mot de passe');
-            });
+        });
 
-            return response()->json(['message' => 'Un code de réinitialisation a été envoyé à votre adresse email.']);
-        } catch (\Exception $e) {
-            \Log::error('Erreur forgotPassword: ' . $e->getMessage());
-            return response()->json(['message' => 'Erreur serveur interne.'], 500);
-        }
+        return response()->json([
+            'message' => 'Un code de réinitialisation a été envoyé à votre adresse email.'
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'message' => 'Validation échouée.',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        \Log::error('Erreur forgotPassword: ' . $e->getMessage());
+        return response()->json(['message' => 'Erreur serveur interne.'], 500);
     }
+}
 
 
 

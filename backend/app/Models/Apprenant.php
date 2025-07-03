@@ -47,5 +47,18 @@ class Apprenant extends Model
     public function parent() {
         return $this->belongsTo(Parents::class, 'parent_id');
     }
+
+    
+    public function tentatives(): HasMany
+    {
+        return $this->hasMany(Tentative::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        // On suppose que la table 'apprenants' a une colonne 'user_id'
+        // qui est la clé étrangère vers la table 'users'.
+        return $this->belongsTo(User::class, 'utilisateur_id');
+    }
 }
 
