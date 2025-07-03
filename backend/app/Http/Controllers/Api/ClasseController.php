@@ -38,7 +38,7 @@ class ClasseController extends Controller
         $conflict = $classe->seances()->where('date', $request->date)
             ->where(function ($query) use ($request) {
                 $query->whereBetween('heure_debut', [$request->heure_debut, $request->heure_fin])
-                      ->orWhereBetween('heure_fin', [$request->heure_debut, $request->heure_fin]);
+                    ->orWhereBetween('heure_fin', [$request->heure_debut, $request->heure_fin]);
             })->exists();
 
         return response()->json(['disponible' => !$conflict]);
@@ -55,16 +55,16 @@ class ClasseController extends Controller
      */
     public function index()
     {
-        return response()->json(Classe::all());
+        return Classe::with('formation')->get(); // Charge la relation formation
     }
 
 
-   
+
     public function store(Request $request)
     {
 
-       $this->checkAdminOrSuperviseur();
-        
+        $this->checkAdminOrSuperviseur();
+
         $validated = $request->validate([
             'nom' => 'required|string',
             'capacite' => 'required|integer|min:1',
@@ -77,15 +77,15 @@ class ClasseController extends Controller
         return response()->json($classe, 201);
     }
 
-   
+
     public function show(Classe $classe)
     {
         //
     }
 
-    
 
-    
+
+
     public function update(Request $request, $id)
     {
         $this->checkAdminOrSuperviseur();
