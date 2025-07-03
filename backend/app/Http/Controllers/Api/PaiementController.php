@@ -2,9 +2,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\MoMoService;
+use App\Services\MoMoTransaction;
+use App\Services\Payer;
 
 use App\Models\Paiement;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class PaiementController extends Controller
 {
@@ -62,5 +66,41 @@ class PaiementController extends Controller
     public function destroy(Paiement $paiement)
     {
         //
+    }
+    public function init()
+    {
+
+        $payerPhone = "674359141";
+        $amount = "0.0015";
+        $currency = "EUR";
+        $externalId = "679064500";
+
+
+        $payerMessage = "Test transaction";
+        $payeeNote = "Test transaction aaa";
+
+        $response = MoMoService::getApiKey();
+
+        $apiKey = json_decode(json_decode($response, true)["response_body"],true)["apiKey"];
+
+        $response = MoMoService::getAccessToken($apiKey);
+        $accessToken = json_decode($response, true)["access_token"];
+
+        $payer = new Payer("MSISDN",$payerPhone);
+        $transactionReference = Uuid::uuid4()->toString();
+        $momoTransaction = new MoMoTransaction(
+            $amount,
+            $currency,
+            $externalId,
+            $payer,
+            $payerMessage,
+            $payeeNote,
+        );
+        $response = MoMoService::requestToPay($accessToken, $momoTransaction,$transactionReference);
+        return json_decode($response);
+
+
+
+
     }
 }

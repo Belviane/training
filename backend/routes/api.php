@@ -42,6 +42,13 @@ use App\Http\Controllers\Api\AdministrateurController;
 
 use App\Http\Controllers\Api\ExamenController;
 
+use App\Http\Controllers\Api\TentativeController;
+
+use App\Http\Controllers\Api\PaiementController;
+
+use App\Http\Controllers\Api\TestController;
+
+use App\Http\Controllers\Api\ImportController;
 // Routes publiques
 //Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -181,7 +188,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/formations/{id}', 'destroy');
         Route::put('/formations/{id}', 'update');
         Route::post('/formations', 'store');
-       
+
     });
 
     //Classes
@@ -246,8 +253,41 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profil', [ProfilController::class, 'afficherProfil']);
     Route::put('/profil', [ProfilController::class, 'modifierProfil']);
 
-    Route::post('modules/{module}/examens', [ExamenController::class, 'storeForModule']);
+
+    Route::controller(ExamenController::class)->group(function () {
+        // Lister tous les examens d'un module
+        Route::get('modules/{module}/examens', 'indexForModule');
+
+        // Créer un nouvel examen pour un module
+        Route::post('modules/{module}/examens', 'storeForModule');
+
+        // Afficher un examen spécifique (indépendant du module, on a juste besoin de son ID)
+        Route::get('examens/{examen}',  'show');
+
+        // Mettre à jour un examen spécifique
+        Route::put('examens/{examen}', 'update');
+
+        // Archiver un examen
+        Route::patch('examens/{examen}/archive', 'archive');
+    });
+
+    Route::post('tests/{examen}/check', [TestController::class, 'checkAnswers']);
+
+    Route::post('examens/{examen}/start', [TentativeController::class, 'start']);
+    // Soumettre les réponses pour une tentative spécifique
+    Route::post('tentatives/{tentative}/submit', [TentativeController::class, 'submit']);
+
+    Route::get('evaluations/{examen}/tentatives', [TentativeController::class, 'indexForExamen']);
+
+   // dans routes/api.php
+    Route::get('evaluations/{examen}/statistiques', [TentativeController::class, 'getStatistiques']);
+
+    Route::post('modules/{module}/import-examen', [ImportController::class, 'importExamen']);
+
+
 
 
 
 });
+Route::post('paiements/init', [PaiementController::class, 'init']);
+
