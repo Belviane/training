@@ -46,6 +46,8 @@ use App\Http\Controllers\Api\TentativeController;
 
 use App\Http\Controllers\Api\PaiementController;
 
+use App\Http\Controllers\Api\ParenteController;
+
 use App\Http\Controllers\Api\TestController;
 
 use App\Http\Controllers\Api\ImportController;
@@ -133,7 +135,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Parents
-    Route::prefix('parents')->controller(ParentController::class)->group(function () {
+    Route::prefix('parents')->controller(ParenteController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
         Route::get('/{id}', 'show');
