@@ -25,45 +25,46 @@ class InscriptionController extends Controller
         }
     }
 
-    public function inscrire(Request $request, $formationId)
-    {
-        $formation = Formation::findOrFail($formationId);
+   public function inscrire(Request $request, $formationId)
+{
+    $formation = Formation::findOrFail($formationId);
 
-        if (!auth()->check()) {
-            return response()->json([
-                'message' => 'Token invalide ou manquant',
-            ], 401);
-        }
-
-       $this->checkAdminOrSuperviseur();
-
-        $request->validate([
-            'apprenant_id' => 'required|exists:apprenants,id'
-        ]);
-
-        $apprenant = Apprenant::findOrFail($request->apprenant_id);
-
-        // Vérification double inscription
-        if (Inscription::where('formation_id', $formation->id)
-            ->where('apprenant_id', $apprenant->id)->exists()) {
-            return response()->json(['message' => 'Cet apprenant est déjà inscrit.'], 400);
-        }
-
-        // Création de l’inscription
-        $inscription = Inscription::create([
-            'formation_id' => $formation->id,
-            'apprenant_id' => $apprenant->id,
-            'inscrit_par' => $user->id,
-            'date_inscription' => now(),
-            'statut' => 'en_attente',
-            'paiement_effectue' => false
-        ]);
-
+    if (!auth()->check()) {
         return response()->json([
-            'message' => 'Inscription enregistrée avec succès.',
-            'inscription' => $inscription
-        ], 201);
+            'message' => 'Token invalide ou manquant',
+        ], 401);
     }
+
+    $this->checkAdminOrSuperviseur();
+
+    $request->validate([
+        'apprenant_id' => 'required|exists:apprenants,id'
+    ]);
+
+    $apprenant = Apprenant::findOrFail($request->apprenant_id);
+
+    // Vérification double inscription
+    if (Inscription::where('formation_id', $formation->id)
+        ->where('apprenant_id', $apprenant->id)->exists()) {
+        return response()->json(['message' => 'Cet apprenant est déjà inscrit.'], 400);
+    }
+
+    // Création de l’inscription
+    $inscription = Inscription::create([
+        'formation_id' => $formation->id,
+        'apprenant_id' => $apprenant->id,
+        'inscrit_par' => auth()->id(),
+        'date_inscription' => now(),
+        'statut' => 'en_attente',
+        'paiement_effectue' => false
+    ]);
+
+    return response()->json([
+        'message' => 'Inscription enregistrée avec succès.',
+        'inscription' => $inscription
+    ], 201);
+}
+
 
 
     public function mesInscriptions()
