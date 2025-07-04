@@ -89,6 +89,13 @@ export class SidebarComponent implements OnInit {
           exact: true,
         },
         {
+          label: 'Gestion',
+          icon: 'event',
+          route: '/app/gestion',
+          roles: ['superviseur'],
+          exact: true,
+        },
+        {
           label: 'Paiements',
           icon: 'payment',
           route: '/app/paiements',

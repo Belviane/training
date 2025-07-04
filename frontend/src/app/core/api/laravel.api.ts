@@ -14,7 +14,7 @@ export const LaravelApi = {
   // === Authentification ===
   login: `${BASE_URL}/login`, // Connexion utilisateur
   logout: `${BASE_URL}/logout`, // Déconnexion utilisateur
-  register: `${BASE_URL}/register`, // Inscription utilisateur
+  register: `${BASE_URL}/register`, // Inscription utilisateur (protégée)
   emailverify: `${BASE_URL}/email/verify`, // Vérification email
   forgotpassword: `${BASE_URL}/forgot-password`, // Mot de passe oublié
   resetpassword: `${BASE_URL}/reset-password`, // Réinitialisation du mot de passe
@@ -73,6 +73,25 @@ export const LaravelApi = {
 
   // === Examens ===
   storeExamenForModule: (moduleId: number) => `${BASE_URL}/modules/${moduleId}/examens`, // Ajouter un examen à un module
+  getExamensForModule: (moduleId: number) => `${BASE_URL}/modules/${moduleId}/examens`, // Lister les examens d'un module
+  showExamen: (examenId: number) => `${BASE_URL}/examens/${examenId}`, // Afficher un examen
+  updateExamen: (examenId: number) => `${BASE_URL}/examens/${examenId}`, // Mettre à jour un examen
+  archiveExamen: (examenId: number) => `${BASE_URL}/examens/${examenId}/archive`, // Archiver un examen
+
+  // === Tentatives ===
+  startExamen: (examenId: number) => `${BASE_URL}/examens/${examenId}/start`, // Démarrer un examen
+  submitTentative: (tentativeId: number) => `${BASE_URL}/tentatives/${tentativeId}/submit`, // Soumettre une tentative
+  getTentativesForExamen: (examenId: number) => `${BASE_URL}/evaluations/${examenId}/tentatives`, // Lister les tentatives d'un examen
+  getExamenStatistics: (examenId: number) => `${BASE_URL}/evaluations/${examenId}/statistiques`, // Statistiques d'un examen
+
+  // === Tests ===
+  checkTestAnswers: (examenId: number) => `${BASE_URL}/tests/${examenId}/check`, // Vérifier les réponses d'un test
+
+  // === Import ===
+  importExamen: (moduleId: number) => `${BASE_URL}/modules/${moduleId}/import-examen`, // Importer un examen
+
+  // === Paiements ===
+  initPaiement: `${BASE_URL}/paiements/init`, // Initialiser un paiement
 
   // === Dashboard spécifiques ===
   ADMIN_STATS: `${BASE_URL}/admin/stats`, // Statistiques administrateur
@@ -118,15 +137,13 @@ export const LaravelApi = {
   updateSeance(id: number): string {
     return `${BASE_URL}/seances/${id}`; // Modifier une séance
   },
-  inscrireApprenant(formationId: number): string {
-    return `${BASE_URL}/formations/${formationId}/inscrire`; // Inscrire un apprenant à une formation
-  },
 
   // === Inscriptions ===
   rechercheInscriptions: `${BASE_URL}/inscriptions/recherche`, // Recherche d'inscriptions
   mesInscriptions: `${BASE_URL}/mes-inscriptions`, // Inscriptions de l'utilisateur
   inscriptionsParent: `${BASE_URL}/mes-enfants/inscriptions`, // Inscriptions des enfants (parent)
   inscriptionsApprenant: `${BASE_URL}/mes-formations`, // Inscriptions de l'apprenant
+  inscrireApprenant: (formationId: number) => `${BASE_URL}/formations/${formationId}/inscrire`,
 
   // === Exportations par rôle ===
   exportExcelAdministrateurs: `${BASE_URL}/administrateurs/export/excel`,

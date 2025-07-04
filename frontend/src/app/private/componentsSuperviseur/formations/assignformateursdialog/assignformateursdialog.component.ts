@@ -43,29 +43,38 @@ export class AssignformateursdialogComponent implements OnInit {
         this.http.get<{ data: any[] }>(LaravelApi.formateurs)
       );
       this.formateurs = response.data;
+      console.log('Formateurs chargés :', this.formateurs);
 
       // Charger les formateurs déjà assignés
-      const assignedResponse = await lastValueFrom(
-        this.http.get<{ data: any[] }>(`${LaravelApi.assignFormateurs(this.formationId)}/assigned`)
-      );
-      this.selectedFormateurs = assignedResponse.data.map(f => f.id);
+      // const assignedResponse = await lastValueFrom(
+      //   this.http.get<{ data: any[] }>(`${LaravelApi.assignFormateurs(this.formationId)}/assigned`)
+      // );
+      // this.selectedFormateurs = assignedResponse.data.map(f => f.id);
     } catch (error) {
       this.snackBar.open('Erreur de chargement des formateurs', 'Fermer', { duration: 3000 });
     }
   }
 
   async onAssign() {
-    try {
-      await lastValueFrom(
-        this.http.post(LaravelApi.assignFormateurs(this.formationId), {
-          formateurs: this.selectedFormateurs
-        })
-      );
-      this.dialogRef.close(true);
-    } catch (error) {
-      this.snackBar.open('Erreur lors de l\'assignation', 'Fermer', { duration: 3000 });
+  try {
+    console.log('Formateurs sélectionnés :', this.selectedFormateurs);  // tu verras le bon tableau ici
+
+    await lastValueFrom(
+      this.http.post(LaravelApi.assignFormateurs(this.formationId), {
+        formateur_ids: this.selectedFormateurs  // ✅ bien `formateur_ids`
+      })
+    );
+
+    this.dialogRef.close(true);
+  } catch (error: any) {
+    console.error('Erreur complète :', error);
+    if (error.status === 422) {
+      console.error('Validation errors :', error.error.errors);
     }
+    this.snackBar.open('Erreur lors de l\'assignation', 'Fermer', { duration: 3000 });
   }
+}
+
 
   onCancel() {
     this.dialogRef.close(false);

@@ -7,7 +7,7 @@ import { ContentComponent } from './content/content.component';
 import { AjouterComponent } from '@app/core/shared/modals/ajouter/ajouter.component';
 import { ListecompteComponent } from './componentsSuperviseur/listecompte/listecompte.component';
 import { FormationsComponent } from './componentsSuperviseur/formations/formations.component';
-import { SuiviapprenantComponent } from './componentsFormateur/suiviapprenant/suiviapprenant.component';
+import { SuiviapprenantComponent } from './componentsSuperviseur/suiviapprenant/suiviapprenant.component';
 import { EvaluationComponent } from './componentsApprenant/evaluation/evaluation.component';
 import { EvaluerformateurComponent } from './componentsSuperviseur/evaluerformateur/evaluerformateur.component';
 import { PaiementsComponent } from './componentsSuperviseur/paiements/paiements.component';
@@ -17,6 +17,10 @@ import { GestionseanceComponent } from './componentsSuperviseur/gestionseance/ge
 import { NouvelleformationComponent } from './componentsSuperviseur/nouvelleformation/nouvelleformation.component';
 import { NouvelleclasseComponent } from './componentsSuperviseur/nouvelleclasse/nouvelleclasse.component';
 import { NouvelleseanceComponent } from './componentsSuperviseur/nouvelleseance/nouvelleseance.component';
+import { ListeutilisateurComponent } from './componentsAdministrateur/listeutilisateur/listeutilisateur.component';
+import { SuiviparentComponent } from './componentsSuperviseur/suiviparent/suiviparent.component';
+import { PresenceComponent } from './componentsFormateur/presence/presence.component';
+import { GestioninscriptionComponent } from './componentsSuperviseur/gestioninscription/gestioninscription.component';
 
 export const PRIVATE_ROUTES: Routes = [
   {
@@ -44,6 +48,16 @@ export const PRIVATE_ROUTES: Routes = [
         component: ListecompteComponent,
         canActivate: [AuthGuard],
       },
+      // {
+      //   path: 'utilisateurs',
+      //   component: ListeutilisateurComponent,
+      //   canActivate: [AuthGuard],
+      // },
+      {
+        path: 'utilisateurs/:roleType',
+        component: ListeutilisateurComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'formations',
         canActivate: [AuthGuard],
@@ -59,8 +73,18 @@ export const PRIVATE_ROUTES: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'parents',
+        component: SuiviparentComponent,
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'evaluation',
         component: EvaluationComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'gestion',
+        component: GestioninscriptionComponent,
         canActivate: [AuthGuard],
       },
       {
@@ -96,6 +120,12 @@ export const PRIVATE_ROUTES: Routes = [
         component: GestionseanceComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: 'presences/:id',
+        component: PresenceComponent,
+        canActivate: [AuthGuard],
+      },
+
       { path: '**', redirectTo: '' },
     ]
   },

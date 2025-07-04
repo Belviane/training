@@ -1,0 +1,30 @@
+<div class="suivi-container">
+  <h2>Associer un parent à un apprenant</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Parent</mat-label>
+      <mat-select formControlName="parent_id" required>
+        <mat-option *ngFor="let parent of parents" [value]="parent.id">
+          {{ parent.prenom }} {{ parent.nom }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Apprenant</mat-label>
+      <mat-select formControlName="apprenant_id" required>
+        <mat-option *ngFor="let apprenant of apprenants" [value]="apprenant.id">
+          {{ apprenant.utilisateur.prenom }} {{ apprenant.utilisateur.nom }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || status === 'loading'">
+      {{ status === 'loading' ? 'Association en cours...' : 'Associer' }}
+    </button>
+  </form>
+
+  <div class="message success" *ngIf="status === 'success'">{{ message }}</div>
+  <div class="message error" *ngIf="status === 'error'">{{ message }}</div>
+</div>

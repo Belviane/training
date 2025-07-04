@@ -23,7 +23,7 @@
           <a routerLink="/formations" 
              [class.active]="activeLink === 'formations'" 
              (click)="navigateTo('/formations')">
-            <mat-icon>school</mat-icon>
+            <mat-icon aria-hidden="false" aria-label="School icon" fontIcon="school"></mat-icon>
             <span>Formations</span>
           </a>
         </li>
@@ -31,7 +31,7 @@
           <a routerLink="/about" 
              [class.active]="activeLink === 'about'" 
              (click)="navigateTo('/about')">
-            <mat-icon>info</mat-icon>
+            <mat-icon aria-hidden="false" aria-label="Info icon" fontIcon="info"></mat-icon>
             <span>À Propos</span>
           </a>
         </li>
@@ -39,7 +39,7 @@
           <a routerLink="/contact" 
              [class.active]="activeLink === 'contact'" 
              (click)="navigateTo('/contact')">
-            <mat-icon>mail</mat-icon>
+            <mat-icon aria-hidden="false" aria-label="Mail icon" fontIcon="mail"></mat-icon>
             <span>Contact</span>
           </a>
         </li>

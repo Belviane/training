@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SeanceService } from 'src/app/services/seance.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,10 +13,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { NouvelleseanceComponent } from '../nouvelleseance/nouvelleseance.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-seance',
   imports: [
+    RouterModule,
     MatTooltipModule,
     MatIconModule,
     CommonModule,
@@ -37,10 +39,13 @@ export class SeanceComponent implements OnInit {
   seances: any[] = [];
   isLoading = true;
 
+  @Input() seanceData?: any;
+
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  constructor(private seanceService: SeanceService) {}
+  constructor(private seanceService: SeanceService
+  ) { }
 
   ngOnInit(): void {
     this.loadSeances();
@@ -65,12 +70,13 @@ export class SeanceComponent implements OnInit {
       }
     });
   }
-  
-  openDialog(): void {
+
+  openDialog(seance?: any): void {
     const dialogRef = this.dialog.open(NouvelleseanceComponent, {
       width: '900px',
       maxHeight: '90vh',
-      disableClose: true
+      disableClose: true,
+      data: seance || null
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -78,9 +84,28 @@ export class SeanceComponent implements OnInit {
     });
   }
 
+
   editSeance(id: number): void {
-    // Implémentez l'édition si nécessaire
+    const seance = this.seances.find(s => s.id === id);
+    if (!seance) {
+      this.snackBar.open('Séance non trouvée', 'Fermer', { duration: 3000 });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(NouvelleseanceComponent, {
+      width: '900px',
+      maxHeight: '90vh',
+      disableClose: true,
+      data: seance  // <-- ici tu passes la séance à modifier
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadSeances();
+      }
+    });
   }
+
 
   annulerSeance(id: number): void {
     this.seanceService.annulerSeance(id).subscribe({

@@ -1,0 +1,71 @@
+<div class="compte-container">
+    <!-- Titre dynamique en fonction du rôle -->
+    <div class="header-container">
+        <h2>
+            <mat-icon>people</mat-icon> Liste des {{ roleLabel }}
+        </h2>
+    </div>
+    <!-- États de chargement -->
+    <div *ngIf="isLoading" class="loading-state">
+        <mat-spinner diameter="50"></mat-spinner>   
+        <p class="loading-text">Chargement des {{ roleLabel }}...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        <mat-icon>error</mat-icon> {{ errorMessage }}
+    </div>
+
+    <!-- Tableau des utilisateurs -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table *ngIf="!isLoading && users.length > 0" class="user-table">
+                <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users" [class.inactive-row]="!user.is_active">
+                        <td><strong>{{ getMatricule(user) }}</strong></td>
+                        <td>{{ user.nom }}</td>
+                        <td>{{ user.prenom }}</td>
+                        <td class="email-cell">{{ user.email }}</td>
+                        <td>
+                            <span class="role-badge" [ngClass]="getRoleClass(user.role_id)">
+                                {{ getRoleName(user.role_id) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge" [class.active]="user.is_active"
+                                [class.inactive]="!user.is_active">
+                                {{ user.is_active ? 'Actif' : 'Inactif' }}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button mat-icon-button [disabled]="user.isLoading"
+                                [color]="user.is_active ? 'primary' : 'warn'" (click)="toggleUserStatus(user)"
+                                matTooltip="{{user.is_active ? 'Désactiver' : 'Activer'}}">
+                                <mat-icon *ngIf="!user.isLoading">
+                                    {{user.is_active ? 'toggle_off' : 'toggle_on'}}
+                                </mat-icon>
+                                <mat-spinner *ngIf="user.isLoading" diameter="24"></mat-spinner>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Message si vide -->
+    <div *ngIf="!isLoading && users.length === 0" class="no-users">
+        <mat-icon>people_outline</mat-icon>
+        <p>Aucun {{ roleLabel }} trouvé</p>
+    </div>
+</div>

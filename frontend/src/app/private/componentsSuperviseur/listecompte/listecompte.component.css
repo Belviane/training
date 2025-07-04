@@ -20,7 +20,7 @@
 }
 
 .compte-container {
-  padding: 20px;
+  padding: 10px;
 }
 
 .header-container {
@@ -31,15 +31,15 @@
 }
 
 .table-container {
-  margin-top: 20px;
+  margin-top: 15px;
   overflow-x: auto;
 }
 
 /* Styles des badges */
 .role-badge {
   padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
+  border-radius: 8px;
+  font-size: 10px;
   font-weight: 500;
   color: white;
 }
@@ -80,7 +80,7 @@
 }
 
 .loading-text {
-  margin-top: 10px;
+  margin-top: 8px;
   color: #666;
 }
 
@@ -113,3 +113,4 @@
     white-space: nowrap;
   }
 }
+

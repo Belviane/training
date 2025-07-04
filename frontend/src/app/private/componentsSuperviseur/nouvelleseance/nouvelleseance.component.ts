@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { SeanceService } from 'src/app/services/seance.service';
 import { FormateurService } from 'src/app/services/formateur.service';
 import { FormationService } from 'src/app/services/formation.service';
 import { ClasseService } from 'src/app/services/classe.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 // Angular Material
 import { MatButtonModule } from '@angular/material/button';
@@ -59,7 +61,8 @@ export class NouvelleseanceComponent implements OnInit {
     private formateurService: FormateurService,
     private formationService: FormationService,
     private classeService: ClasseService,
-    private dialogRef: MatDialogRef<NouvelleseanceComponent>
+    private dialogRef: MatDialogRef<NouvelleseanceComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.seanceForm = this.fb.group({
       titre: ['', Validators.required],
@@ -79,6 +82,21 @@ export class NouvelleseanceComponent implements OnInit {
     this.loadFormateurs();
     this.loadFormations();
     this.loadClasses();
+
+     if (this.data) {
+    this.seanceForm.patchValue({
+      titre: this.data.titre,
+      description: this.data.description,
+      date: new Date(this.data.date),
+      heure_debut: this.data.heure_debut,
+      heure_fin: this.data.heure_fin,
+      formateur_id: this.data.formateur_id,
+      formation_id: this.data.formation_id,
+      classe_id: this.data.classe_id,
+      type_seance: this.data.type_seance,
+      statut: this.data.statut
+    });
+  }
   }
 
   loadFormateurs(): void {
@@ -130,20 +148,26 @@ export class NouvelleseanceComponent implements OnInit {
         classe_id: Number(this.seanceForm.value.classe_id)
       };
 
-      console.log('Payload envoyé:', payload);
-
-      this.seanceService.createSeance(payload).subscribe({
-        next: (response) => this.dialogRef.close(true),
-        error: (err) => {
-          console.error('Erreur complète:', {
-            status: err.status,
-            message: err.message,
-            error: err.error
-          });
-        }
-      });
+      if (this.data && this.data.id) {
+        // Cas édition : appeler update
+        this.seanceService.updateSeance(this.data.id, payload).subscribe({
+          next: () => this.dialogRef.close(true),
+          error: (err) => {
+            console.error('Erreur mise à jour:', err);
+          }
+        });
+      } else {
+        // Cas création
+        this.seanceService.createSeance(payload).subscribe({
+          next: () => this.dialogRef.close(true),
+          error: (err) => {
+            console.error('Erreur création:', err);
+          }
+        });
+      }
     }
   }
+
 
   private formatDate(date: string | Date): string {
     const d = new Date(date);

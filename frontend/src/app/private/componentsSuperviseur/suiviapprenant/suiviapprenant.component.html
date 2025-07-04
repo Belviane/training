@@ -1,0 +1,30 @@
+<div class="suivi-container">
+  <h2>Inscrire un apprenant à une formation</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Apprenant</mat-label>
+      <mat-select formControlName="apprenant_id" required>
+        <mat-option *ngFor="let apprenant of apprenants" [value]="apprenant.id">
+          {{ apprenant.utilisateur.prenom }} {{ apprenant.utilisateur.nom }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Formation</mat-label>
+      <mat-select formControlName="formation_id" required>
+        <mat-option *ngFor="let formation of formations" [value]="formation.id">
+          {{ formation.nom_formation }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || status === 'loading'">
+      {{ status === 'loading' ? 'Inscription...' : 'Inscrire' }}
+    </button>
+  </form>
+
+  <div class="message success" *ngIf="status === 'success'">{{ message }}</div>
+  <div class="message error" *ngIf="status === 'error'">{{ message }}</div>
+</div>

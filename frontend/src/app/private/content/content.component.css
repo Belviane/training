@@ -219,6 +219,7 @@ Styles pour les badges de rôle - Version CSS
 }
 
 .stat-card {
+  cursor: pointer;
   display: flex;
   align-items: center;
   padding: 10px;

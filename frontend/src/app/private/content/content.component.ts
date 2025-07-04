@@ -27,7 +27,7 @@ import { FormateurService } from 'src/app/services/formateur.service';
   styleUrl: './content.component.css'
 })
 export class ContentComponent implements OnInit {
-   nbClasses = 0;
+  nbClasses = 0;
   nbApprenants = 0;
   nbFormateurs = 0;
   nbreussite = 0;
@@ -39,6 +39,8 @@ export class ContentComponent implements OnInit {
       label: 'Superviseurs',
       value: 0, // Valeur initiale, sera mise à jour dynamiquement
       icon: 'supervisor_account',
+      route: 'superviseurs',
+      queryParams: { role: 'superviseurs' }
     },
   ];
 
@@ -84,7 +86,7 @@ export class ContentComponent implements OnInit {
     private classeService: ClasseService,
     private apprenantService: ApprenantService,
     private formateurService: FormateurService,
-    
+
   ) {
   }
 
@@ -99,6 +101,14 @@ export class ContentComponent implements OnInit {
 
     this.loadDashboardStats();
 
+  }
+
+  navigateToUserList(roleType: string): void {
+    // Solution 1: Utilisation des paramètres de chemin
+    this.router.navigate(['/app/utilisateurs', roleType.toLowerCase()]);
+
+    // OU Solution 2: Utilisation des queryParams (si vous préférez)
+    //this.router.navigate(['/app/utilisateurs'], { queryParams: { role: roleType } });
   }
 
   loadDashboardStats(): void {
@@ -149,13 +159,13 @@ export class ContentComponent implements OnInit {
 
         // Mise à jour des statistiques pour l'affichage
         this.userStats = [
-          { label: 'Superviseurs', value: counts.superviseur, icon: 'supervisor_account' },
-          { label: 'Formateurs', value: counts.formateur, icon: 'school' },
-          { label: 'Apprenants', value: counts.apprenant, icon: 'person' },
-          { label: 'Parents', value: counts.parent, icon: 'family_restroom' },
-          { label: 'Caissiers', value: counts.caissier, icon: 'payments' },
-          { label: 'Auditeurs', value: counts.auditeur, icon: 'hearing' },
-          { label: 'Vendeur', value: counts.vendeur, icon: 'storefront' }
+          { label: 'Superviseurs', value: counts.superviseur, icon: 'supervisor_account', route: 'superviseurs', queryParams: { role: 'superviseurs' } },
+          { label: 'Formateurs', value: counts.formateur, icon: 'school', route: 'formateurs', queryParams: { role: 'formateurs' } },
+          { label: 'Apprenants', value: counts.apprenant, icon: 'person', route: 'apprenants', queryParams: { role: 'apprenants' } },
+          { label: 'Parents', value: counts.parent, icon: 'family_restroom', route: 'parents', queryParams: { role: 'parents' } },
+          { label: 'Caissiers', value: counts.caissier, icon: 'payments', route: 'caissiers', queryParams: { role: 'caissiers' } },
+          { label: 'Auditeurs', value: counts.auditeur, icon: 'hearing', route: 'auditeurs', queryParams: { role: 'auditeurs' } },
+          { label: 'Vendeur', value: counts.vendeur, icon: 'storefront', route: 'vendeurs', queryParams: { role: 'vendeurs' } }
         ];
       },
       error: (err) => {

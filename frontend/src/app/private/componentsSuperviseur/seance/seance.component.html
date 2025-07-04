@@ -23,7 +23,7 @@
         <h3>{{ seance.titre }}</h3>
         <span class="seance-status">{{ seance.statut }}</span>
       </div>
-      
+
       <div class="seance-content">
         <p><mat-icon>event</mat-icon> {{ seance.date | date:'mediumDate' }}</p>
         <p><mat-icon>schedule</mat-icon> {{ seance.heure_debut }} - {{ seance.heure_fin }}</p>
@@ -37,26 +37,33 @@
         <button mat-icon-button color="primary" (click)="editSeance(seance.id)" matTooltip="Modifier la séance">
           <mat-icon>edit</mat-icon>
         </button>
-        
-        <button mat-icon-button color="warn" (click)="annulerSeance(seance.id)" *ngIf="seance.statut !== 'Annulée'" matTooltip="Annuler la séance">
+
+        <button mat-icon-button color="warn" (click)="annulerSeance(seance.id)" *ngIf="seance.statut !== 'Annulée'"
+          matTooltip="Annuler la séance">
           <mat-icon>cancel</mat-icon>
         </button>
-        
-        <button mat-icon-button color="accent" (click)="demarrerSeance(seance.id)" 
-                *ngIf="seance.statut === 'Planifiée'" matTooltip="Démarrer la séance">
+
+        <button mat-icon-button color="accent" (click)="demarrerSeance(seance.id)" *ngIf="seance.statut === 'Planifiée'"
+          matTooltip="Démarrer la séance">
           <mat-icon>play_arrow</mat-icon>
         </button>
-        
-        <button mat-icon-button color="primary" (click)="terminerSeance(seance.id)" 
-                *ngIf="seance.statut === 'Confirmée'" matTooltip="Terminer la séance">
+
+        <button mat-icon-button color="primary" (click)="terminerSeance(seance.id)"
+          *ngIf="seance.statut === 'Confirmée'" matTooltip="Terminer la séance">
           <mat-icon>stop</mat-icon>
         </button>
-        
+
+        <button mat-icon-button color="accent" [routerLink]="['/app/presences', seance.id]"
+            matTooltip="Gérer les présences">
+            <mat-icon>how_to_reg</mat-icon>
+        </button>
+
         <button mat-icon-button (click)="notifierSeance(seance.id)" matTooltip="Notifier les participants">
           <mat-icon>notifications</mat-icon>
         </button>
-        
-        <button mat-icon-button (click)="downloadFeuillePresence(seance.id)" matTooltip="Télécharger la feuille de présence">
+
+        <button mat-icon-button (click)="downloadFeuillePresence(seance.id)"
+          matTooltip="Télécharger la feuille de présence">
           <mat-icon>picture_as_pdf</mat-icon>
         </button>
       </div>

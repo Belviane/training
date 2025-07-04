@@ -27,7 +27,6 @@ export class FormateurService {
         }));
       }),
       catchError(err => {
-        console.error('Erreur API formateurs:', err);
         return of([]);
       })
     );
