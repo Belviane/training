@@ -38,9 +38,7 @@ services:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        fromService:
-          type: database  
-          name: mysql
+        value: mysql
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
