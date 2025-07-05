@@ -1,7 +1,7 @@
 services:
   - type: web
     name: laravel-backend
-    runtime: php
+    env: php
     plan: free
     buildCommand: |
       cd backend
@@ -39,7 +39,7 @@ services:
         value: mysql
       - key: DB_HOST
         fromService:
-          type: mysql 
+          type: database  
           name: mysql
       - key: DB_PORT
         value: 3306
