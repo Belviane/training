@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   // New property to control password input type
   passwordFieldType: string = 'password';
-
+  showPassword = false;
   errorMessage: string | null = null;
 
   showForgotPasswordModal: boolean = false;
@@ -123,6 +123,8 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility() {
     this.passwordFieldType =
       this.passwordFieldType === 'password' ? 'text' : 'password';
+
+    this.showPassword = !this.showPassword;
   }
 
   openForgotPasswordModal() {

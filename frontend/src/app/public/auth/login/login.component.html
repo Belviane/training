@@ -14,8 +14,8 @@
       <div class="form-group">
         <label for="login">Nom d'utilisateur</label>
         <div class="input-wrapper">
-          <input type="text" id="login" name="login" placeholder="Entrez votre nom d'utilisateur" autocomplete="username"
-            required aria-required="true" [(ngModel)]="credentials.login" />
+          <input type="text" id="login" name="login" placeholder="Entrez votre nom d'utilisateur"
+            autocomplete="username" required aria-required="true" [(ngModel)]="credentials.login" />
         </div>
       </div>
 
@@ -24,11 +24,8 @@
         <div class="input-wrapper">
           <input [type]="passwordFieldType" id="password" name="password" placeholder="Entrez votre mot de passe"
             autocomplete="current-password" required aria-required="true" [(ngModel)]="credentials.password" />
-          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
-            aria-label="Toggle password visibility">
-            <i class="fa" [ngClass]="
-                passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash'
-              "></i>
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
           </button>
         </div>
       </div>

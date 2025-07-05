@@ -7,7 +7,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LaravelApi } from '@app/core/api/laravel.api';
 
 @Component({
@@ -48,7 +48,8 @@ export class ListeutilisateurComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -134,6 +135,9 @@ export class ListeutilisateurComponent implements OnInit {
     });
   }
 
+goBackToStats() {
+  this.router.navigate(['/app']); // adapte le chemin si besoin
+}
 
 
   private transformApiResponse(response: any): any[] {

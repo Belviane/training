@@ -120,10 +120,13 @@ main {
   transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: #efef57;
   cursor: pointer;
   font-size: 1rem;
+  z-index: 10;
 }
+
+
 
 .login-btn {
   width: 100%;

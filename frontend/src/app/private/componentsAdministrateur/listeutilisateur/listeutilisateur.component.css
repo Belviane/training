@@ -157,3 +157,17 @@ h2 mat-icon {
 .email-cell {
   word-break: break-all;
 }
+
+.back-button-container {
+  margin-bottom: 10px;
+}
+
+.back-button-container button {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.back-button-container mat-icon {
+  margin-right: 5px;
+}
