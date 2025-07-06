@@ -1,0 +1,20 @@
+mat-selection-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #fafafa;
+}
+
+mat-list-option {
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.no-formateur {
+  color: #999;
+  font-style: italic;
+  margin-top: 10px;
+  text-align: center;
+}

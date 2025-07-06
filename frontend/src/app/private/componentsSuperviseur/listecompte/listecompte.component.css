@@ -1,7 +1,116 @@
-.table-container {
-  margin: 20px;
+/* Style spécifique pour le bouton Ajouter */
+.header-container button[mat-raised-button] {
+  display: flex !important; /* Force l'affichage */
+  visibility: visible !important; /* Double assurance */
+  opacity: 1 !important;
+  z-index: 100;
 }
 
-table {
-  width: 100%;
+/* Style du bouton Ajouter */
+.header-container button[mat-raised-button] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  height: 36px;
 }
+
+.header-container button[mat-raised-button] mat-icon {
+  margin-right: 8px;
+}
+
+.compte-container {
+  padding: 10px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  margin-top: 15px;
+  overflow-x: auto;
+}
+
+/* Styles des badges */
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: white;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  
+  &.active {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  &.inactive {
+    background-color: #f44336;
+    color: white;
+  }
+}
+
+/* Classes pour les différents rôles */
+.administrateur { background-color: #673ab7; }
+.superviseur { background-color: #3f51b5; }
+.formateur { background-color: #2196f3; }
+.apprenant { background-color: #009688; }
+.parent { background-color: #ff9800; }
+.caissier { background-color: #795548; }
+.auditeur { background-color: #607d8b; }
+.vendeur { background-color: #e91e63; }
+
+/* États de chargement */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.loading-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+/* Message quand pas d'utilisateurs */
+.no-users {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .email-cell {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+

@@ -55,7 +55,7 @@
             <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Modifier">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button [disabled]="user.isLoading" [color]="user.is_active ? 'warn' : 'primary'"
+            <button mat-icon-button [disabled]="user.isLoading" [color]="user.is_active ? 'primary' : 'warn'"
               (click)="toggleUserStatus(user)" matTooltip="{{user.is_active ? 'Désactiver' : 'Activer'}}">
               <mat-icon *ngIf="!user.isLoading">
                 {{user.is_active ? 'toggle_off' : 'toggle_on'}}

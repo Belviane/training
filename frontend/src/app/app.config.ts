@@ -6,10 +6,11 @@ import { tokenInterceptor } from './core/auth/interceptors/token.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export const appConfig: ApplicationConfig = {
   providers: [ 
+    MatTooltipModule,
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(APP_ROUTES),
     provideHttpClient(

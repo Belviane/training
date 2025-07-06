@@ -1,192 +1,69 @@
-/* Reset et styles de base */
-:host {
-  display: block;
-  width: 100%;
-  overflow-x: hidden;
-  --header-height: 64px;
-  --sidebar-width: 240px;
-  --primary-color: #3f51b5;
-  --secondary-color: #f5f7fa;
-  --text-color: #2c3e50;
-  --border-radius: 8px;
-  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+/* Mise en page principale de l'application */
+.app-layout {
+  min-height: 100vh; /* Hauteur minimale : 100% de la fenêtre */
+  display: flex;
+  flex-direction: column; /* Disposition verticale */
 }
 
-/* Layout principal */
-.layout-wrapper {
-  display: grid;
-  grid-template-areas:
-    "header header"
-    "sidebar main";
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
-  background-color: var(--secondary-color);
-}
-
-/* En-tête */
-app-header {
-  grid-area: header;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Sidebar */
-.sidebar, app-sidebar {
-  grid-area: sidebar;
-  position: fixed;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
-  width: var(--sidebar-width);
-  background: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 90;
-  overflow-y: auto;
-  transition: transform 0.3s ease;
+/* Corps de l'application */
+.app-body {
+  flex: 1;
+  display: flex;
+  margin-top: 64px; /* Hauteur du header */
 }
 
 /* Contenu principal */
 .main-content {
-  grid-area: main;
-  margin-top: var(--header-height);
-  margin-left: var(--sidebar-width);
-  padding: 24px;
-  min-height: calc(100vh - var(--header-height));
-  transition: margin-left 0.3s ease;
-  background-color: var(--secondary-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px); /* Hauteur moins le header */
+  background: var(--gray-50); /* Couleur de fond */
+  transition: margin-left 0.3s ease; /* Animation du décalage */
 }
 
-.router-content {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 24px;
-  box-shadow: var(--box-shadow);
-  min-height: calc(100% - 48px);
-  overflow: hidden;
+/* Wrapper du contenu */
+.content-wrapper {
+  flex: 1;
+  padding: 20px; /* Espacement intérieur */
 }
 
-/* Styles pour les tableaux */
-.table-container {
-  margin-top: 20px;
-  overflow-x: auto;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  background: white;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 800px;
-}
-
-.data-table th {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 500;
-  position: sticky;
-  top: 0;
-}
-
-.data-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
-  vertical-align: middle;
-}
-
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-
-.data-table tr:hover td {
-  background-color: rgba(63, 81, 181, 0.05);
-}
-
-/* Styles pour les cartes de contenu */
-.content-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--box-shadow);
-}
-
-.content-card h2 {
-  margin-top: 0;
-  color: var(--primary-color);
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-/* Espacement et organisation */
-.section-spacing {
-  margin-bottom: 30px;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
+/* Desktop - Sidebar toujours visible */
+@media (min-width: 993px) {
   .main-content {
-    padding: 20px;
+    margin-left: 250px; /* Décalage pour la sidebar */
+    width: calc(100% - 250px); /* Largeur ajustée */
   }
   
-  .router-content {
-    padding: 20px;
+  .sidebar {
+    transform: translateX(0) !important; /* Sidebar visible */
   }
 }
 
+/* Mobile - Sidebar cachée par défaut */
 @media (max-width: 992px) {
-  :host {
-    --sidebar-width: 0;
-  }
-  
   .main-content {
+    margin-left: 0; /* Pas de décalage */
+  }
+}
+
+/* Desktop - Gestion de la sidebar */
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 250px; /* Largeur sidebar */
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Quand la sidebar est fermée en desktop */
+  .main-content:not(.sidebar-open) {
     margin-left: 0;
   }
-  
-  .sidebar, app-sidebar {
-    transform: translateX(-100%);
-  }
-  
-  .sidebar.open, app-sidebar.open {
-    transform: translateX(0);
-    z-index: 110;
-  }
 }
 
-@media (max-width: 768px) {
-  :host {
-    --header-height: 56px;
-  }
-  
+/* Mobile - Gestion différente */
+@media (max-width: 1023px) {
   .main-content {
-    padding: 16px;
-  }
-  
-  .router-content {
-    padding: 16px;
-  }
-  
-  .data-table th, 
-  .data-table td {
-    padding: 10px 12px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .main-content {
-    padding: 12px;
-  }
-  
-  .router-content {
-    padding: 12px;
-  }
-  
-  .content-card {
-    padding: 16px;
+    margin-left: 0 !important;
+    width: 100%;
   }
 }

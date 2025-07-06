@@ -22,8 +22,12 @@ export class ProfileService {
       nom: profile.nom,
       prenom: profile.prenom,
       email: profile.email,
+      login: profile.login,
+      password: profile.password
       // N'envoyez pas l'ID dans le body si l'API l'attend dans l'URL ou le JWT
     };
     return this.http.put<{ message: string } >(LaravelApi.profil, payload);
   }
+
+  
 }

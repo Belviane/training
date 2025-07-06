@@ -1,32 +1,11 @@
 <header class="main-header">
   <div class="header-left">
-    <img src="/assets/logo.png" class="header-logo" alt="BE I.T Logo" />
-    <span class="current-date">
-      {{ currentDate | date:' d MMMM y' : 'fr' }}
-    </span>
-  </div>
-
-  <button class="menu-toggle" (click)="onToggleSidebar()">
-    <mat-icon>menu</mat-icon>
-  </button>
-
-  <div class="header-center">
-    <h1 class="site-title">BE I.T CLASSROOM</h1>
-  </div>
-
-  <div class="mode-system">
-    <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
-      <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
+    <button class="menu-toggle" (click)="toggleSidebar()">
+      <i class="material-icons">menu</i>
     </button>
-
-    <mat-menu #themeMenu="matMenu">
-      @for (theme of themeService.getThemes(); track theme.name) {
-      <button mat-menu-item (click)="themeService.setTheme(theme.name)">
-        <mat-icon>{{ theme.icon }}</mat-icon>
-        <span>{{ theme.name | titlecase }}</span>
-      </button>
-      }
-    </mat-menu>
+    <div class="header-title">
+      <h1 class="site-title">BE I.T CLASSROOM</h1>
+    </div>
   </div>
 
   <div class="header-right">
@@ -59,7 +38,18 @@
 
 
 <div *ngIf="showProfileEditModal" class="profile-edit-modal-overlay" (click)="closeProfileModal()">
+
   <div class="profile-edit-modal-content" (click)="$event.stopPropagation()">
+    <div class="form-group">
+      <label for="avatar">Photo de profil</label>
+      <input type="file" id="avatar" (change)="onAvatarSelected($event)" accept="image/*" />
+    </div>
+
+    <div class="form-group">
+      <img *ngIf="avatarPreviewUrl" [src]="avatarPreviewUrl" alt="Prévisualisation de l'avatar"
+        class="avatar-preview" />
+    </div>
+
     <h3>Modifier mon profil</h3>
     <form (ngSubmit)="updateProfile()">
       <div class="form-group">
@@ -74,6 +64,12 @@
         <label for="email">Email</label>
         <input type="email" id="email" name="email" [(ngModel)]="editableUser.email" required />
       </div>
+
+      <div class="form-group">
+        <label for="login">Nom d'utilisateur</label>
+        <input type="texte" id="login" name="login" [(ngModel)]="editableUser.login" required />
+      </div>
+
       <div class="modal-actions">
         <button type="submit" [disabled]="isLoadingProfileUpdate">
           {{ isLoadingProfileUpdate ? 'Mise à jour...' : 'Enregistrer' }}

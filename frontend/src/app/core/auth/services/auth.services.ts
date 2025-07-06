@@ -273,4 +273,19 @@ export class AuthService {
             throw new Error('Token non disponible - Veuillez vous reconnecter');
         }
     }
+
+    forgotPassword(email: string) {
+        return this.http.post(LaravelApi.forgotpassword, { email });
+    }
+
+    resetPassword(data: {
+        email: string,
+        verification_code: string,
+        new_password: string,
+        new_password_confirmation: string
+    }) {
+        return this.http.post(LaravelApi.resetpassword, data);
+    }
+
+
 }

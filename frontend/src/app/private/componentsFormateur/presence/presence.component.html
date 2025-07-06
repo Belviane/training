@@ -1,0 +1,28 @@
+<div class="presence-container">
+  <h2>Présences - Séance #{{ seanceId }}</h2>
+
+  <div *ngIf="loading">Chargement...</div>
+
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let apprenant of apprenants">
+        <td>{{ apprenant.prenom }} {{ apprenant.nom }}</td>
+        <td>{{ apprenant.presence ? 'Présent' : 'Absent' }}</td>
+        <td>
+          <button *ngIf="!apprenant.presence"
+                  (click)="marquerPresence(apprenant.id)"
+                  mat-raised-button color="primary">
+            Marquer Présent
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

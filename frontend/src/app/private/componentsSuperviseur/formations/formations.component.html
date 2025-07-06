@@ -1,76 +1,128 @@
+<!--
+    Composant Angular pour la gestion des formations (formations.component.html)
+
+    - En-tête :
+        - Affiche le titre "Gestion des Formations".
+        - Barre d'actions comprenant :
+            - Champ de recherche pour filtrer les formations (liaison à la méthode searchFormations).
+            - Boutons pour ajouter une nouvelle formation, une nouvelle classe, ou une nouvelle séance (navigation via routerLink).
+            - Bouton pour exporter la liste des formations au format PDF (appel de la méthode exportToPdf).
+
+    - Affichage des cartes de formation :
+        - Si les données sont en cours de chargement (isLoading()), affiche un spinner de chargement.
+        - Sinon, parcourt la liste des formations (formations.data) et affiche pour chaque formation :
+            - Nom et libellé de la formation.
+            - Dates de début et de fin, volume horaire, nombre de séances et de modules, prix.
+            - Statut de la formation sous forme de badge coloré.
+            - Actions disponibles : édition (routerLink vers la page d’édition) et suppression (appel de deleteFormation).
+
+    - Pagination :
+        - Utilisation du composant mat-paginator pour la navigation entre les pages de résultats, avec options de taille de page et boutons premier/dernier.
+
+    Remarques :
+        - Utilisation des composants Angular Material pour l’UI (mat-form-field, mat-icon, mat-spinner, mat-paginator, etc.).
+        - Syntaxe Angular 17 avec les blocs @if et @for pour le rendu conditionnel et itératif.
+        - Les classes CSS personnalisées sont utilisées pour la mise en forme (header-container, cards-container, formation-card, etc.).
+-->
 <div class="header-container">
-    <h2>Liste des formations</h2>
-    <button mat-raised-button color="primary" (click)="openAddModal()">
-        <mat-icon>add</mat-icon>
-        Ajouter une formation
-    </button>
+    <h2>Gestion des Formations</h2>
+
+    <div class="actions-container">
+        <mat-form-field class="search-field">
+            <mat-label>Rechercher</mat-label>
+            <input matInput (input)="searchFormations($any($event.target).value)">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="buttons-container">
+            <button mat-raised-button color="primary" routerLink="/app/formations/nouvelle">
+                <mat-icon>add</mat-icon>
+                Nouvelle formation
+            </button>
+            <button mat-raised-button color="accent" (click)="exportToPdf()">
+                <mat-icon>picture_as_pdf</mat-icon>
+                Exporter PDF
+            </button>
+        </div>
+    </div>
 </div>
 
-<div class="table-container">
-    <h2>Liste des formations</h2>
-    <table mat-table [dataSource]="formations" class="mat-elevation-z8">
-        <ng-container matColumnDef="nom">
-            <th mat-header-cell *matHeaderCellDef> Nom </th>
-            <td mat-cell *matCellDef="let element"> {{ element.nom }} </td>
-        </ng-container>
-        <ng-container matColumnDef="libelle">
-            <th mat-header-cell *matHeaderCellDef> Libellé </th>
-            <td mat-cell *matCellDef="let element"> {{ element.libelle }} </td>
-        </ng-container>
-        <ng-container matColumnDef="dateDebut">
-            <th mat-header-cell *matHeaderCellDef> Date de début </th>
-            <td mat-cell *matCellDef="let element"> {{ element.dateDebut | date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="dateFin">
-            <th mat-header-cell *matHeaderCellDef> Date de fin </th>
-            <td mat-cell *matCellDef="let element"> {{ element.dateFin | date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="nombreSeance">
-            <th mat-header-cell *matHeaderCellDef> Nombre de séances </th>
-            <td mat-cell *matCellDef="let element"> {{ element.nombreSeance }} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<div class="cards-container">
+    @if (isLoading()) {
+    <div class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    } @else {
+    @for (formation of formations.data; track formation.id) {
+    <div class="formation-card">
+        <div class="card-header">
+            <h3>{{ formation.nom_formation }}</h3>
+            <div class="card-subtitle">{{ formation.libelle_formation }}</div>
+        </div>
+
+        <div class="card-content">
+            <div class="card-detail">
+                <mat-icon>event</mat-icon>
+                {{ formation.date_debutf | date:'dd/MM/yyyy' }} - {{ formation.date_finf | date:'dd/MM/yyyy' }}
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>schedule</mat-icon>
+                {{ formation.volume_horaire }} heures
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>library_books</mat-icon>
+                {{ formation.nombre_seancef }} séances • {{ formation.modules?.length || 0 }} modules
+            </div>
+
+            <div class="card-detail">
+                <mat-icon>attach_money</mat-icon>
+                {{ formation.prix | currency:'FCFA': 'symbol':'1.0-0' }}
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <span class="status-badge" [class]="'status-' + formation.statut">
+                {{ formation.statut | titlecase }}
+            </span>
+
+            <div class="card-actions">
+                <button mat-icon-button color="primary" [routerLink]="['/app/formations/editer', formation.id]">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteFormation(formation.id!)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+            <!-- Section assignation formateurs -->
+            <div class="formateurs-section">
+                <h4>Formateurs assignés</h4>
+                @if (formation.formateurs && formation.formateurs.length > 0) {
+                <div class="formateurs-list">
+                    @for (formateur of formation.formateurs; track formateur.id) {
+                    <span class="formateur-badge">
+                        {{ formateur.prenom }} {{ formateur.nom }}
+                        <button mat-icon-button (click)="removeFormateur(formation.id!, formateur.id)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </span>
+                    }
+                </div>
+                } @else {
+                <p>Aucun formateur assigné</p>
+                }
+
+                <button mat-stroked-button color="primary" (click)="openAssignFormateursDialog(formation.id!)">
+                    <mat-icon>group_add</mat-icon>
+                    Assigner des formateurs
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+    }
 </div>
 
-
-<!-- Formulaire modal -->
-<ng-template #addFormationModal>
-    <div class="modal-header">
-        <h2>Ajouter une formation</h2>
-    </div>
-    <div class="modal-body">
-        <form >
-            <mat-form-field>
-                <mat-label>Nom</mat-label>
-                <input matInput formControlName="nom">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Libellé</mat-label>
-                <input matInput formControlName="libelle">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Date de début</mat-label>
-                <input matInput [matDatepicker]="dateDebut" formControlName="dateDebut">
-                <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
-                <mat-datepicker #dateDebut></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Date de fin</mat-label>
-                <input matInput [matDatepicker]="dateFin" formControlName="dateFin">
-                <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
-                <mat-datepicker #dateFin></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Nombre de séances</mat-label>
-                <input matInput formControlName="nombreSeance" type="number">
-            </mat-form-field>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button mat-raised-button (click)="closeModal()">Annuler</button>
-        <button mat-raised-button color="primary" (click)="addFormation()">Ajouter</button>
-    </div>
-</ng-template>
+<mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>

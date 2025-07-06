@@ -12,7 +12,7 @@
 
       <!-- Cartes de statistiques utilisateur -->
       <div class="stats-grid">
-        <div class="stat-card" *ngFor="let stat of userStats">
+        <div class="stat-card" *ngFor="let stat of userStats" (click)="navigateToUserList(stat.route)">
           <div class="stat-icon" [ngClass]="stat.label.toLowerCase()">
             <mat-icon>{{ stat.icon }}</mat-icon>
           </div>
@@ -34,7 +34,49 @@
   =============================================
 -->
 <div *ngIf="isSupervisor()">
-  
+  <div class="dashboard-container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="material-icons">groups</i>
+          </div>
+          <div class="stat-content">
+             <h3>{{ nbClasses }}</h3>
+            <p>Classes actives</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon success">
+            <i class="material-icons">people</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ nbApprenants }}</h3>
+            <p>Apprenants totaux</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon warning">
+            <i class="material-icons">school</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ nbFormateurs }}</h3>
+            <p>Formateurs actifs</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon info">
+            <i class="material-icons">trending_up</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ nbreussite }} %</h3>
+            <p>Taux de réussite global</p>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 
 
@@ -93,5 +135,5 @@
   =============================================
 -->
 <div *ngIf="isVendeur()">
-  
+
 </div>

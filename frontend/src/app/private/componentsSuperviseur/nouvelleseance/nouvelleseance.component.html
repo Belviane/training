@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>Ajouter une nouvelle séance</h2>
+<mat-dialog-content>
+  <form [formGroup]="seanceForm">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="flex gap-4">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Heure de début</mat-label>
+        <input matInput type="time" formControlName="heure_debut" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Heure de fin</mat-label>
+        <input matInput type="time" formControlName="heure_fin" required>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-4">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Formateur</mat-label>
+        <mat-select formControlName="formateur_id" required>
+          <mat-option *ngFor="let formateur of formateurs" [value]="formateur.id">
+            {{ formateur.prenom }} {{ formateur.nom }}
+            <span *ngIf="formateur.specialite"> ({{ formateur.specialite }}) </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Formation</mat-label>
+        <mat-select formControlName="formation_id" required>
+          <mat-option *ngFor="let formation of formations" [value]="formation.id">
+            {{ formation.nom_formation }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Classe</mat-label>
+        <mat-select formControlName="classe_id" required>
+          <mat-option *ngFor="let classe of classes" [value]="classe.id">
+            {{ classe.nom }} ({{ classe.localisation }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Type de séance</mat-label>
+      <mat-select formControlName="type_seance" required>
+        <mat-option value="Théorie">Théorie</mat-option>
+        <mat-option value="Pratique">Pratique</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Statut</mat-label>
+      <mat-select formControlName="statut">
+        <mat-option value="Planifiée">Planifiée</mat-option>
+        <mat-option value="Confirmée">Confirmée</mat-option>
+        <mat-option value="Terminée">Terminée</mat-option>
+        <mat-option value="Annulée">Annulée</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!seanceForm.valid">Enregistrer</button>
+</mat-dialog-actions>

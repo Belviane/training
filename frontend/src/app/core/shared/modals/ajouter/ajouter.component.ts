@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Interface pour typer les données reçues dans la boîte de dialogue
 interface UserDialogData {
   user?: any; // Utilisateur optionnel (pour modification)
+  allowedRoles?: Array<{ id: number; label: string }>; // Liste des rôles autorisés
 }
 
 @Component({
@@ -46,12 +47,12 @@ export class AjouterComponent implements OnInit {
   hidePassword = true;
 
   // Indique si une requête HTTP est en cours
-  isLoading = false;
+  isLoading = false; // Initialisez comme tableau vide
 
   // Liste des rôles disponibles
   rolesList = [
     //{ id: 1, label: 'Administrateur' },
-    { id: 2, label: 'Superviseur' },
+    //{ id: 2, label: 'Superviseur' },
     { id: 3, label: 'Formateur' },
     { id: 4, label: 'Apprenant' },
     { id: 5, label: 'Parent' },
@@ -59,6 +60,8 @@ export class AjouterComponent implements OnInit {
     { id: 7, label: 'Auditeur' },
     { id: 8, label: 'Vendeur' }
   ];
+
+  
 
   /**
    * Constructeur : injection des dépendances nécessaires
@@ -87,10 +90,23 @@ export class AjouterComponent implements OnInit {
    * Si un utilisateur est passé en paramètre, on pré-remplit le formulaire
    */
   ngOnInit(): void {
+    // Debug: Affichez les données reçues
+    console.log('Données reçues dans le modal:', this.data);
+
+    // Récupérer les rôles autorisés depuis les données
+    // if (this.data && Array.isArray(this.data.allowedRoles)) {
+    //     this.rolesList = this.data.allowedRoles;
+    // } else {
+    //     console.warn('Aucun rôle autorisé fourni ou format incorrect');
+    //     this.rolesList = [];
+    // }
+
+    // console.log('Rôles disponibles:', this.rolesList); // Debug
+  
     if (this.data?.user) {
-      this.patchFormValues();
+        this.patchFormValues();
     }
-  }
+}
 
   /**
    * Remplit le formulaire avec les valeurs de l'utilisateur à modifier
@@ -117,34 +133,38 @@ export class AjouterComponent implements OnInit {
    * - Affiche une notification de succès ou d'erreur
    */
   onSubmit(): void {
-    if (this.userForm.invalid) return;
+  if (this.userForm.invalid) return;
 
-    this.isLoading = true;
-    const formData = this.prepareFormData();
+  this.isLoading = true;
+  const formData = this.prepareFormData();
 
-    // Choix de la requête selon création ou modification
-    const apiCall = this.http.post(LaravelApi.register, formData);
-
-    apiCall.subscribe({
-      next: () => {
-        this.snackBar.open(
-          `Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`,
-          'Fermer',
-          { duration: 3000 }
-        );
-        this.dialogRef.close('success');
-      },
-      error: (err) => {
-        console.error('Erreur:', err);
-        this.snackBar.open(
-          err.error?.message || 'Une erreur est survenue',
-          'Fermer',
-          { duration: 3000, panelClass: ['snackbar-error'] }
-        );
-        this.isLoading = false;
-      }
-    });
+  let apiCall;
+  if (this.data?.user) {
+    apiCall = this.http.put(LaravelApi.updateUtilisateur(this.data.user.id), formData);
+  } else {
+    apiCall = this.http.post(LaravelApi.register, formData);
   }
+
+  apiCall.subscribe({
+    next: () => {
+      this.snackBar.open(
+        `Utilisateur ${this.data?.user ? 'modifié' : 'créé'} avec succès`,
+        'Fermer',
+        { duration: 3000 }
+      );
+      this.dialogRef.close('success');
+    },
+    error: (err) => {
+      console.error('Erreur:', err);
+      this.snackBar.open(
+        err.error?.message || 'Une erreur est survenue',
+        'Fermer',
+        { duration: 3000, panelClass: ['snackbar-error'] }
+      );
+      this.isLoading = false;
+    }
+  });
+}
 
   /**
    * Prépare les données du formulaire avant envoi à l'API

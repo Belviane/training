@@ -23,8 +23,12 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   // New property to control password input type
   passwordFieldType: string = 'password';
-
+  showPassword = false;
   errorMessage: string | null = null;
+
+  showForgotPasswordModal: boolean = false;
+  forgotPasswordEmail: string = '';
+  isSubmittingForgot: boolean = false;
 
   ngOnInit() { }
 
@@ -101,7 +105,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         let errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
 
-        if (err.message.includes('vérifier votre email')) {
+        if (err.message.includes('vérifier vos identifiants')) {
           errorMessage = err.message;
         } else if (err.error?.message) {
           errorMessage = err.error.message;
@@ -119,5 +123,77 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility() {
     this.passwordFieldType =
       this.passwordFieldType === 'password' ? 'text' : 'password';
+
+    this.showPassword = !this.showPassword;
   }
+
+  openForgotPasswordModal() {
+    this.showForgotPasswordModal = true;
+  }
+
+  closeForgotPasswordModal() {
+    this.showForgotPasswordModal = false;
+    this.forgotPasswordEmail = '';
+  }
+
+  submitForgotPassword() {
+    if (!this.forgotPasswordEmail) return;
+
+    this.isSubmittingForgot = true;
+
+    this.authService.forgotPassword(this.forgotPasswordEmail).subscribe({
+      next: (res) => {
+        this.toastr.success("Un code de vérification a été envoyé à votre adresse email.");
+        this.closeForgotPasswordModal();
+
+        // Préparer le reset
+        this.resetPasswordData.email = this.forgotPasswordEmail;
+        this.showResetPasswordModal = true; // Afficher le deuxième modal
+      },
+      error: (err) => {
+        this.toastr.error(err.error?.message || "Erreur lors de l'envoi du mail.", "Erreur");
+      },
+      complete: () => {
+        this.isSubmittingForgot = false;
+      }
+    });
+  }
+
+
+  // Pour gérer le second modal
+  showResetPasswordModal: boolean = false;
+  resetPasswordData = {
+    email: '',
+    verification_code: '',
+    new_password: '',
+    new_password_confirmation: ''
+  };
+
+  submitResetPassword() {
+    const data = this.resetPasswordData;
+
+    if (
+      !data.verification_code || !data.new_password || !data.new_password_confirmation
+    ) {
+      this.toastr.error("Tous les champs sont requis.");
+      return;
+    }
+
+    if (data.new_password !== data.new_password_confirmation) {
+      this.toastr.error("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    this.authService.resetPassword(data).subscribe({
+      next: () => {
+        this.toastr.success("Mot de passe réinitialisé avec succès.");
+        this.showResetPasswordModal = false;
+      },
+      error: (err) => {
+        this.toastr.error(err.error?.message || "Échec de la réinitialisation.");
+      },
+    });
+  }
+
+
 }

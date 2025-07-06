@@ -1,0 +1,28 @@
+<div class="classe-container">
+  <div class="header">
+    <h1>Liste des Classes</h1>
+    <button mat-raised-button color="primary"  (click)="openDialog()">
+      <mat-icon>add</mat-icon>Nouvelle classe</button>
+  </div>
+
+  <div class="classe-card" *ngFor="let classe of classes">
+    <h2>{{ classe.nom }} <span class="capacite">({{ classe.capacite }} places)</span></h2>
+    <p><strong>Localisation :</strong> {{ classe.localisation }}</p>
+    <p><strong>Description :</strong> {{ classe.description }}</p>
+    <p><strong>Formation :</strong> {{ classe.formation.nom }}</p>
+
+    <div class="card-actions">
+    <button mat-icon-button color="primary" 
+            (click)="openDisponibiliteDialog(classe.id!)"
+            matTooltip="Vérifier disponibilité">
+      <mat-icon>event_available</mat-icon>
+    </button>
+    
+    <button mat-icon-button color="accent" 
+            (click)="openCapaciteDialog(classe.id!)"
+            matTooltip="Voir capacité restante">
+      <mat-icon>airline_seat_recline_normal</mat-icon>
+    </button>
+  </div>
+  </div>
+</div>

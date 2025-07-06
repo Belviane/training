@@ -53,7 +53,7 @@ body {
   NAVBAR
   ========================================================== */
 #navbar {
-  background: linear-gradient(135deg, var(--primary-black) 0%, var(--dark-gray) 100%);
+  background: white; /* Blanc par défaut */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(239, 239, 87, 0.1);
@@ -167,7 +167,7 @@ body {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--primary-black);
+  background: white !important;
   border-radius: 2px;
   transition:  all 0.3s ease;
   transform-origin: center;
@@ -206,6 +206,7 @@ body {
 }
 
 .main-menu li {
+  cursor: pointer;
   position: relative;
 }
 
@@ -371,27 +372,37 @@ body {
 
 /* Styles pour mobile */
 @media (max-width: 768px) {
-  
+  #navbar:not(.scrolled) .menu-toggle span {
+    background: white; /* Traits blancs si fond noir */
+  }
+
+  #navbar.scrolled .menu-toggle span {
+    background: black; /* Traits noirs si fond blanc */
+  }
+
   .menu-toggle {
     display: flex;
   }
 
-  /* Ajustement pour petit écran */
-  .menu-toggle span {
-    width: 22px;
-    margin: 3px 0;
+  /* Fond du menu avant scroll (noir) */
+  #navbar:not(.scrolled) .main-menu {
+    background: rgba(0, 0, 0, 0.98);
+    color: white;
+  }
+
+  /* Fond du menu après scroll (blanc) */
+  #navbar.scrolled .main-menu {
+    background: rgba(255, 255, 255, 0.97);
+    color: black;
   }
 
   .main-menu {
     position: fixed;
     top: 70px;
-    /* Ajustez selon la hauteur de votre header */
     left: 0;
     width: 100%;
     height: calc(100vh - 70px);
-    background: rgba(0, 0, 0, 0.98);
     backdrop-filter: blur(10px);
-    flex-direction: column;
     -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
     justify-content: flex-start;
@@ -402,7 +413,6 @@ body {
     transition: transform 0.3s ease, opacity 0.2s ease;
     z-index: 999;
     display: flex;
-    /* Important: doit être flex même quand caché */
   }
 
   .main-menu.open {
@@ -412,7 +422,6 @@ body {
 
   .main-menu li {
     width: 100%;
-    color: white;
   }
 
   .main-menu li a {
@@ -422,6 +431,7 @@ body {
     font-size: 1rem;
     background: rgba(234, 234, 221, 0.05);
     border: 1px solid rgba(212, 212, 17, 0.906);
+    color: inherit; /* héritera du parent : blanc ou noir */
   }
 
   .btn {
@@ -429,6 +439,7 @@ body {
     font-size: 0.8rem;
   }
 }
+
 
 /* Styles pour desktop */
 @media (min-width: 769px) {
@@ -440,6 +451,10 @@ body {
     height: auto;
     transform: none !important;
     opacity: 1 !important;
+  }
+
+  #navbar {
+    background: linear-gradient(135deg, var(--primary-black), var(--dark-gray));
   }
 
   .menu-toggle {

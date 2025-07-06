@@ -12,7 +12,7 @@
           </mat-option>
         </mat-select>
         <mat-error *ngIf="userForm.get('role_id')?.hasError('required')">
-          Ce champ est obligatoire
+          Le rôle est obligatoire
         </mat-error>
       </mat-form-field>
 
@@ -40,7 +40,6 @@
         <mat-select formControlName="genre" required>
           <mat-option value="Masculin">Masculin</mat-option>
           <mat-option value="Feminin">Féminin</mat-option>
-          <mat-option value="Autre">Autre</mat-option>
         </mat-select>
         <mat-error *ngIf="userForm.get('genre')?.hasError('required')">
           Ce champ est obligatoire
